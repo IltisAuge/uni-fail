@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend System for uni-fail",
+  "license": "ISC",
+  "author": "Daniel Ziegler, Lisa Natterer, Leonie Reusch",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
