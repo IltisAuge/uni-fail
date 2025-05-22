@@ -31,13 +31,19 @@
 						],
 						"scripts": [],
 						"server": "src/main.server.ts",
-						"outputMode": "server",
+						"prerender": true,
 						"ssr": {
 							"entry": "src/server.ts"
 						}
 					},
 					"configurations": {
 						"production": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.ts"
+								}
+							],
 							"budgets": [
 								{
 									"type": "initial",
@@ -46,25 +52,23 @@
 								},
 								{
 									"type": "anyComponentStyle",
-									"maximumWarning": "4kB",
-									"maximumError": "8kB"
+									"maximumWarning": "2kB",
+									"maximumError": "4kB"
 								}
 							],
 							"outputHashing": "all"
 						},
 						"development": {
+							"fileReplacements": [],
 							"optimization": false,
 							"extractLicenses": false,
 							"sourceMap": true
 						}
 					},
-					"defaultConfiguration": "production"
+					"defaultConfiguration": "development"
 				},
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
-					"options": {
-						"proxyConfig": "proxy.conf.json"
-					},
 					"configurations": {
 						"production": {
 							"buildTarget": "frontend:build:production"
@@ -74,6 +78,58 @@
 						}
 					},
 					"defaultConfiguration": "development"
+				},
+				"server": {
+					"builder": "@angular-devkit/build-angular:server",
+					"options": {
+						"outputPath": "dist/frontend/server",
+						"main": "src/server.ts",
+						"tsConfig": "tsconfig.server.json",
+						"assets": [
+							{
+								"glob": "index.server.html",
+								"input": "src",
+								"output": "."
+							}
+						]
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.server.prod.ts"
+								}
+							],
+							"sourceMap": false,
+							"optimization": true
+						},
+						"development": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.server.ts"
+								}
+							]
+						}
+					}
+				},
+				"serve-ssr": {
+					"builder": "@angular-devkit/build-angular:ssr-dev-server",
+					"options": {
+						"browserTarget": "frontend:build",
+						"serverTarget": "frontend:server"
+					},
+					"configurations": {
+						"development": {
+							"browserTarget": "frontend:build:development",
+							"serverTarget": "frontend:server:development"
+						},
+						"production": {
+							"browserTarget": "frontend:build:production",
+							"serverTarget": "frontend:server:production"
+						}
+					}
 				},
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n"

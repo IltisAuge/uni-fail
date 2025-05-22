@@ -1,18 +1,20 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../environments/environment';
 
 @Component({
 	selector: 'app-root',
 	imports: [RouterOutlet],
 	templateUrl: './app.component.html',
+	standalone: true,
 	styleUrl: './app.component.css'
 })
 export class AppComponent {
 	title = 'frontend';
 
 	constructor(private http: HttpClient) {
-		http.get('/api', {responseType: 'text'}).subscribe(data => {
+		http.get(environment.apiBaseUrl + '/', {responseType: 'text'}).subscribe(data => {
 			console.log(data);
 		})
 	}
