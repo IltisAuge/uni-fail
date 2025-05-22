@@ -1,0 +1,63 @@
+name: uni-fail
+
+services:
+    nginx:
+        image: nginx
+        container_name: uni-fail_nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./dist/uni-fail/browser/:/usr/share/nginx/html/
+            - ../certs/fullchain.pem:/etc/ssl/certs/fullchain.pem
+            - ../certs/privkey.pem:/etc/ssl/private/privkey.pem
+        networks:
+            - uni-fail
+        deploy:
+            resources:
+                limits:
+                  memory: 100M
+    angular:
+        build: .
+        container_name: uni-fail_angular
+        ports:
+            - 4000:4000
+        volumes:
+            - ./dist/:/app/dist/
+        networks:
+            - uni-fail
+        deploy:
+            resources:
+                limits:
+                  memory: 100M
+    api-server:
+        build: ./api-server
+        container_name: uni-fail_api-server
+        ports:
+            - 5010:5010
+        volumes:
+            - ./api-server/main.js:/app/main.js
+            - ./api-server/uploads/:/app/uploads/
+        networks:
+            - uni-fail
+        deploy:
+            resources:
+                limits:
+                  memory: 100M
+    mongodb:
+        image: mongo
+        container_name: uni-fail_mongodb
+        ports:
+            - 27017:27017
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: 'root'
+            MONGO_INITDB_ROOT_PASSWORD: 'CHANGEME'
+        volumes:
+            - uni-fail_mongodb:/data/db
+        networks:
+            - uni-fail
+volumes:
+    uni-fail_mongodb:
+networks:
+    uni-fail:

@@ -1,4 +1,5 @@
 const express = require('express');
+const Database = require('./database');
 
 const server = express();
 server.get('/api', (req, res) => {
@@ -14,3 +15,6 @@ server.get('/api/hello', (req, res) => {
 server.listen(5010, () => {
     console.log('Server listening on port 5010');
 })
+
+const db = new Database();
+db.connect();

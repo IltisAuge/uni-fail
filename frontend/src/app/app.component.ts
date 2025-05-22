@@ -12,10 +12,11 @@ import {environment} from '../environments/environment';
 })
 export class AppComponent {
 	title = 'frontend';
+	apiResponse: string = 'Requesting API response...';
 
 	constructor(private http: HttpClient) {
 		http.get(environment.apiBaseUrl + '/', {responseType: 'text'}).subscribe(data => {
-			console.log(data);
+			this.apiResponse = data;
 		})
 	}
 }
