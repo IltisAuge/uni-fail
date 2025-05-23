@@ -6,7 +6,7 @@
 		"start": "ng serve",
 		"dev:ssr": "ng run frontend:serve-ssr:development",
 		"build": "ng build --configuration development",
-		"build:prod": "ng build --configuration production",
+		"build:prod": "ng build --configuration production && ng run frontend:server:production",
 		"preview:ssr": "node dist/frontend/server/server.mjs",
 		"test": "ng test"
 	},

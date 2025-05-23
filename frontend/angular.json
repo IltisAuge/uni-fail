@@ -56,11 +56,12 @@
 									"maximumError": "4kB"
 								}
 							],
-							"outputHashing": "all"
+							"outputHashing": "all",
+							"optimization": true,
+							"sourceMap": true
 						},
 						"development": {
 							"fileReplacements": [],
-							"optimization": false,
 							"extractLicenses": false,
 							"sourceMap": true
 						}
@@ -111,8 +112,8 @@
 									"with": "src/environments/environment.server.ts"
 								}
 							],
-							"sourceMap": false,
-							"optimization": true
+							"optimization": false,
+							"sourceMap": false
 						}
 					}
 				},

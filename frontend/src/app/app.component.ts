@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../environments/environment';
+import {HttpService} from './http.service';
 
 @Component({
 	selector: 'app-root',
@@ -12,11 +11,9 @@ import {environment} from '../environments/environment';
 })
 export class AppComponent {
 	title = 'frontend';
-	apiResponse: string = 'Requesting API response...';
+	apiResponse: any = 'Requesting API response...';
 
-	constructor(private http: HttpClient) {
-		http.get(environment.apiBaseUrl + '/', {responseType: 'text'}).subscribe(data => {
-			this.apiResponse = data;
-		})
+	constructor(private httpService: HttpService) {
+		httpService.load("/").subscribe(r => this.apiResponse = r);
 	}
 }
