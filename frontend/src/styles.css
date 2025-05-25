@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+/* In src/styles.css */
+
+body {
+	font-family: 'Inter', sans-serif; /* 'sans-serif' ist ein Fallback */
+	background-color: #121212;
+	color: #f0f0f0;
+}
+
+

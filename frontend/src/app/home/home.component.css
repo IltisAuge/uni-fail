@@ -1,0 +1,20 @@
+.image-container {
+	display: flex;
+	justify-content: center; /* Horizontally centers the image */
+	align-items: flex-start; /* Aligns the image to the top of the container */
+
+	/*Set a height for the container if needed */
+	height: 200px; /* Example: adjust as needed for the "upper part" height */
+	width: 100%; /* Ensure container takes full width */
+}
+
+img {
+	width: 500px;
+	height: 135px;
+	object-fit: cover;
+}
+
+h1 {
+	color: #C3E6FC;
+	text-align: center;
+}
