@@ -1,18 +1,17 @@
-.header-container{
-	display: flex;
+/* Styling für den Hauptcontainer, der Bild und Text nebeneinander anordnet */
+.header-container {
+	display: flex; /* Aktiviert Flexbox */
 	justify-content: center;
 	align-items: center;
-
+	gap: 40px; /* Abstand ZWISCHEN dem Bild und dem Textblock*/
+	padding: 20px 0; /* Vertikales Padding für den gesamten Bereich */
+	width: 100%; /
+	max-width: 1200px; /* maximale Breite des Layouts */
+	margin: 0 auto;
 }
 
-.header-container.image-container {
-	display: flex;
-	justify-content: center; /* Horizontally centers the image */
-	align-items: flex-start; /* Aligns the image to the top of the container */
-
-	/*Set a height for the container if needed */
-	height: 200px; /* Example: adjust as needed for the "upper part" height */
-	width: 100%; /* Ensure container takes full width */
+.image-container {
+	flex-shrink: 0;
 }
 
 img {
@@ -21,6 +20,44 @@ img {
 	object-fit: cover;
 }
 
-h1 {
+.text-content {
+	display: flex; /* Macht die h1 und slogan-paragraphs zu Flex-Items */
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.main-heading {
 	color: #C3E6FC;
+	text-align: left;
+	margin-bottom: 10px; /* Abstand zwischen h1 und den Paragraphen */
+}
+
+.slogan-paragraphs {
+	display: flex; /* Aktiviert Flexbox, um die Paragraphen nebeneinander zu setzen */
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 5px; /* Abstand zwischen den beiden Paragraphen */
+}
+
+.slogan-paragraphs p {
+	color: #f0f0f0;
+	text-align: left;
+	max-width: 400px;
+	margin: 0; /* entfernung Standard margin, für gap*/
+}
+
+
+.disclaimer {
+	font-style:italic;
+}
+
+.emoji {
+	font-style: normal;
+}
+
+body > p {
+	color: #f0f0f0;
+	text-align: center;
+	margin-top: 40px; /* Abstand zu dem darüber liegenden .header-container */
 }
