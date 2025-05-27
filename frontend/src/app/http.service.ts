@@ -14,7 +14,7 @@ export class HttpService {
 				@Inject(PLATFORM_ID) private platformId: Object) {
 	}
 
-	load(uri: string): Observable<string> {
+	get(uri: string): Observable<any> {
 		const DATA_KEY = makeStateKey<any>('api-data');
 		if (isPlatformServer(this.platformId)) {
 			const obs = this.http.get(environment.apiBaseUrl + uri, { responseType: 'text' });
@@ -27,5 +27,11 @@ export class HttpService {
 			const data = this.transferState.get(DATA_KEY, null);
 			return of(data);
 		}
+	}
+
+	post(uri: string, body: { }): Observable<any> {
+		return this.http.post(environment.apiBaseUrl + uri, body, {
+			responseType: 'text'
+		});
 	}
 }

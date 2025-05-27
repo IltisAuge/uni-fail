@@ -1,6 +1,6 @@
-const MongoClient = require('mongodb').MongoClient;
+import { MongoClient } from 'mongodb';
 
-module.exports = class Database {
+export class Database {
 
 	connect() {
 		const client = new MongoClient("mongodb://" + process.env.DB_HOST + ":" + process.env.DB_PORT, {

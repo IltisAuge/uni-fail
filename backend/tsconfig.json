@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"strict": true,
+		"esModuleInterop": true,
+		"outDir": "dist",
+		"rootDir": "src"
+	},
+	"include": ["src", ".env", "google_client.json", "package.json", "package-lock.json"]
+}
