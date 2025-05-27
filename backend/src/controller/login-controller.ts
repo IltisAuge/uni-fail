@@ -3,14 +3,6 @@ import {OAuth2Client} from 'google-auth-library';
 export class LoginController {
 	keys = require('../../google_client.json');
 
-	private getClient() {
-		return new OAuth2Client(
-			this.keys.web.client_id,
-			this.keys.web.client_secret,
-			this.keys.web.redirect_uris[0]
-		);
-	}
-
 	getAuthUrl() {
 		return this.getClient().generateAuthUrl({
 			access_type: 'offline',
@@ -33,6 +25,14 @@ export class LoginController {
 			name: payload.name,
 			picture: payload.picture
 		};
+	}
+
+	private getClient() {
+		return new OAuth2Client(
+			this.keys.web.client_id,
+			this.keys.web.client_secret,
+			this.keys.web.redirect_uris[0]
+		);
 	}
 
 	private decodeToken(token: string) {

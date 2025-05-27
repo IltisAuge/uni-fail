@@ -5,7 +5,7 @@ import {Observable, of, tap} from 'rxjs';
 import {isPlatformServer} from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class HttpService {
 
@@ -17,7 +17,7 @@ export class HttpService {
 	get(uri: string): Observable<any> {
 		const DATA_KEY = makeStateKey<any>('api-data');
 		if (isPlatformServer(this.platformId)) {
-			const obs = this.http.get(environment.apiBaseUrl + uri, { responseType: 'text' });
+			const obs = this.http.get(environment.apiBaseUrl + uri, {responseType: 'text'});
 			return obs.pipe(
 				tap(data => {
 					this.transferState.set(DATA_KEY, data);
@@ -29,7 +29,7 @@ export class HttpService {
 		}
 	}
 
-	post(uri: string, body: { }): Observable<any> {
+	post(uri: string, body: {}): Observable<any> {
 		return this.http.post(environment.apiBaseUrl + uri, body, {
 			responseType: 'text'
 		});

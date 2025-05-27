@@ -1,9 +1,10 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
-import { Database } from './database';
+import {Database} from './database';
 import loginRoutes from './routes/login-routes';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 declare module 'express-session' {
@@ -39,7 +40,7 @@ server.get('/', (req, res) => {
 });
 
 server.listen(5010, () => {
-    console.log('Server listening on port 5010');
+	console.log('Server listening on port 5010');
 });
 
 const db = new Database();

@@ -17,12 +17,13 @@ export class AppComponent implements OnInit {
 	title = 'frontend';
 	apiResponse: any = 'Requesting API response...';
 	username: any = 'Not logged in';
-	user: any|undefined
+	user: any | undefined
 
 	constructor(private httpService: HttpService, private authService: AuthService) {
 		httpService.get("/").subscribe(r => this.apiResponse = r);
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
+
 	ngOnInit(): void {
 		this.authService.checkLogin().subscribe(resp => {
 			const user = resp.user;

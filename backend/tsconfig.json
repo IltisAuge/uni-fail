@@ -8,5 +8,11 @@
 		"outDir": "dist",
 		"rootDir": "src"
 	},
-	"include": ["src", ".env", "google_client.json", "package.json", "package-lock.json"]
+	"include": [
+		"src",
+		".env",
+		"google_client.json",
+		"package.json",
+		"package-lock.json"
+	]
 }
