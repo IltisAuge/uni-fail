@@ -8,8 +8,8 @@ import bootstrap from './main.server';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
 	const server = express();
-	const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-	const browserDistFolder = resolve(serverDistFolder, '../browser');
+	const serverDistFolder = resolve(process.cwd(), 'dist/frontend/server');
+	const browserDistFolder = resolve(process.cwd(), 'dist/frontend/browser');
 	const indexHtml = join(serverDistFolder, 'index.server.html');
 
 	const commonEngine = new CommonEngine();
