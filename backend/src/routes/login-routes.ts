@@ -1,5 +1,5 @@
-import { LoginController } from '../controller/login-controller';
-import { Router } from 'express';
+import {LoginController} from '../controller/login-controller';
+import {Router} from 'express';
 
 const loginRouter = Router();
 const loginController = new LoginController();
@@ -26,9 +26,9 @@ loginRouter.get('/google-auth-return', (req, res) => {
 
 loginRouter.get('/check-login', (req, res) => {
 	if (req.session.user) {
-		res.json({ user: req.session.user });
+		res.json({user: req.session.user});
 	} else {
-		res.json({ user: null });
+		res.json({user: null});
 	}
 });
 
