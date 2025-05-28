@@ -62,7 +62,7 @@ jobs:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "frontend/dist/frontend/**"
+          source: "frontend/dist/frontend/browser frontend/dist/frontend/server"
           target: "/root/uni-fail/frontend/dist/frontend"
       
       # --- BACKEND BUILD & DEPLOY ---
