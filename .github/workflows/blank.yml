@@ -60,8 +60,8 @@ jobs:
       - name: Prepare deploy folder
         run: |
           mkdir -p frontend_deploy
-          cp -r frontend/dist/frontend/browser deploy/
-          cp -r frontend/dist/frontend/server deploy/
+          cp -r frontend/dist/frontend/browser frontend_deploy/
+          cp -r frontend/dist/frontend/server frontend_deploy/
     
       - name: Copy built Angular app (dist/) to server
         uses: appleboy/scp-action@v0.1.7
@@ -111,8 +111,8 @@ jobs:
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
           source: "backend/dist/**"
-          target: "/root/uni-fail/backend/dist"
-          strip_components: 2
+          target: "/root/uni-fail/backend/"
+          strip_components: 1
 
       - name: Restart frontend and backend Docker container
         uses: appleboy/ssh-action@v1.0.3
