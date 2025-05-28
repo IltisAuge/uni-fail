@@ -64,17 +64,6 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           source: "frontend/dist/frontend/**"
           target: "/root/uni-fail/frontend/dist/frontend"
-
-      - name: Restart Docker container
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          script: |
-            cd /root/uni-fail/frontend
-            docker compose down
-            docker compose up -d --build
       
       # --- BACKEND BUILD & DEPLOY ---
 
@@ -106,13 +95,13 @@ jobs:
           source: "backend/dist/**"
           target: "/root/uni-fail/backend/dist"
 
-      - name: Restart backend Docker container
+      - name: Restart frontend and backend Docker container
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            cd /root/uni-fail/backend
+            cd /root/uni-fail/
             docker compose down
             docker compose up -d --build
