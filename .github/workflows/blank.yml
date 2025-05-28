@@ -1,0 +1,103 @@
+name: Deploy Angular Frontend
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build Angular (Browser + Server)
+        run: |
+          cd frontend
+          npm run build:prod
+
+      - name: Copy package.json to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "frontend/package.json"
+          target: "/root/uni-fail/frontend"
+
+      - name: Copy built Angular app (dist/) to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "frontend/dist/frontend"
+          target: "/root/uni-fail/frontend/dist"
+
+      - name: Restart Docker container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /root/uni-fail/frontend
+            docker-compose down
+            docker-compose up -d --build
+      
+      # --- BACKEND BUILD & DEPLOY ---
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Build backend (e.g. NestJS, TS → JS)
+        run: |
+          cd backend
+          npm run build
+
+      - name: Copy backend package.json to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "backend/package.json"
+          target: "/root/uni-fail/backend"
+
+      - name: Copy backend dist/ to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "backend/dist"
+          target: "/root/uni-fail/backend"
+
+      - name: Restart backend Docker container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /root/uni-fail/backend
+            docker-compose down
+            docker-compose up -d --build
