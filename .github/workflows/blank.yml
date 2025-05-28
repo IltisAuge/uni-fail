@@ -70,6 +70,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           source: "deploy"
           target: "/root/uni-fail/frontend/dist/frontend"
+          strip_components: 1
       
       # --- BACKEND BUILD & DEPLOY ---
 
