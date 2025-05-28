@@ -3,10 +3,10 @@
 	display: flex; /* Aktiviert Flexbox */
 	justify-content: center;
 	align-items: center;
-	gap: 40px; /* Abstand ZWISCHEN dem Bild und dem Textblock*/
-	padding: 20px 0; /* Vertikales Padding für den gesamten Bereich */
+	gap: 40rem; /* Abstand ZWISCHEN dem Bild und dem Textblock*/
+	padding: 20rem 0; /* Vertikales Padding für den gesamten Bereich */
 	width: 100%; /
-	max-width: 1200px; /* maximale Breite des Layouts */
+	max-width: 1200rem; /* maximale Breite des Layouts */
 	margin: 0 auto;
 }
 
@@ -15,8 +15,8 @@
 }
 
 img {
-	width: 500px;
-	height: 135px;
+	width: 500rem;
+	height: 135rem;
 	object-fit: cover;
 }
 
@@ -29,7 +29,7 @@ img {
 .main-heading {
 	color: #C3E6FC;
 	text-align: left;
-	margin-bottom: 10px; /* Abstand zwischen h1 und den Paragraphen */
+	margin-bottom: 10rem; /* Abstand zwischen h1 und den Paragraphen */
 }
 
 .slogan-paragraphs {
@@ -37,13 +37,13 @@ img {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	gap: 5px; /* Abstand zwischen den beiden Paragraphen */
+	gap: 5rem; /* Abstand zwischen den beiden Paragraphen */
 }
 
 .slogan-paragraphs p {
 	color: #f0f0f0;
 	text-align: left;
-	max-width: 400px;
+	max-width: 400rem;
 	margin: 0; /* entfernung Standard margin, für gap*/
 }
 
@@ -59,5 +59,5 @@ img {
 body > p {
 	color: #f0f0f0;
 	text-align: center;
-	margin-top: 40px; /* Abstand zu dem darüber liegenden .header-container */
+	margin-top: 40rem; /* Abstand zu dem darüber liegenden .header-container */
 }
