@@ -1,3 +1,19 @@
-<form (ngSubmit)="loginWithGoogle()">
-	<input class="login-with-google-btn" type="submit" value="Sign in with Google">
-</form>
+<div class="w-full flex flex-col items-center">
+	<div>
+		<h2 class="mb-5">Melde dich bei einem Service an</h2>
+		<div class="flex flex-col gap-5">
+			<form (ngSubmit)="openLoginPage('google')">
+				<button class="login-btn">
+					<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=" alt="Google Logo">
+					<span>Sign in with Google</span>
+				</button>
+			</form>
+			<form (ngSubmit)="openLoginPage('microsoft')">
+				<button class="login-btn">
+					<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMC8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvVFIvMjAwMS9SRUMtU1ZHLTIwMDEwOTA0L0RURC9zdmcxMC5kdGQnPjxzdmcgaGVpZ2h0PSIzMiIgc3R5bGU9Im92ZXJmbG93OnZpc2libGU7ZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMiAzMiIgdmlld0JveD0iMCAwIDMyIDMyIiB3aWR0aD0iMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnPjxnIGlkPSJNaWNyb3NvZnRfMV8iPjxnIGlkPSJNaWNyb3NvZnQiPjxnIGlkPSJCbHVlX3g1Rl9TcXVhcmUiPjxyZWN0IGhlaWdodD0iMTUiIHN0eWxlPSJmaWxsOiM1MUFFRDk7IiB3aWR0aD0iMTUiIHk9IjE3Ii8+PC9nPjxnIGlkPSJZZWxsb3dfeDVGX1NxdWFyZSI+PHJlY3QgaGVpZ2h0PSIxNSIgc3R5bGU9ImZpbGw6I0ZFQzMyNzsiIHdpZHRoPSIxNSIgeD0iMTciIHk9IjE3Ii8+PC9nPjxnIGlkPSJHcmVlbl94NUZfU3F1YXJlIj48cmVjdCBoZWlnaHQ9IjE1IiBzdHlsZT0iZmlsbDojMzRCNjdBOyIgd2lkdGg9IjE1IiB4PSIxNyIvPjwvZz48ZyBpZD0iT3JhbmdlX3g1Rl9TcXVhcmUiPjxyZWN0IGhlaWdodD0iMTUiIHN0eWxlPSJmaWxsOiNGMTU3MjM7IiB3aWR0aD0iMTUiLz48L2c+PC9nPjwvZz48L2c+PC9zdmc+" alt="Microsoft Logo">
+					Sign in with Microsoft
+				</button>
+			</form>
+		</div>
+	</div>
+</div>

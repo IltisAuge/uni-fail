@@ -17,8 +17,8 @@ export class LoginComponent {
 	constructor(private http: HttpService) {
 	}
 
-	loginWithGoogle() {
-		this.http.post('/login', {provider: 'google'}).subscribe(
+	openLoginPage(provider: string) {
+		this.http.post('/login', {provider: provider}).subscribe(
 			resp => {
 				console.log(resp);
 				document.location.href = resp;

@@ -1,11 +1,26 @@
-import {LoginController} from '../controller/login-controller';
 import {Router} from 'express';
+import {GoogleLoginController} from '../controller/login-providers/google-login';
+import {MicrosoftLoginController} from '../controller/login-providers/microsoft-login';
 
 const loginRouter = Router();
-const loginController = new LoginController();
+const googleLoginController = new GoogleLoginController();
+const microsoftLoginController = new MicrosoftLoginController();
 
 loginRouter.post('/', (req, res) => {
-	res.send(loginController.getAuthUrl());
+	console.log(req.body);
+	let loginController: GoogleLoginController | MicrosoftLoginController;
+	switch (req.body.provider) {
+		case 'google':
+			loginController = googleLoginController;
+			break;
+		case 'microsoft':
+			loginController = microsoftLoginController;
+			break;
+		default:
+			res.status(400).send('Invalid login provider');
+			return;
+	}
+	res.send(loginController.getAuthURL());
 });
 
 loginRouter.get('/google-auth-return', (req, res) => {
@@ -18,7 +33,24 @@ loginRouter.get('/google-auth-return', (req, res) => {
 		res.send('Code is not a string');
 		return;
 	}
-	loginController.getToken(code).then(userData => {
+	googleLoginController.getUserData(code).then((userData: { id: string; email: string; name: string; } | undefined) => {
+		req.session.user = userData;
+		res.redirect(process.env.AUTH_RETURN_URL as string);
+	});
+});
+
+loginRouter.post('/microsoft-auth-return', (req, res) => {
+	const id_token = req.body.id_token as string;
+	if (id_token == undefined) {
+		res.send('No id_token');
+		return;
+	}
+	if (id_token.constructor !== String) {
+		res.send('id_token is not a string');
+		return;
+	}
+	microsoftLoginController.getUserData(id_token).then((userData: { id: string; email: string; name: string; } | undefined) => {
+		console.log(userData);
 		req.session.user = userData;
 		res.redirect(process.env.AUTH_RETURN_URL as string);
 	});

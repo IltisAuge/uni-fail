@@ -18,8 +18,11 @@
 		"express": "^5.1.0",
 		"express-session": "^1.18.1",
 		"google-auth-library": "^9.15.1",
+		"jwt-decode": "^4.0.0",
 		"mongodb": "^6.16.0",
-		"node-cache": "^5.1.2"
+		"node-cache": "^5.1.2",
+		"node-fetch": "^3.3.2",
+		"ts-randomstring": "^1.0.8"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.18",
