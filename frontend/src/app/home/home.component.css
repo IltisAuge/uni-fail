@@ -3,10 +3,10 @@
 	display: flex; /* Aktiviert Flexbox */
 	justify-content: center;
 	align-items: center;
-	gap: 40rem; /* Abstand ZWISCHEN dem Bild und dem Textblock*/
-	padding: 20rem 0; /* Vertikales Padding für den gesamten Bereich */
-	width: 100%; /
-	max-width: 1200rem; /* maximale Breite des Layouts */
+	gap: 2.5rem; /* Abstand ZWISCHEN dem Bild und dem Textblock*/
+	padding: 1.25rem 0; /* Vertikales Padding für den gesamten Bereich */
+	width: 100%;
+	max-width: 75rem; /* maximale Breite des Layouts */
 	margin: 0 auto;
 }
 
@@ -15,8 +15,8 @@
 }
 
 img {
-	width: 500rem;
-	height: 135rem;
+	width: 31.25rem;
+	height: 8.75rem;
 	object-fit: cover;
 }
 
@@ -29,7 +29,7 @@ img {
 .main-heading {
 	color: #C3E6FC;
 	text-align: left;
-	margin-bottom: 10rem; /* Abstand zwischen h1 und den Paragraphen */
+	margin-bottom: 0.625rem; /* Abstand zwischen h1 und den Paragraphen */
 }
 
 .slogan-paragraphs {
@@ -37,27 +37,26 @@ img {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	gap: 5rem; /* Abstand zwischen den beiden Paragraphen */
+	gap: 0.313rem; /* Abstand zwischen den beiden Paragraphen */
 }
 
 .slogan-paragraphs p {
 	color: #f0f0f0;
 	text-align: left;
-	max-width: 400rem;
+	max-width: 25rem;
 	margin: 0; /* entfernung Standard margin, für gap*/
-}
-
-
-.disclaimer {
-	font-style:italic;
 }
 
 .emoji {
 	font-style: normal;
 }
 
+.disclaimer {
+	font-style:italic;
+}
+
 body > p {
 	color: #f0f0f0;
 	text-align: center;
-	margin-top: 40rem; /* Abstand zu dem darüber liegenden .header-container */
+	margin-top: 2.5rem; /* Abstand zu dem darüber liegenden .header-container */
 }
