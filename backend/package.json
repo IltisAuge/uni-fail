@@ -27,6 +27,7 @@
 		"@types/cors": "^2.8.18",
 		"@types/express": "^5.0.2",
 		"@types/express-session": "^1.18.1",
+		"tsx": "^4.19.4",
 		"typescript": "^5.8.3"
 	}
 }
