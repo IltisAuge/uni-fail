@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm install --force
+          npm install --omit=dev --force
 
       - name: Build Angular (Browser + Server)
         run: |
@@ -59,7 +59,7 @@ jobs:
 
       - name: Prepare deploy folder
         run: |
-          mkdir -p deploy
+          mkdir -p frontend_deploy
           cp -r frontend/dist/frontend/browser deploy/
           cp -r frontend/dist/frontend/server deploy/
     
@@ -69,7 +69,7 @@ jobs:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "deploy"
+          source: "frontend_deploy"
           target: "/root/uni-fail/frontend/dist/frontend"
           strip_components: 1
       
@@ -105,19 +105,13 @@ jobs:
             rm -rf /root/uni-fail/backend/dist
             rm -rf /root/uni-fail/frontend/dist
 
-      - name: Prepare deploy folder
-        run: |
-          mkdir -p deploy
-          cp -r frontend/dist/frontend/browser deploy/
-          cp -r frontend/dist/frontend/server deploy/
-
       - name: Copy backend dist/ to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "deploy"
+          source: "backend/dist/**"
           target: "/root/uni-fail/backend/dist"
           strip_components: 1
 
