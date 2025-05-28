@@ -45,6 +45,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           source: "frontend/package.json"
           target: "/root/uni-fail/frontend"
+          strip_components: 1
           
       - name: Clean old frontend build on server
         uses: appleboy/ssh-action@v0.1.10
@@ -92,6 +93,23 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           source: "backend/package.json"
           target: "/root/uni-fail/backend"
+          strip_components: 1
+
+      - name: Clean old backend build on server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            rm -rf /root/uni-fail/backend/dist
+            rm -rf /root/uni-fail/frontend/dist
+
+      - name: Prepare deploy folder
+        run: |
+          mkdir -p deploy
+          cp -r frontend/dist/frontend/browser deploy/
+          cp -r frontend/dist/frontend/server deploy/
 
       - name: Copy backend dist/ to server
         uses: appleboy/scp-action@v0.1.7
@@ -99,8 +117,9 @@ jobs:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "backend/dist/**"
+          source: "deploy"
           target: "/root/uni-fail/backend/dist"
+          strip_components: 1
 
       - name: Restart frontend and backend Docker container
         uses: appleboy/ssh-action@v1.0.3
