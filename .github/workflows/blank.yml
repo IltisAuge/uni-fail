@@ -45,6 +45,16 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           source: "frontend/package.json"
           target: "/root/uni-fail/frontend"
+          
+      - name: Clean old frontend build on server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 91.99.109.27
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            rm -rf /root/uni-fail/frontend/dist/frontend/browser
+            rm -rf /root/uni-fail/frontend/dist/frontend/server
 
       - name: Copy built Angular app (dist/) to server
         uses: appleboy/scp-action@v0.1.7
@@ -52,8 +62,8 @@ jobs:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "frontend/dist/frontend"
-          target: "/root/uni-fail/frontend/dist"
+          source: "frontend/dist/frontend/**"
+          target: "/root/uni-fail/frontend/dist/frontend"
 
       - name: Restart Docker container
         uses: appleboy/ssh-action@v1.0.3
@@ -63,8 +73,8 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /root/uni-fail/frontend
-            docker-compose down
-            docker-compose up -d --build
+            docker compose down
+            docker compose up -d --build
       
       # --- BACKEND BUILD & DEPLOY ---
 
@@ -93,8 +103,8 @@ jobs:
           host: 91.99.109.27
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "backend/dist"
-          target: "/root/uni-fail/backend"
+          source: "backend/dist/**"
+          target: "/root/uni-fail/backend/dist"
 
       - name: Restart backend Docker container
         uses: appleboy/ssh-action@v1.0.3
@@ -104,5 +114,5 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /root/uni-fail/backend
-            docker-compose down
-            docker-compose up -d --build
+            docker compose down
+            docker compose up -d --build
