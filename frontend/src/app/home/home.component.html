@@ -1,24 +1,23 @@
-<html>
-
-<head>
-	<link rel="stylesheet" href="/frontend/src/app/home/home.component.css">
-
-	<title>Willkommen bei UNIFAIL!</title>
-</head>
-<body>
-	<div class="header-container">
-		<div class="image-container">
-			<img src="assets/logoUNIFAIL.jpg" alt="Logo">
+<div class="w-full flex justify-center">
+	<div class="flex flex-row items-center justify-center gap-10 py-5 max-w-[75rem] w-full px-4">
+		<!-- Bildcontainer -->
+		<div class="flex-shrink-0">
+			<img src="assets/logoUNIFAIL.jpg" alt="Logo" class="w-[31.25rem] h-[8.75rem] object-cover" />
 		</div>
-		<div class="text-content"> <h1 class="main-heading">✨Teile und bewerte UNI-fails✨ </h1>
-			<div class="slogan-paragraphs">
-				<p>Teilt keine Hinweise auf die Identität von Personen</p>
-				<p class="disclaimer">#wir wollen nicht verklagt werden  <span class="emoji">🥲 </span> </p>
+
+		<!-- Textcontainer -->
+		<div class="flex flex-col items-start">
+			<h1 class="text-left text-[#C3E6FC] text-2xl mb-[0.625rem]">✨Teile und bewerte UNI-fails✨</h1>
+			<div class="flex flex-col justify-start items-start gap-[0.313rem]">
+				<p class="text-left text-[#f0f0f0] max-w-[25rem] m-0">
+					Teilt keine Hinweise auf die Identität von Personen
+				</p>
+				<p class="italic text-left text-[#f0f0f0] max-w-[25rem] m-0">
+					#wir wollen nicht verklagt werden <span class="not-italic">🥲</span>
+				</p>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<p>Space for more fancy stuff🛠️</p>
-
-</body>
-</html>
+<p class="text-center text-[#f0f0f0] mt-10">Space for more fancy stuff🛠️</p>
