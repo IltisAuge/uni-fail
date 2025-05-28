@@ -103,7 +103,6 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             rm -rf /root/uni-fail/backend/dist
-            rm -rf /root/uni-fail/frontend/dist
 
       - name: Copy backend dist/ to server
         uses: appleboy/scp-action@v0.1.7
@@ -113,7 +112,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           source: "backend/dist/**"
           target: "/root/uni-fail/backend/dist"
-          strip_components: 1
+          strip_components: 2
 
       - name: Restart frontend and backend Docker container
         uses: appleboy/ssh-action@v1.0.3
