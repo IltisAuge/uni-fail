@@ -26,12 +26,11 @@ jobs:
         run: |
           cd frontend
           rm -rf node_modules package-lock.json
-          npm install
 
       - name: Install dependencies
         run: |
           cd frontend
-          npm ci --force
+          npm install --force
 
       - name: Build Angular (Browser + Server)
         run: |
