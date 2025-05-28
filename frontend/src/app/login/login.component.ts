@@ -18,7 +18,15 @@ export class LoginComponent {
 	}
 
 	loginWithGoogle() {
-		this.http.post('/login', {provider: 'google'}).subscribe(
+		this.openLoginPage('google');
+	}
+
+	loginWithFacebook() {
+		this.openLoginPage('facebook');
+	}
+
+	private openLoginPage(provider: string) {
+		this.http.post('/login', {provider: provider}).subscribe(
 			resp => {
 				console.log(resp);
 				document.location.href = resp;

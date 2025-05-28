@@ -1,3 +1,14 @@
-<form (ngSubmit)="loginWithGoogle()">
-	<input class="login-with-google-btn" type="submit" value="Sign in with Google">
-</form>
+<div class="w-full h-full flex flex-col justify-center items-center">
+	<h2 class="mb-5">Melde dich bei einem Service an</h2>
+	<form (ngSubmit)="loginWithGoogle()">
+		<input class="login-btn google-btn" type="submit" value="Sign in with Google">
+	</form>
+	<form (ngSubmit)="loginWithFacebook()">
+		<button class="login-btn facebook-btn pl-3! flex">
+			<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="blue">
+				<path d="M22 12c0-5.522-4.478-10-10-10S2 6.478 2 12c0 5.084 3.797 9.293 8.667 9.951v-7.038H8.078v-2.913h2.589V9.845c0-2.559 1.524-3.968 3.861-3.968 1.119 0 2.289.2 2.289.2v2.517h-1.29c-1.27 0-1.665.79-1.665 1.601v1.92h2.834l-.453 2.913h-2.381V22C18.203 21.293 22 17.084 22 12z"/>
+			</svg>
+			Mit Facebook anmelden
+		</button>
+	</form>
+</div>

@@ -24,12 +24,12 @@ server.use(session({
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
-		secure: process.env.ENV === 'PRODUCTION',
+		secure: process.env.PRODUCTION === 'true',
 		httpOnly: true
 	}
 }));
 server.use(cors({
-	origin: 'https://uni-fail.iltisauge.de',
+	origin: process.env.HOST,
 	credentials: true
 }));
 server.use('/login', loginRoutes);
@@ -40,6 +40,7 @@ server.get('/', (req, res) => {
 });
 
 server.listen(5010, () => {
+	console.log("Starting in " + (process.env.PRODUCTION === 'true' ? 'PRODUCTION' : 'DEVELOPMENT') + " mode");
 	console.log('Server listening on port 5010');
 });
 
