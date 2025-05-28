@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm install --omit=dev --force
+          npm install --force
 
       - name: Build Angular (Browser + Server)
         run: |
