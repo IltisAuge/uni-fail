@@ -1,29 +1,29 @@
 import {OAuth2Client} from 'google-auth-library';
+import {LoginController} from './login-controller';
 
-export class GoogleLoginController {
-	keys = require('../../google_client.json');
+export class GoogleLoginController extends LoginController {
+	keys = require('../../../google_client.json');
 
-	getAuthUrl(provider: string) {
+	getAuthURL() {
 		return this.getClient().generateAuthUrl({
 			access_type: 'offline',
 			scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
 		});
 	}
 
-	async getToken(code: string) {
+	async getUserData(code: string) {
 		const response = await this.getClient().getToken(code);
 		const idToken = response.tokens.id_token;
 		if (idToken == undefined) {
 			throw new Error('No id token');
 		}
 		const decodedToken = this.decodeToken(idToken);
-		console.log(decodedToken);
 		const payload = decodedToken.payload;
 		return {
+			provider: 'google',
 			id: payload.sub,
 			email: payload.email,
-			name: payload.name,
-			picture: payload.picture
+			name: payload.name
 		};
 	}
 

@@ -19,6 +19,7 @@ declare module 'express-session' {
 
 const server = express();
 server.use(express.json());
+server.use(express.urlencoded({extended: true}));
 server.use(session({
 	secret: process.env.SESSION_SECRET as string,
 	resave: false,

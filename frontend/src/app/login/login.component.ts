@@ -17,15 +17,7 @@ export class LoginComponent {
 	constructor(private http: HttpService) {
 	}
 
-	loginWithGoogle() {
-		this.openLoginPage('google');
-	}
-
-	loginWithFacebook() {
-		this.openLoginPage('facebook');
-	}
-
-	private openLoginPage(provider: string) {
+	openLoginPage(provider: string) {
 		this.http.post('/login', {provider: provider}).subscribe(
 			resp => {
 				console.log(resp);

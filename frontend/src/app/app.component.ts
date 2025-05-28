@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
 			if (user != undefined) {
 				this.user = user;
 				console.log(user);
-				this.username = "Logged in as " + user.name + " (" + user.email + ")";
+				this.username = "Logged in via " + user.provider + " as " + user.name + " (" + user.email + ")";
 			}
 		});
 	}

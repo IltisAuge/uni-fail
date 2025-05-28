@@ -1,14 +1,19 @@
-<div class="w-full h-full flex flex-col justify-center items-center">
-	<h2 class="mb-5">Melde dich bei einem Service an</h2>
-	<form (ngSubmit)="loginWithGoogle()">
-		<input class="login-btn google-btn" type="submit" value="Sign in with Google">
-	</form>
-	<form (ngSubmit)="loginWithFacebook()">
-		<button class="login-btn facebook-btn pl-3! flex">
-			<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="blue">
-				<path d="M22 12c0-5.522-4.478-10-10-10S2 6.478 2 12c0 5.084 3.797 9.293 8.667 9.951v-7.038H8.078v-2.913h2.589V9.845c0-2.559 1.524-3.968 3.861-3.968 1.119 0 2.289.2 2.289.2v2.517h-1.29c-1.27 0-1.665.79-1.665 1.601v1.92h2.834l-.453 2.913h-2.381V22C18.203 21.293 22 17.084 22 12z"/>
-			</svg>
-			Mit Facebook anmelden
-		</button>
-	</form>
+<div class="w-full flex flex-col items-center">
+	<div>
+		<h2 class="mb-5">Melde dich bei einem Service an</h2>
+		<div class="flex flex-col gap-5">
+			<form (ngSubmit)="openLoginPage('google')">
+				<button class="login-btn">
+					<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=" alt="Google Logo">
+					<span>Sign in with Google</span>
+				</button>
+			</form>
+			<form (ngSubmit)="openLoginPage('microsoft')">
+				<button class="login-btn">
+					<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMC8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvVFIvMjAwMS9SRUMtU1ZHLTIwMDEwOTA0L0RURC9zdmcxMC5kdGQnPjxzdmcgaGVpZ2h0PSIzMiIgc3R5bGU9Im92ZXJmbG93OnZpc2libGU7ZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMiAzMiIgdmlld0JveD0iMCAwIDMyIDMyIiB3aWR0aD0iMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnPjxnIGlkPSJNaWNyb3NvZnRfMV8iPjxnIGlkPSJNaWNyb3NvZnQiPjxnIGlkPSJCbHVlX3g1Rl9TcXVhcmUiPjxyZWN0IGhlaWdodD0iMTUiIHN0eWxlPSJmaWxsOiM1MUFFRDk7IiB3aWR0aD0iMTUiIHk9IjE3Ii8+PC9nPjxnIGlkPSJZZWxsb3dfeDVGX1NxdWFyZSI+PHJlY3QgaGVpZ2h0PSIxNSIgc3R5bGU9ImZpbGw6I0ZFQzMyNzsiIHdpZHRoPSIxNSIgeD0iMTciIHk9IjE3Ii8+PC9nPjxnIGlkPSJHcmVlbl94NUZfU3F1YXJlIj48cmVjdCBoZWlnaHQ9IjE1IiBzdHlsZT0iZmlsbDojMzRCNjdBOyIgd2lkdGg9IjE1IiB4PSIxNyIvPjwvZz48ZyBpZD0iT3JhbmdlX3g1Rl9TcXVhcmUiPjxyZWN0IGhlaWdodD0iMTUiIHN0eWxlPSJmaWxsOiNGMTU3MjM7IiB3aWR0aD0iMTUiLz48L2c+PC9nPjwvZz48L2c+PC9zdmc+" alt="Microsoft Logo">
+					Sign in with Microsoft
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
