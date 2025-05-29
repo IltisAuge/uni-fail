@@ -1,0 +1,71 @@
+<div class="container" *ngIf="isLoggedIn; else notLoggedIn">
+
+	<form
+		[formGroup]="postForm"
+		(ngSubmit)="onSubmit()"
+		class="post-form flex flex-col gap-2 max-w-3xl mx-auto p-8
+         bg-gradient-to-r from-[#1A568E] from-5% via-[#69B3E2] via-35%  to-[#FFD700] to-95%
+         rounded-xl shadow-lg text-[#1A568E] mt-2"
+	>
+		<h2 class="text-3xl font-bold text-center border-b-2 border-[#333333] pb-2">
+			Create a New Post
+		</h2>
+		<p class="text-center text-[#333333]"
+		>
+			Disclaimer: Do <strong>NOT</strong> share names or sensitive information <br>
+			Please don't sue us😅!
+		</p>
+
+		<label
+			for="content"
+			class="font-semibold text-[#FFFFFF] text-lg"
+		>
+			Your Story
+		</label>
+
+		<textarea
+			id="content"
+			formControlName="content"
+			placeholder="Write your uni-fail..."
+			class="p-3 border-2 border-[#FFA500] rounded-md text-base bg-white resize-y min-h-[120px]
+           focus:outline-none focus:ring-2 focus:ring-[#FFA500] text-[#1A568E]"
+		></textarea>
+
+		<label
+			for="tags"
+			class="font-semibold text-[#FFFFFF] text-lg"
+		>
+			Tags
+		</label>
+		<input
+			id="tags"
+			formControlName="tags"
+			placeholder="e.g. the name of your university, ..."
+			class="p-3 border-2 border-[#FFA500] rounded-md text-base bg-white
+           focus:outline-none focus:ring-2 focus:ring-[#FFA500] text-[#1A568E]"
+		/>
+
+		<button
+			type="submit"
+			[disabled]="postForm.invalid"
+			class="bg-[#FFA500] text-[#1A568E] font-bold py-3 px-6 rounded-md border-2 border-[#FFA500]
+           shadow-md hover:text-[#333333] hover:border-[#FFD700]"
+		>
+			Submit
+		</button>
+	</form>
+
+
+
+</div>
+
+<ng-template #notLoggedIn>
+	<div class="w-full bg-[#1A568E] text-[#FFA500] font-bold text-center p-16 rounded-none shadow-[0_0_15px_#333333] mt-2">
+		<p class="text-4xl px-4">
+			Please <strong>log in</strong> to post your uni-fail!
+
+		</p>
+	</div>
+</ng-template>
+
+
