@@ -29,10 +29,10 @@ server.use(session({
 	saveUninitialized: false,
 	proxy: true,
 	cookie: {
-		secure: true,
+		secure: process.env.PRODUCTION == 'true',
 		httpOnly: true,
-		sameSite: 'none',
-		domain: '.uni-fail.iltisauge.de'
+		sameSite: process.env.PRODUCTION == 'true' ? 'none' : undefined,
+		domain: process.env.PRODUCTION == 'true' ? '.uni-fail.iltisauge.de' : undefined
 	}
 }));
 server.use(cors({
