@@ -29,7 +29,8 @@ server.use(session({
 	saveUninitialized: false,
 	cookie: {
 		secure: process.env.PRODUCTION === 'true',
-		httpOnly: true
+		httpOnly: true,
+		sameSite: process.env.PRODUCTION === 'true' ? 'none' : undefined
 	}
 }));
 server.use(cors({

@@ -62,6 +62,9 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		return;
 	}
 	const state = req.body.state;
+	console.log("state=" + state);
+	console.log("oAuthState=" + req.session.oAuthState);
+	console.log("oAuthNonce=" + req.session.oAuthNonce);
 	if (state == undefined) {
 		res.send('No state');
 		return;
@@ -71,6 +74,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		return;
 	}
 	const jwt = microsoftLoginController.decodeJWT(id_token);
+	console.log("nonce=" + jwt.nonce);
 	if (jwt.nonce != req.session.oAuthNonce) {
 		res.send('Invalid oAuthNonce');
 		return;
@@ -80,6 +84,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		email: string;
 		name: string;
 	} | undefined) => {
+		console.log(userData);
 		req.session.user = userData;
 		res.redirect(process.env.AUTH_RETURN_URL as string);
 	});
