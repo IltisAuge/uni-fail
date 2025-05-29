@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import {GoogleLoginController} from '../controller/login-providers/google-login';
 import {MicrosoftLoginController} from '../controller/login-providers/microsoft-login';
+import {generateRandomString} from 'ts-randomstring/lib';
 
 const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
@@ -20,7 +21,14 @@ loginRouter.post('/', (req, res) => {
 			res.status(400).send('Invalid login provider');
 			return;
 	}
-	res.send(loginController.getAuthURL());
+	let url = loginController.getAuthURL();
+	const state = crypto.randomUUID().toString();
+	const nonce = crypto.randomUUID().toString();
+	// Replace security parameters for Microsoft
+	url = url.replace('{state}', state).replace('{nonce}', nonce);
+	req.session.oAuthState = state;
+	req.session.oAuthNonce = nonce;
+	res.send(url);
 });
 
 loginRouter.get('/google-auth-return', (req, res) => {
@@ -33,7 +41,11 @@ loginRouter.get('/google-auth-return', (req, res) => {
 		res.send('Code is not a string');
 		return;
 	}
-	googleLoginController.getUserData(code).then((userData: { id: string; email: string; name: string; } | undefined) => {
+	googleLoginController.getUserData(code).then((userData: {
+		id: string;
+		email: string;
+		name: string;
+	} | undefined) => {
 		req.session.user = userData;
 		res.redirect(process.env.AUTH_RETURN_URL as string);
 	});
@@ -49,8 +61,25 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('id_token is not a string');
 		return;
 	}
-	microsoftLoginController.getUserData(id_token).then((userData: { id: string; email: string; name: string; } | undefined) => {
-		console.log(userData);
+	const state = req.body.state;
+	if (state == undefined) {
+		res.send('No state');
+		return;
+	}
+	if (req.session.oAuthState != state) {
+		res.send('Invalid oAuthState');
+		return;
+	}
+	const jwt = microsoftLoginController.decodeJWT(id_token);
+	if (jwt.nonce != req.session.oAuthNonce) {
+		res.send('Invalid oAuthNonce');
+		return;
+	}
+	microsoftLoginController.getUserData(jwt).then((userData: {
+		id: string;
+		email: string;
+		name: string;
+	} | undefined) => {
 		req.session.user = userData;
 		res.redirect(process.env.AUTH_RETURN_URL as string);
 	});

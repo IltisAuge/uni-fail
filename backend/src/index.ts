@@ -13,11 +13,14 @@ declare module 'express-session' {
 			id: string;
 			email: string;
 			name: string;
-		};
+		},
+		oAuthState: string,
+		oAuthNonce: string;
 	}
 }
 
 const server = express();
+server.set('trust proxy', 1);
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 server.use(session({
@@ -41,7 +44,7 @@ server.get('/', (req, res) => {
 });
 
 server.listen(5010, () => {
-	console.log("Starting in " + (process.env.PRODUCTION === 'true' ? 'PRODUCTION' : 'DEVELOPMENT') + " mode");
+	console.log("Starting in " + (process.env.PRODUCTION === 'true' ? 'PRODUCTION':'DEVELOPMENT') + " mode");
 	console.log('Server listening on port 5010');
 });
 
