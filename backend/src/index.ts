@@ -32,17 +32,13 @@ server.use(session({
 		secure: process.env.PRODUCTION == 'true',
 		httpOnly: true,
 		sameSite: process.env.PRODUCTION == 'true' ? 'none' : undefined,
-		domain: process.env.PRODUCTION == 'true' ? '.uni-fail.iltisauge.de' : undefined
+		domain: process.env.PRODUCTION == 'true' ? '.' + process.env.DOMAIN : undefined
 	}
 }));
 server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
-server.use((req, res, next) => {
-	console.log('Session:', JSON.stringify(req.session, null, 2));
-	next();
-})
 server.use('/login', loginRoutes);
 
 server.get('/', (req, res) => {
@@ -56,4 +52,4 @@ server.listen(5010, () => {
 });
 
 const db = new Database();
-//db.connect();
+db.connect();

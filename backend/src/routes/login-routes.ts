@@ -26,7 +26,7 @@ loginRouter.get('/', (req, res) => {
 	url = url.replace('{state}', state).replace('{nonce}', nonce);
 	req.session.oAuthState = state;
 	req.session.oAuthNonce = nonce;
-	res.send(url);
+	res.redirect(url);
 });
 
 loginRouter.get('/google-auth-return', (req, res) => {
@@ -59,11 +59,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('id_token is not a string');
 		return;
 	}
-	console.log('Session:', JSON.stringify(req.session, null, 2));
 	const state = req.body.state;
-	console.log("state=" + state);
-	console.log("oAuthState=" + req.session.oAuthState);
-	console.log("oAuthNonce=" + req.session.oAuthNonce);
 	if (state == undefined) {
 		res.send('No state');
 		return;
@@ -73,7 +69,6 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		return;
 	}
 	const jwt = microsoftLoginController.decodeJWT(id_token);
-	console.log("nonce=" + jwt.nonce);
 	if (jwt.nonce != req.session.oAuthNonce) {
 		res.send('Invalid oAuthNonce');
 		return;
