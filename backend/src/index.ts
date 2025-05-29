@@ -40,7 +40,7 @@ server.use(cors({
 	credentials: true
 }));
 server.use((req, res, next) => {
-	console.log("Session: " + req.session);
+	console.log('Session:', JSON.stringify(req.session, null, 2));
 })
 server.use('/login', loginRoutes);
 

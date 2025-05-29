@@ -60,7 +60,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('id_token is not a string');
 		return;
 	}
-	console.log("Session: " + req.session);
+	console.log('Session:', JSON.stringify(req.session, null, 2));
 	const state = req.body.state;
 	console.log("state=" + state);
 	console.log("oAuthState=" + req.session.oAuthState);
