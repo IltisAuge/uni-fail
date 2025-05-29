@@ -22,8 +22,8 @@ loginRouter.post('/', (req, res) => {
 			return;
 	}
 	let url = loginController.getAuthURL();
-	const state = generateRandomString({length: 32}) as string;
-	const nonce = generateRandomString({length: 32}) as string;
+	const state = crypto.randomUUID().toString();
+	const nonce = crypto.randomUUID().toString();
 	// Replace security parameters for Microsoft
 	url = url.replace('{state}', state).replace('{nonce}', nonce);
 	req.session.oAuthState = state;
@@ -61,11 +61,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('id_token is not a string');
 		return;
 	}
-	console.log(req.body);
 	const state = req.body.state;
-	console.log("state=" + state);
-	console.log("oAuthState=" + req.session.oAuthState);
-	console.log("oAuthNonce=" + req.session.oAuthNonce);
 	if (state == undefined) {
 		res.send('No state');
 		return;
@@ -75,7 +71,6 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		return;
 	}
 	const jwt = microsoftLoginController.decodeJWT(id_token);
-	console.log("nonce=" + jwt.nonce);
 	if (jwt.nonce != req.session.oAuthNonce) {
 		res.send('Invalid oAuthNonce');
 		return;
@@ -85,7 +80,6 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		email: string;
 		name: string;
 	} | undefined) => {
-		console.log(userData);
 		req.session.user = userData;
 		res.redirect(process.env.AUTH_RETURN_URL as string);
 	});
