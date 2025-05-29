@@ -28,20 +28,16 @@ server.use(session({
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
-		secure: process.env.PRODUCTION === 'true',
+		secure: true,
 		httpOnly: true,
-		sameSite: process.env.PRODUCTION === 'true' ? 'none' : undefined,
-		domain: process.env.PRODUCTION === 'true' ? '.' + process.env.DOMAIN : undefined
+		sameSite: 'none',
+		domain: '.uni-fail.iltisauge.de'
 	}
 }));
 server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
-server.use((req, res, next) => {
-	console.log('Secure? ', req.secure); // true on HTTPS via Nginx
-	next();
-});
 server.use('/login', loginRoutes);
 
 server.get('/', (req, res) => {
@@ -55,4 +51,4 @@ server.listen(5010, () => {
 });
 
 const db = new Database();
-db.connect();
+//db.connect();
