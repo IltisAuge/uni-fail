@@ -14,7 +14,7 @@ declare module 'express-session' {
 			email: string;
 			name: string;
 		},
-		oAuthState: string,
+		oAuthState: string;
 		oAuthNonce: string;
 	}
 }
