@@ -1,23 +1,14 @@
-import {generateRandomString} from 'ts-randomstring/lib';
 import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {LoginController} from './login-controller';
 
-interface MicrosoftIdToken extends JwtPayload {
+export interface MicrosoftIdToken extends JwtPayload {
 	oid: string;
 	name: string;
 	email: string;
+	nonce: string; // security parameter
 }
 
 export class MicrosoftLoginController extends LoginController {
-
-	private formatURL(url: string) {
-		return url.replace('{tenant}', process.env.MICROSOFT_TENANT_ID as string)
-			.replace('{client_id}', process.env.MICROSOFT_CLIENT_ID as string)
-			.replace('{return_uri}', process.env.MICROSOFT_RETURN_URL as string)
-			.replace('{scope}', process.env.MICROSOFT_SCOPE as string)
-			.replace('{state}', generateRandomString({length: 32}) as string)
-			.replace('{nonce}', generateRandomString({length: 32}) as string);
-	}
 
 	getAuthURL(): string {
 		return this.formatURL('https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize?\n' +
@@ -30,13 +21,28 @@ export class MicrosoftLoginController extends LoginController {
 			'&state={state}\n');
 	}
 
-	async getUserData(id_token: string) {
-		const decodedToken = jwtDecode<MicrosoftIdToken>(id_token);
+	decodeJWT(id_token: string): MicrosoftIdToken {
+		return jwtDecode<MicrosoftIdToken>(id_token);
+	}
+
+	async getUserData(decoded_token: MicrosoftIdToken): Promise<{
+		provider: string;
+		id: string;
+		email: string;
+		name: string;
+	}> {
 		return {
 			provider: 'microsoft',
-			id: decodedToken.oid,
-			email: decodedToken.email,
-			name: decodedToken.name
+			id: decoded_token.oid,
+			email: decoded_token.email,
+			name: decoded_token.name
 		};
+	}
+
+	private formatURL(url: string): string {
+		return url.replace('{tenant}', process.env.MICROSOFT_TENANT_ID as string)
+			.replace('{client_id}', process.env.MICROSOFT_CLIENT_ID as string)
+			.replace('{return_uri}', process.env.MICROSOFT_RETURN_URL as string)
+			.replace('{scope}', process.env.MICROSOFT_SCOPE as string);
 	}
 }

@@ -13,7 +13,9 @@ declare module 'express-session' {
 			id: string;
 			email: string;
 			name: string;
-		};
+		},
+		oAuthState: string,
+		oAuthNonce: string;
 	}
 }
 
@@ -41,7 +43,7 @@ server.get('/', (req, res) => {
 });
 
 server.listen(5010, () => {
-	console.log("Starting in " + (process.env.PRODUCTION === 'true' ? 'PRODUCTION' : 'DEVELOPMENT') + " mode");
+	console.log("Starting in " + (process.env.PRODUCTION === 'true' ? 'PRODUCTION':'DEVELOPMENT') + " mode");
 	console.log('Server listening on port 5010');
 });
 

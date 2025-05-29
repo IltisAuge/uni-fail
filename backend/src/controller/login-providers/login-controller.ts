@@ -1,4 +1,13 @@
+import {SessionData} from 'express-session';
+import {MicrosoftIdToken} from './microsoft-login';
+
 export abstract class LoginController {
-	abstract getAuthURL(): string;
-	abstract getUserData(code: string): Promise<{provider: string; id: string; email: string; name: string}>;
+	abstract getAuthURL(session?: SessionData): string;
+
+	abstract getUserData(code: string | MicrosoftIdToken): Promise<{
+		provider: string;
+		id: string;
+		email: string;
+		name: string
+	}>;
 }
