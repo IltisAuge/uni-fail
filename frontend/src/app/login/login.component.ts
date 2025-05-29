@@ -18,11 +18,6 @@ export class LoginComponent {
 	}
 
 	openLoginPage(provider: string) {
-		this.http.post('/login', {provider: provider}).subscribe(
-			resp => {
-				console.log(resp);
-				document.location.href = resp;
-			}
-		);
+		window.location.href = `/login?provider=${provider}`;
 	}
 }

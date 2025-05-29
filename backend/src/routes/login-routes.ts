@@ -6,10 +6,9 @@ const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
 const microsoftLoginController = new MicrosoftLoginController();
 
-loginRouter.post('/', (req, res) => {
-	console.log(req.body);
+loginRouter.get('/', (req, res) => {
 	let loginController: GoogleLoginController | MicrosoftLoginController;
-	switch (req.body.provider) {
+	switch (req.query.provider) {
 		case 'google':
 			loginController = googleLoginController;
 			break;
