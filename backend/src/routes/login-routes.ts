@@ -86,11 +86,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 });
 
 loginRouter.get('/check-login', (req, res) => {
-	if (req.session.user) {
-		res.json({user: req.session.user});
-	} else {
-		res.json({user: null});
-	}
+	res.json({user: req.session.user});
 });
 
 export default loginRouter;

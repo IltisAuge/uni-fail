@@ -20,12 +20,21 @@ export class AppComponent implements OnInit {
 	user: any | undefined
 
 	constructor(private httpService: HttpService, private authService: AuthService) {
-		httpService.get("/").subscribe(r => this.apiResponse = r);
+		httpService.get("/").subscribe(r => {
+			if (!!r) {
+				this.apiResponse = r;
+			}
+		});
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
 
 	ngOnInit(): void {
 		this.authService.checkLogin().subscribe(resp => {
+			console.log(resp);
+			if (!resp.success) {
+				this.username = "Could not check authentication status! Make sure the API server is running correctly!";
+				return;
+			}
 			const user = resp.user;
 			if (user != undefined) {
 				this.user = user;
