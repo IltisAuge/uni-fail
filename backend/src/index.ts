@@ -41,6 +41,7 @@ server.use(cors({
 }));
 server.use((req, res, next) => {
 	console.log('Session:', JSON.stringify(req.session, null, 2));
+	next();
 })
 server.use('/login', loginRoutes);
 
