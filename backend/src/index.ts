@@ -27,6 +27,7 @@ server.use(session({
 	secret: process.env.SESSION_SECRET as string,
 	resave: false,
 	saveUninitialized: false,
+	proxy: true,
 	cookie: {
 		secure: true,
 		httpOnly: true,
