@@ -30,7 +30,8 @@ server.use(session({
 	cookie: {
 		secure: process.env.PRODUCTION === 'true',
 		httpOnly: true,
-		sameSite: process.env.PRODUCTION === 'true' ? 'none' : undefined
+		sameSite: process.env.PRODUCTION === 'true' ? 'none' : undefined,
+		domain: process.env.PRODUCTION === 'true' ? '.' + process.env.DOMAIN : undefined
 	}
 }));
 server.use(cors({
