@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import {GoogleLoginController} from '../controller/login-providers/google-login';
 import {MicrosoftLoginController} from '../controller/login-providers/microsoft-login';
-import {generateRandomString} from 'ts-randomstring/lib';
 
 const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
@@ -61,6 +60,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('id_token is not a string');
 		return;
 	}
+	console.log("Session: " + req.session);
 	const state = req.body.state;
 	console.log("state=" + state);
 	console.log("oAuthState=" + req.session.oAuthState);

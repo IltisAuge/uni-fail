@@ -39,6 +39,9 @@ server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
+server.use((req, res, next) => {
+	console.log("Session: " + req.session);
+})
 server.use('/login', loginRoutes);
 
 server.get('/', (req, res) => {
