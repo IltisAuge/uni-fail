@@ -36,6 +36,10 @@ server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
+server.use((req, res, next) => {
+	console.log('Secure? ', req.secure); // true on HTTPS via Nginx
+	next();
+});
 server.use('/login', loginRoutes);
 
 server.get('/', (req, res) => {
