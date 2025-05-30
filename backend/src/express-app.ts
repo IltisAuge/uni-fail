@@ -1,23 +1,11 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
-import {Database} from './database';
 import loginRoutes from './routes/login-routes';
+import postRoutes from './routes/post-routes';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-declare module 'express-session' {
-	interface SessionData {
-		user?: {
-			id: string;
-			email: string;
-			name: string;
-		},
-		oAuthState: string;
-		oAuthNonce: string;
-	}
-}
 
 const server = express();
 server.set('trust proxy', 1);
@@ -40,16 +28,14 @@ server.use(cors({
 	credentials: true
 }));
 server.use('/login', loginRoutes);
+server.use('/post', postRoutes);
 
 server.get('/', (req, res) => {
 	res.header('Content-Type', 'text/plain');
 	res.send('Welcome to the API of uni-fail!');
 });
 
-server.listen(5010, () => {
-	console.log("Starting in " + (process.env.PRODUCTION === 'true' ? 'PRODUCTION':'DEVELOPMENT') + " mode");
-	console.log('Server listening on port 5010');
-});
+export default server;
 
-const db = new Database();
-db.connect();
+//const db = new Database();
+//db.connect();

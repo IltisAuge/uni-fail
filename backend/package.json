@@ -5,14 +5,15 @@
 	"license": "ISC",
 	"author": "Daniel Ziegler, Lisa Natterer, Leonie Reusch",
 	"type": "commonjs",
-	"main": "src/index.ts",
+	"main": "src/express-app.ts",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "ts-node-dev src/index.ts",
+		"test": "jest",
+		"dev": "ts-node-dev src/express-app.ts",
 		"build": "tsc",
 		"start": "node dist/index.js"
 	},
 	"dependencies": {
+		"@types/mongoose": "^5.11.97",
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
@@ -28,6 +29,11 @@
 		"@types/cors": "^2.8.18",
 		"@types/express": "^5.0.2",
 		"@types/express-session": "^1.18.1",
+		"@types/jest": "^29.5.14",
+		"@types/supertest": "^6.0.3",
+		"jest": "^29.7.0",
+		"mongodb-memory-server": "^10.1.4",
+		"ts-jest": "^29.3.4",
 		"tsx": "^4.19.4",
 		"typescript": "^5.8.3"
 	}
