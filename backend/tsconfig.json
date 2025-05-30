@@ -6,10 +6,12 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"outDir": "dist",
-		"rootDir": "src"
+		"rootDir": "src",
+		"resolveJsonModule": true
 	},
 	"include": [
 		"src",
+		"src/types",
 		".env",
 		"google_client.json",
 		"package.json",
