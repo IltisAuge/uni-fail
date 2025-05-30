@@ -5,10 +5,12 @@ import {LoginComponent} from './login/login.component';
 import {NgIf} from '@angular/common';
 import {AuthService} from './auth/auth.service';
 import {environment} from '../environments/environment';
+import { HeaderComponent } from './header/header.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
-	imports: [HomeComponent, LoginComponent, NgIf],
+	imports: [HomeComponent, LoginComponent, NgIf, HeaderComponent, RouterOutlet],
 	templateUrl: './app.component.html',
 	standalone: true,
 	styleUrl: './app.component.css'
