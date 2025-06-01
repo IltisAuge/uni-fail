@@ -34,15 +34,15 @@ export class AppComponent implements OnInit {
 	user: any | undefined
 
 	constructor(private httpService: HttpService, private authService: AuthService) {
-		httpService.get("/").subscribe(r => {
-			if (!!r) {
-				this.apiResponse = r;
-			}
-		});
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
 
 	ngOnInit(): void {
+		this.httpService.get("/").subscribe(r => {
+			if (!!r) {
+				this.apiResponse = r;
+			}
+		});
 		this.authService.checkLogin().subscribe(resp => {
 			console.log(resp);
 			if (!resp.success) {
