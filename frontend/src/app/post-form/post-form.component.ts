@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../auth/auth.service';
-//some kind of service that handles http requests to the backend
-
+import {environment} from '../../environments/environment';
 
 @Component({
-  selector: 'app-post-form',
-  standalone: true,
+	selector: 'app-post-form',
+	standalone: true,
 	imports: [
 		ReactiveFormsModule, CommonModule
 	],
-  templateUrl: './post-form.component.html',
-  styleUrl: './post-form.component.css'
+	templateUrl: './post-form.component.html',
+	styleUrl: './post-form.component.css'
 })
 export class PostFormComponent {
 	postForm: FormGroup;
@@ -20,7 +19,6 @@ export class PostFormComponent {
 
 	constructor(
 		private fb: FormBuilder,
-		//private postService: PostService,
 		private authService: AuthService
 	) {
 		this.postForm = this.fb.group({
@@ -28,17 +26,22 @@ export class PostFormComponent {
 			tags: ['']
 		});
 
-		//check authentifiaction
 		this.authService.isLoggedIn().subscribe(isLoggedIn => {
 			this.isLoggedIn = isLoggedIn;
-		})
+		});
 	}
 
 	onSubmit() {
 		if (this.postForm.valid) {
-			console.log('Form submitted', this.postForm.value);
-			alert('Form submitted! Check console for data.');
-			this.postForm.reset();
+			fetch(environment.apiBaseUrl + '/post/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.postForm.value)
+			}).then(result => {
+				console.log(result);
+			});
 		}
 	}
 }
