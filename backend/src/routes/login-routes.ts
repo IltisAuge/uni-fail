@@ -1,10 +1,12 @@
 import {Router} from 'express';
 import {GoogleLoginController} from '../controller/login-providers/google-login';
 import {MicrosoftLoginController} from '../controller/login-providers/microsoft-login';
+import {UserManager} from '../controller/user-manager';
 
 const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
 const microsoftLoginController = new MicrosoftLoginController();
+const userManager = new UserManager();
 
 loginRouter.get('/', (req, res) => {
 	let loginController: GoogleLoginController | MicrosoftLoginController;
@@ -39,14 +41,7 @@ loginRouter.get('/google-auth-return', (req, res) => {
 		res.send('Code is not a string');
 		return;
 	}
-	googleLoginController.getUserData(code).then((userData: {
-		id: string;
-		email: string;
-		name: string;
-	} | undefined) => {
-		req.session.user = userData;
-		res.redirect(process.env.AUTH_RETURN_URL as string);
-	});
+	googleLoginController.getUserData(code).then(userData => completeAuthentication(userData, req, res));
 });
 
 loginRouter.post('/microsoft-auth-return', (req, res) => {
@@ -73,19 +68,23 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('Invalid oAuthNonce');
 		return;
 	}
-	microsoftLoginController.getUserData(jwt).then((userData: {
-		id: string;
-		email: string;
-		name: string;
-	} | undefined) => {
-		console.log(userData);
-		req.session.user = userData;
-		res.redirect(process.env.AUTH_RETURN_URL as string);
-	});
+	microsoftLoginController.getUserData(jwt).then(userData => completeAuthentication(userData, req, res));
 });
 
 loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
+
+function completeAuthentication(userData: any, req: any, res: any) {
+	userManager.saveUser(userData).then(userDocument => {
+		console.log(userDocument);
+		if (!!userDocument) {
+			req.session.user = userDocument;
+			res.redirect(process.env.AUTH_RETURN_URL as string);
+			return;
+		}
+		res.status(500).send('Authentication failed!');
+	});
+}
 
 export default loginRouter;

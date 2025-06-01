@@ -17,6 +17,12 @@ export const PostModel = model('Post', PostSchema);
 const UserSchema = new Schema({
 	_id: String,
 	provider: String,
-	isAdmin: Boolean
+	name: String,
+	email: String,
+	isAdmin: {
+		type: Boolean,
+		default: false,
+		required: true
+	}
 });
 export const UserModel = model('User', UserSchema);
