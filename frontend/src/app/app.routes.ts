@@ -12,11 +12,11 @@ import {AboutUserComponent} from './about-user/about-user.component';
 export const routes: Routes = [
 	{ path: '', component: HomeComponent },
 
-	{ path: 'Search', component: SearchComponent },
-	{ path: 'Ranking', component: RankingComponent },
-	{ path: 'Post', component: PostFormComponent },
-	{ path: 'AboutUs', component: AboutUsComponent },
-	{ path: 'MyAccount', component: AboutUserComponent },
+	{ path: 'search', component: SearchComponent },
+	{ path: 'ranking', component: RankingComponent },
+	{ path: 'post', component: PostFormComponent },
+	{ path: 'aboutUs', component: AboutUsComponent },
+	{ path: 'myAccount', component: AboutUserComponent },
 ];
 
 
