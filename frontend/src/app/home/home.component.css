@@ -8,7 +8,7 @@
 	font-family: 'Lato', sans-serif;
 	font-size: 40px;
 	line-height: 40px;
-	color: #C3E6FC;
+	color: #A1C181;
 	text-align: left;
 	margin-bottom: 0.625rem;
 }
@@ -27,7 +27,7 @@
 	left: 0;
 	position: absolute;
 	top: 0;
-	color: #16a085;
+	color: #FCAA46;
 	font-size: 42px;
 	line-height: 40px;
 
@@ -41,7 +41,7 @@
 	position: absolute;
 	right: 0;
 	top: 0;
-	color: #16a085;
+	color: #FCAA46;
 	font-size: 42px;
 	line-height: 40px;
 
@@ -83,10 +83,11 @@
 }
 
 @keyframes change {
-	0%, 12.66%, 100% {transform:translate3d(0,0,0);}
-	16.66%, 29.32% {transform:translate3d(0,-25%,0);}
-	33.32%,45.98% {transform:translate3d(0,-50%,0);}
-	49.98%,62.64% {transform:translate3d(0,-75%,0);}
-	66.64%,79.3% {transform:translate3d(0,-50%,0);}
-	83.3%,95.96% {transform:translate3d(0,-25%,0);}
+	0% { transform: translate3d(0, 0, 0); }
+	40% { transform: translate3d(0, 0, 0); }
+
+	60% { transform: translate3d(0, -40px, 0); }
+	80% { transform: translate3d(0, -40px, 0); }
+
+	100% { transform: translate3d(0, 0, 0); }
 }
