@@ -18,7 +18,7 @@ postRouter.post('/create', (req, res) => {
 	const user = req.session.user!;
 	console.log(content);
 	console.log(tags);
-	postController.createPost(user.id, content, tags).then(result => {
+	postController.createPost(user._id, content, tags).then(result => {
 		res.status(200).json(result.content);
 	}).catch(error => {
 		res.status(500).send(error);
@@ -28,7 +28,7 @@ postRouter.post('/create', (req, res) => {
 postRouter.delete('/delete/:id', async (req, res) => {
 	const id = req.params.id;
 	const user = req.session.user!;
-	const fullUser = await UserModel.findById(user.id);
+	const fullUser = await UserModel.findById(user._id);
 	if (!fullUser) {
 		res.status(404).send("User not found!");
 		return;
@@ -38,7 +38,7 @@ postRouter.delete('/delete/:id', async (req, res) => {
 		res.status(404).send("Post with id '" + id + "' not found");
 		return;
 	}
-	if (post.userId !== user.id && !fullUser.isAdmin) {
+	if (post.userId !== user._id && !fullUser.isAdmin) {
 		res.status(403).send("No permission to delete this post");
 	}
 	post.deleteOne().then(result => {

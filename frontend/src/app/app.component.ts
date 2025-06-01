@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
 	title = 'frontend';
 	apiResponse: any = 'Requesting API response...';
 	username: any = 'Not logged in';
+	isAdmin: boolean = false;
 	user: any | undefined
 
 	constructor(private httpService: HttpService, private authService: AuthService) {
@@ -53,6 +54,7 @@ export class AppComponent implements OnInit {
 			if (user != undefined) {
 				this.user = user;
 				console.log(user);
+				this.isAdmin = user.isAdmin;
 				this.username = "Logged in via " + user.provider + " as " + user.name + " (" + user.email + ")";
 			}
 		});

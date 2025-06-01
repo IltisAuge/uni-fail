@@ -6,7 +6,7 @@ export abstract class LoginController {
 
 	abstract getUserData(code: string | MicrosoftIdToken): Promise<{
 		provider: string;
-		id: string;
+		_id: string;
 		email: string;
 		name: string
 	}>;

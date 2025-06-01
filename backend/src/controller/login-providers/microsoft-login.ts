@@ -25,15 +25,10 @@ export class MicrosoftLoginController extends LoginController {
 		return jwtDecode<MicrosoftIdToken>(id_token);
 	}
 
-	async getUserData(decoded_token: MicrosoftIdToken): Promise<{
-		provider: string;
-		id: string;
-		email: string;
-		name: string;
-	}> {
+	async getUserData(decoded_token: MicrosoftIdToken) {
 		return {
 			provider: 'microsoft',
-			id: decoded_token.oid,
+			_id: decoded_token.oid,
 			email: decoded_token.email,
 			name: decoded_token.name
 		};

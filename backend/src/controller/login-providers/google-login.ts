@@ -21,7 +21,7 @@ export class GoogleLoginController extends LoginController {
 		const payload = decodedToken.payload;
 		return {
 			provider: 'google',
-			id: payload.sub,
+			_id: payload.sub,
 			email: payload.email,
 			name: payload.name
 		};

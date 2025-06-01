@@ -7,6 +7,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+declare module 'express-session' {
+	interface SessionData {
+		user?: {
+			_id: string;
+			provider: string;
+			email: string;
+			name: string;
+			isAdmin: boolean;
+		},
+		oAuthState: string;
+		oAuthNonce: string;
+	}
+}
+
 const server = express();
 server.set('trust proxy', 1);
 server.use(express.json());
