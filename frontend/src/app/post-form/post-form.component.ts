@@ -38,6 +38,7 @@ export class PostFormComponent {
 				headers: {
 					'Content-Type': 'application/json'
 				},
+				credentials: 'include',
 				body: JSON.stringify(this.postForm.value)
 			}).then(result => {
 				console.log(result);
