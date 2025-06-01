@@ -22,9 +22,8 @@
 }
 
 /*Brackets*/
-.content__container::before {
-	content: '[';
-	left: 0;
+.content__container::before,
+.content__container::after {
 	position: absolute;
 	top: 0;
 	color: #FCAA46;
@@ -34,22 +33,18 @@
 	animation-name: opacity;
 	animation-duration: 2s;
 	animation-iteration-count: infinite;
+}
+
+.content__container::before {
+	content: '[';
+	left: 0;
 }
 
 .content__container::after {
 	content: ']';
-	position: absolute;
 	right: 0;
-	top: 0;
-	color: #FCAA46;
-	font-size: 42px;
-	line-height: 40px;
-
-	animation-name: opacity;
-	animation-duration: 2s;
-	animation-iteration-count: infinite;
-
 }
+
 
 .content__container__text {
 	display: inline;
