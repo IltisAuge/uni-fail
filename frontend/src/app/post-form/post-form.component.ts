@@ -28,9 +28,10 @@ export class PostFormComponent {
 			tags: ['']
 		});
 
-		//this.isLoggedIn = this.authService.isLoggedIn(); // checking authentification
-		//authentification is not yet working correctly
-
+		//check authentifiaction
+		this.authService.isLoggedIn().subscribe(isLoggedIn => {
+			this.isLoggedIn = isLoggedIn;
+		})
 	}
 
 	onSubmit() {
