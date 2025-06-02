@@ -1,0 +1,49 @@
+<nav class="flex flex-col min-h-full h-fit items-center bg-[#002244] py-7 shadow-md ml-0 mr-auto">
+    <div class="navbar-logo">
+        <img src="assets/logo-unifail.jpg" alt="Unifail Logo" class="pb-7"/>
+    </div>
+
+    <ul class="h-full w-full text-center flex flex-col list-none m-0">
+        <li>
+            <a class="nav-item"
+               routerLink="/"
+               routerLinkActive="active-link">Home</a>
+        </li>
+        <li>
+            <a class="nav-item"
+               routerLink="/search"
+               routerLinkActive="active-link">Suche</a>
+        </li>
+        <li>
+            <a class="nav-item"
+               routerLink="/ranking"
+               routerLinkActive="active-link">Rangliste</a>
+        </li>
+        <li>
+            <a class="nav-item"
+               routerLink="/post"
+               routerLinkActive="active-link">Post erstellen</a>
+        </li>
+        <li>
+            <a class="nav-item"
+               routerLink="/about-us"
+               routerLinkActive="active-link">Über uns🧚</a>
+        </li>
+        <li *ngIf="isLoggedIn; else login">
+            <a class="nav-item"
+               routerLink="/my-account">Dein Konto👤</a>
+        </li>
+        <li *ngIf="isLoggedIn">
+            <form (ngSubmit)="logout()">
+                <input type="submit" value="Abmelden" class="nav-item w-full"/>
+            </form>
+        </li>
+        <ng-template #login>
+            <li>
+                <a class="nav-item"
+                   routerLink="/login">Anmelden</a>
+            </li>
+        </ng-template>
+    </ul>
+</nav>
+

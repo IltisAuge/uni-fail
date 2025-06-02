@@ -1,28 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpService} from './http.service';
-import {HomeComponent} from './home/home.component';
-import {LoginComponent} from './login/login.component';
-import {NgIf} from '@angular/common';
 import {AuthService} from './auth/auth.service';
 import {environment} from '../environments/environment';
-import { HeaderComponent } from './header/header.component';
-import { RouterOutlet} from '@angular/router';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-
-
-
-/*
-import {SearchComponent} from './search/search.component';
-import {RankingComponent} from './ranking/ranking.component';
-import {PostFormComponent} from './post-form/post-form.component';
-import {AboutUsComponent} from './about-us/about-us.component';
-import {AboutUserComponent} from './about-user/about-user.component';
-*/
-
+import {NavigationComponent} from './navigation/navigation.component';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
 	selector: 'app-root',
-	imports: [HomeComponent, LoginComponent, NgIf, HeaderComponent, RouterOutlet, RouterLink, RouterLinkActive /*SearchComponent, RankingComponent, PostFormComponent, AboutUsComponent, AboutUserComponent*/],
+    imports: [NavigationComponent, RouterOutlet],
 	templateUrl: './app.component.html',
 	standalone: true,
 	styleUrl: './app.component.css'
@@ -44,19 +29,20 @@ export class AppComponent implements OnInit {
 				this.apiResponse = r;
 			}
 		});
-		this.authService.checkLogin().subscribe(resp => {
-			console.log(resp);
-			if (!resp.success) {
+		this.authService.getLoggedInUser().subscribe(resp => {
+			if (!resp || !resp.success) {
 				this.username = "Could not check authentication status! Make sure the API server is running correctly!";
 				return;
 			}
 			const user = resp.user;
-			if (user != undefined) {
-				this.user = user;
-				console.log(user);
-				this.isAdmin = user.isAdmin;
-				this.username = "Logged in via " + user.provider + " as " + user.name + " (" + user.email + ")";
-			}
+			if (user) {
+                this.user = user;
+                this.isAdmin = user.isAdmin;
+                this.username = "Logged in via " + user.provider + " as " + user.name + " (" + user.email + ")";
+                return;
+            }
+            this.username = "Not logged in";
+            this.isAdmin = false;
 		});
 	}
 }

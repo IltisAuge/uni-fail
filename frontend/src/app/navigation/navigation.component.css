@@ -1,0 +1,33 @@
+:host {
+    position: sticky;
+    width: 20%;
+    height: 100vh;
+}
+
+nav {
+    border-right: 1px solid white;
+}
+
+.navbar-logo > img {
+    width: calc(100% - 2rem);
+    margin: 0 auto;
+}
+
+nav > ul > li:first-child .nav-item {
+    border-top: 1px solid white;
+}
+
+.nav-item {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-size: 1.25rem;
+    transition: color .3s;
+    padding: 2rem 0;
+    border-bottom: 1px solid white;
+    display: block;
+}
+
+.nav-item:hover {
+    color: #FFD700;
+    cursor: pointer;
+}

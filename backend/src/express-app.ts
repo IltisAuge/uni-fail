@@ -43,6 +43,10 @@ server.use(cors({
 }));
 server.use('/login', loginRoutes);
 server.use('/post', postRoutes);
+server.post('/logout', (req, res) => {
+    req.session.user = undefined;
+    res.status(200).send("Logout successful");
+});
 
 server.get('/', (req, res) => {
 	res.header('Content-Type', 'text/plain');

@@ -7,32 +7,40 @@ import {environment} from '../../environments/environment';
 	providedIn: 'root'
 })
 export class AuthService {
-	private user = new BehaviorSubject<any>(undefined);
+	private user = new BehaviorSubject<{ success: boolean, user?: any }>({success: true});
 
 	constructor(private http: HttpClient) {
 	}
 
-	checkLogin(): Observable<{ success: boolean, user?:any }> {
-		return this.http.get<{
-			user: any
-		}>(environment.apiBaseUrl + '/login/check-login', {withCredentials: true}).pipe(
-			map(resp => {
-				this.user.next(resp.user);
-				return {success: true, user: resp.user};
-			}),
-			catchError(() => {
-				return of({success: false});
-			})
-		);
-	}
+    checkLogin(): Observable<{ success: boolean, user?: any }> {
+        return this.http.get<{ user: any }>(environment.apiBaseUrl + '/login/check-login', { withCredentials: true }).pipe(
+            map(resp => {
+                const userObj = { success: true, user: resp.user };
+                this.user.next(userObj);
+                return userObj;
+            }),
+            catchError(() => {
+                const errorObj = { success: false };
+                this.user.next(errorObj);
+                return of(errorObj);
+            })
+        );
+    }
 
 	getLoggedInUser(): Observable<any> {
-		return this.user.asObservable();
+        if (this.user.value.user === undefined) {
+            this.checkLogin().subscribe();
+        }
+        return this.user.asObservable();
 	}
 
 	isLoggedIn(): Observable<boolean> {
 		return this.getLoggedInUser().pipe(
-			map(user => !!user)
+			map(state => !!state && !!state.user)
 		);
 	}
+
+    resetUser() {
+        this.user.next({success: true, user: undefined});
+    }
 }
