@@ -41,7 +41,7 @@ export class PostFormComponent {
 				credentials: 'include',
 				body: JSON.stringify(this.postForm.value)
 			}).then(result => {
-				console.log(result);
+                console.log(result);
 			});
 		}
 	}

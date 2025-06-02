@@ -1,9 +1,9 @@
-<app-header></app-header>
-<main>
+<app-navigation></app-navigation>
+<main class="w-full flex flex-col justify-center items-center">
 	<router-outlet></router-outlet>
-</main>
 
-<app-login></app-login>
-{{ apiResponse }}<br>
-{{ username }}<br>
-Is Admin: {{ isAdmin }}
+    DEBUG CODE:<br>
+    {{ apiResponse }}<br>
+    {{ username }}<br>
+    Is Admin: {{ isAdmin }}
+</main>
