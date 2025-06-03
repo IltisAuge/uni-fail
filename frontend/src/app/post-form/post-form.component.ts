@@ -23,7 +23,7 @@ export class PostFormComponent {
 	) {
 		this.postForm = this.fb.group({
 			content: ['', Validators.required],
-			tags: ['']
+			tags: ['', Validators.required]
 		});
 
 		this.authService.isLoggedIn().subscribe(isLoggedIn => {
