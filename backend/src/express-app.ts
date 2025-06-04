@@ -54,6 +54,3 @@ server.get('/', (req, res) => {
 });
 
 export default server;
-
-//const db = new Database();
-//db.connect();

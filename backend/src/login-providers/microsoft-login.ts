@@ -1,5 +1,5 @@
 import {jwtDecode, JwtPayload} from 'jwt-decode';
-import {LoginController} from './login-controller';
+import {LoginController} from '../controller/login-controller';
 
 export interface MicrosoftIdToken extends JwtPayload {
 	oid: string;
