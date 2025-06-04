@@ -1,12 +1,12 @@
 import {Router} from 'express';
-import {GoogleLoginController} from '../controller/login-providers/google-login';
-import {MicrosoftLoginController} from '../controller/login-providers/microsoft-login';
-import {UserManager} from '../controller/user-manager';
+import {GoogleLoginController} from '../login-providers/google-login';
+import {MicrosoftLoginController} from '../login-providers/microsoft-login';
+import {UserController} from '../controller/user-controller';
 
 const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
 const microsoftLoginController = new MicrosoftLoginController();
-const userManager = new UserManager();
+const userController = new UserController();
 
 loginRouter.get('/', (req, res) => {
 	let loginController: GoogleLoginController | MicrosoftLoginController;
@@ -75,10 +75,24 @@ loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
 
+if (!process.env.production as boolean) {
+    loginRouter.get('/mock', (req, res) => {
+        const isAdmin = req.query.admin as unknown as boolean;
+        req.session.user = {
+            _id: '000000000',
+            provider: 'mock-provider',
+            name: 'Mock User',
+            email: 'mock@user.de',
+            isAdmin: isAdmin
+        }
+        res.status(302).send("Mocked session with admin=" + isAdmin);
+    });
+}
+
 function completeAuthentication(userData: any, req: any, res: any) {
-	userManager.saveUser(userData).then(userDocument => {
+    userController.saveUser(userData).then(userDocument => {
 		console.log(userDocument);
-		if (!!userDocument) {
+		if (userDocument) {
 			req.session.user = userDocument;
 			res.redirect(process.env.AUTH_RETURN_URL as string);
 			return;

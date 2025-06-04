@@ -11,7 +11,8 @@
 	},
 	"include": [
 		"src",
-		"src/types",
+		"types",
+        "tests",
 		".env",
 		"google_client.json",
 		"package.json",

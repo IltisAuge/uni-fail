@@ -1,8 +1,8 @@
 import {OAuth2Client} from 'google-auth-library';
-import {LoginController} from './login-controller';
+import {LoginController} from '../controller/login-controller';
 
 export class GoogleLoginController extends LoginController {
-	keys = require('../../../google_client.json');
+	keys = require('../../google_client.json');
 
 	getAuthURL() {
 		return this.getClient().generateAuthUrl({

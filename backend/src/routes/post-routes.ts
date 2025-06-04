@@ -13,13 +13,13 @@ postRouter.use((req, res, next) => {
 });
 
 postRouter.post('/create', (req, res) => {
-	const content = req.body.content;
-	const tags = req.body.tags.split(',');
+    const content = req.body.content;
+	const tags = req.body.tags;
 	const user = req.session.user!;
 	console.log(content);
 	console.log(tags);
 	postController.createPost(user._id, content, tags).then(result => {
-		res.status(200).json(result.content);
+		res.status(200).json(result);
 	}).catch(error => {
 		res.status(500).send(error);
 	});
