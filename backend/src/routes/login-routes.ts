@@ -75,7 +75,7 @@ loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
 
-if (!process.env.production as boolean) {
+if (!(process.env.production as unknown as boolean)) {
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as unknown as boolean;
         req.session.user = {
