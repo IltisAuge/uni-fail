@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import {MongoMemoryServer} from 'mongodb-memory-server';
-import server from '../src/express-app';
+import server from '../express-app';
 import supertestSession from 'supertest-session';
 import type { SuperTest, Test } from 'supertest';
 
