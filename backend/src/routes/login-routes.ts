@@ -2,6 +2,9 @@ import {Router} from 'express';
 import {GoogleLoginController} from '../login-providers/google-login';
 import {MicrosoftLoginController} from '../login-providers/microsoft-login';
 import {UserController} from '../controller/user-controller';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
@@ -75,6 +78,7 @@ loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
 
+console.log(process.env.PRODUCTION as unknown as boolean);
 if (!(process.env.PRODUCTION as unknown as boolean)) {
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as unknown as boolean;
