@@ -3,7 +3,7 @@ import {UserModel} from '../schemata/schemata';
 export class UserController {
 
 	async saveUser(userData: { _id: string, provider: string, name: string, email: string }) {
-		const res = await UserModel.findOneAndUpdate(
+        const res = await UserModel.findOneAndUpdate(
 			{_id: userData._id},
 			{$set: userData},
 			{

@@ -17,7 +17,7 @@ afterAll(async () => {
 	await mongoServer.stop();
 });
 
-describe('POST /post/create', () => {
+describe('Test /post/* endpoints', () => {
     let testSession: SuperTest<Test>;
 
     beforeEach(() => {
@@ -43,6 +43,7 @@ describe('POST /post/create', () => {
             .expect(302);
     })
 
+    let testPostId: string = '';
 	it('should create a post with authentication and succeed with code 200', async () => {
 		const postData = {
 			content: 'Mein Test Post',
@@ -62,24 +63,33 @@ describe('POST /post/create', () => {
         expect(response.body).toHaveProperty('tags');
         expect(response.body.content).toEqual(postData.content);
         expect(response.body.tags).toEqual(postData.tags);
+        testPostId = response.body._id;
 	});
-});
 
-describe('DELETE /post/delete/:id', () => {
-	/*it('should delete a post if user is owner or admin', async () => {
-		// Schritt 1: Post erstellen
-		const created = await request(server)
-			.post('/post/create')
-			.send({ content: 'zum löschen', tags: ['x'] });
+    it('should delete the post previously created and succeed with code 200', async () => {
+        await testSession
+            .get('/login/mock?admin=false')
+            .expect(302);
+        await testSession.delete('/post/delete/' + testPostId)
+            .send().expect(200);
+    });
 
-		const postId = created.body._id;
+    it('should delete a post not created by the mocked user and fail with code 401', async () => {
+        await testSession
+            .get('/login/mock?admin=false')
+            .expect(302);
+        console.log("mocked admin=false");
+        await testSession.delete('/post/delete/000000000')
+            .send().expect(403);
+    });
 
-		// Schritt 2: Post löschen
-		const response = await request(server)
-			.delete(`/post/delete/${postId}`);
-
-		expect(response.status).toBe(200);
-	});*/
+    it('should delete a post not created by the mocked user as an admin and succeed with code 200', async () => {
+        await testSession
+            .get('/login/mock?admin=true')
+            .expect(302);
+        await testSession.delete('/post/delete/000000000')
+            .send().expect(200);
+    });
 });
 
 

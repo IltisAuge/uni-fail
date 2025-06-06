@@ -1,5 +1,10 @@
 ## This project was created by Daniel Ziegler, Lisa Natterer and Leonie Reusch from DHBW Stuttgart.
 
+# Techstack
+This software uses ``Angular 18``, ``TypeScript``, ``TailwindCSS``, ``FontAwesome`` for the frontend.
+The backend is built using ``NodeJS``. The ``express`` library is being used for the API-Server.
+To test backend features, ``supertest`` and ``jest`` are used. All data is stored in ``MongoDB`` via mongoose.
+
 # Documentation for Developers
 
 ## 1. Setup Frontend & Backend Services in a production environment

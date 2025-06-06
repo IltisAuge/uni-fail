@@ -26,16 +26,16 @@ postRouter.post('/create', (req, res) => {
 });
 
 postRouter.delete('/delete/:id', async (req, res) => {
-	const id = req.params.id;
+	const postId = req.params.id;
 	const user = req.session.user!;
 	const fullUser = await UserModel.findById(user._id);
 	if (!fullUser) {
 		res.status(404).send("User not found!");
 		return;
 	}
-	const post = await PostModel.findById(id);
+	const post = await PostModel.findById(postId);
 	if (!post) {
-		res.status(404).send("Post with id '" + id + "' not found");
+		res.status(404).send("Post with id '" + postId + "' not found");
 		return;
 	}
 	if (post.userId !== user._id && !fullUser.isAdmin) {

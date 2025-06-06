@@ -77,8 +77,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
-
-console.log(process.env.PRODUCTION as unknown as boolean);
+//console.log("process.env.PRODUCTION=" + process.env.PRODUCTION as unknown as boolean);
 if (!(process.env.PRODUCTION as unknown as boolean)) {
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as unknown as boolean;
@@ -93,16 +92,20 @@ if (!(process.env.PRODUCTION as unknown as boolean)) {
     });
 }
 
-function completeAuthentication(userData: any, req: any, res: any) {
-    userController.saveUser(userData).then(userDocument => {
-		console.log(userDocument);
-		if (userDocument) {
-			req.session.user = userDocument;
-			res.redirect(process.env.AUTH_RETURN_URL as string);
-			return;
-		}
-		res.status(500).send('Authentication failed!');
-	});
+async function completeAuthentication(userData: any, req: any, res: any) {
+    let userDocument = undefined;
+    // If DB usage is disabled during development, login should work
+    if (process.env.USE_DB === 'true') {
+        userDocument = await userController.saveUser(userData);
+    } else {
+        userDocument = userData;
+    }
+    if (userDocument) {
+        req.session.user = userDocument;
+        res.redirect(process.env.AUTH_RETURN_URL as string);
+        return;
+    }
+    res.status(500).send('Authentication failed!');
 }
 
 export default loginRouter;
