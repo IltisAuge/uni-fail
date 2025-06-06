@@ -93,13 +93,7 @@ if (!(process.env.PRODUCTION as unknown as boolean)) {
 }
 
 async function completeAuthentication(userData: any, req: any, res: any) {
-    let userDocument = undefined;
-    // If DB usage is disabled during development, login should work
-    if (process.env.USE_DB === 'true') {
-        userDocument = await userController.saveUser(userData);
-    } else {
-        userDocument = userData;
-    }
+    const userDocument = await userController.saveUser(userData);
     if (userDocument) {
         req.session.user = userDocument;
         res.redirect(process.env.AUTH_RETURN_URL as string);
