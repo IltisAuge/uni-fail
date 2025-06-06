@@ -3,12 +3,14 @@ import {Schema, model} from "mongoose";
 export interface PostType {
 	_id: string;
 	userId: string;
+    creationTime: string;
 	content: string;
 	tags: string[];
 }
 const PostSchema = new Schema<PostType>({
 	_id: String,
 	userId: String,
+    creationTime: String,
 	content: String,
 	tags: [String]
 });

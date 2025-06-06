@@ -6,10 +6,24 @@ const postRouter = Router();
 const postController = new PostController();
 
 postRouter.use((req, res, next) => {
-	if (!req.session.user) {
+    if (req.path !== '/get' && !req.session.user) {
 		res.status(401).send();
 	}
 	next();
+});
+
+postRouter.use('/get', (req, res) => {
+    const filter = req.query.filter;
+    const max = req.query.max as unknown as number;
+    switch (filter) {
+        case 'newest':
+            postController.getNewestPosts(max)
+                .then(result => res.status(200).json(result));
+            break;
+        default:
+            res.status(400).send("Unknown filter option '" + filter + "'");
+            break;
+    }
 });
 
 postRouter.post('/create', (req, res) => {
