@@ -7,7 +7,8 @@ dotenv.config();
 export class PostController {
 
 	async createPost(userId: string, content: string, tags: string[]): Promise<HydratedDocument<PostType>> {
-		const model = new PostModel({_id: crypto.randomUUID().toString(), userId, content, tags});
+        const date = new Date();
+		const model = new PostModel({_id: crypto.randomUUID().toString(), creationTime: date.toISOString(), userId, content, tags});
 		try {
 			return await model.save();
 		} catch (error) {
@@ -15,4 +16,11 @@ export class PostController {
 			return Promise.reject(error);
 		}
 	}
+
+    async getNewestPosts(max: number) {
+        return await PostModel.find({})
+            .sort({ creationTime: -1 }) // Sort by creationTime descending (newest first)
+            .limit(max)
+            .exec();
+    }
 }

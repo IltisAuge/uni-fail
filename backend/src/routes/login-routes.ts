@@ -77,7 +77,7 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
-//console.log("process.env.PRODUCTION=" + process.env.PRODUCTION as unknown as boolean);
+
 if (!(process.env.PRODUCTION as unknown as boolean)) {
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as unknown as boolean;
