@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
             if (storedTheme) {
                 this.theme = storedTheme;
             }
+            document.documentElement.setAttribute('data-theme', this.theme);
         }
 	}
 
