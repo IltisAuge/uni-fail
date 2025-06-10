@@ -5,7 +5,8 @@
 }
 
 nav {
-    border-right: 1px solid white;
+    border-right: 1px solid var(--border-color);
+    background-color: var(--nav-background);
 }
 
 .navbar-logo > img {
@@ -14,16 +15,16 @@ nav {
 }
 
 nav > ul > li:first-child .nav-item {
-    border-top: 1px solid white;
+    border-top: 1px solid var(--border-color);
 }
 
 .nav-item {
-    color: #f0f0f0;
+    color: var(--nav-text);
     text-decoration: none;
     font-size: 1.25rem;
     transition: color .3s;
     padding: 2rem 0;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid var(--border-color);
     display: block;
 }
 

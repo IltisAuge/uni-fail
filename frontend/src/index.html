@@ -9,7 +9,13 @@
 
 	<title>Frontend</title>
 	<base href="/">
-
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', theme || (prefersDark ? 'dark' : 'light'));
+        })();
+    </script>
 	<link rel="icon" type="image/x-icon" href="favicon.ico">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

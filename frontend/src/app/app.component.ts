@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {HttpService} from './http.service';
 import {AuthService} from './auth/auth.service';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
 import {RouterOutlet} from '@angular/router';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
 	selector: 'app-root',
@@ -17,9 +18,13 @@ export class AppComponent implements OnInit {
 	apiResponse: any = 'Requesting API response...';
 	username: any = 'Not logged in';
 	isAdmin: boolean = false;
-	user: any | undefined
+	user: any | undefined;
+    theme: string = 'light';
 
-	constructor(private httpService: HttpService, private authService: AuthService) {
+	constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private httpService: HttpService,
+        private authService: AuthService) {
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
 
@@ -44,5 +49,18 @@ export class AppComponent implements OnInit {
             this.username = "Not logged in";
             this.isAdmin = false;
 		});
+        if (isPlatformBrowser(this.platformId)) {
+            let storedTheme = localStorage.getItem("theme");
+            if (storedTheme) {
+                this.theme = storedTheme;
+            }
+        }
 	}
+
+    toggleTheme() {
+        const nextTheme = this.theme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', nextTheme);
+        this.theme = nextTheme;
+        document.documentElement.setAttribute('data-theme', nextTheme);
+    }
 }

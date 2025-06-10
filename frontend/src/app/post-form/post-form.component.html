@@ -3,17 +3,18 @@
 
     <form [formGroup]="postForm"
           (ngSubmit)="onSubmit()"
-          class="bg-[#A1C181] dark:bg-[#619B8A] post-form flex flex-col gap-2 min-w-2xl mx-auto p-8
-
-         rounded-xl shadow-lg text-[#002244] mt-2">
-        <h2 class="text-3xl font-bold text-center border-b-2 border-[#002244] pb-2">
-            Erstelle einen neuen Post </h2>
-        <p class="text-center text-[#002244]">
+          class="bg-[var(--background-card)] post-form flex flex-col gap-2 min-w-2xl mx-auto p-8
+                rounded-xl shadow-lg text-[var(text-primary)] mt-2">
+        <h2 class="text-3xl font-bold text-center border-b-2 border-[var(--border-color)] pb-2">
+            Erstelle einen neuen Post
+        </h2>
+        <p class="text-center">
             Teile <strong>KEINE</strong> Namen oder sensible Informationen <br>
-            #wir wollen nicht verklagt werden😅! </p>
+            #wir wollen nicht verklagt werden😅!
+        </p>
 
         <label for="content"
-               class="font-semibold text-[#FFFFFF] text-lg">
+               class="font-semibold text-lg">
             Deine Story
         </label>
 
@@ -21,7 +22,8 @@
                   formControlName="content"
                   placeholder="Erzähle dein Uni-fail..."
                   class="p-3 border-2 border-[#FFA500] rounded-md text-base bg-white resize-y min-h-[120px]
-           focus:outline-none focus:ring-2 focus:ring-[#FFA500] text-[#1A568E]"></textarea>
+                        focus:outline-none focus:ring-2 focus:ring-[#FFA500] ">
+        </textarea>
 
         <label for="tags"
                class="font-semibold text-[#FFFFFF] text-lg">
@@ -31,32 +33,26 @@
                formControlName="tags"
                placeholder="z.B. der Name deiner Uni ..."
                class="p-3 border-2 border-[#FFA500] rounded-md text-base bg-white
-           focus:outline-none focus:ring-2 focus:ring-[#FFA500] text-[#1A568E]"/>
+                    focus:outline-none focus:ring-2 focus:ring-[#FFA500]"/>
 
         <button type="submit"
                 [disabled]="postForm.invalid"
                 [ngClass]="{
-    'cursor-not-allowed opacity-50': postForm.invalid,
-    'hover:text-[#333333] hover:border-[#FFD700]': postForm.valid
-  }"
-            class="bg-[#FFA500] text-[#1A568E] font-bold py-3 px-6 rounded-md border-2 border-[#FFA500] shadow-md"
-        >
+                    'cursor-not-allowed opacity-50': postForm.invalid,
+                    'hover:text-[#333333] hover:border-[#FFD700]': postForm.valid
+                  }"
+                class="bg-[#FFA500] text-[#1A568E] font-bold py-3 px-6 rounded-md border-2 border-[#FFA500] shadow-md">
             Submit
         </button>
-
-	</form>
-
-
-
+    </form>
 </div>
 
 <ng-template #notLoggedIn>
-	<div class="w-full bg-[#1A568E] text-[#FFA500] font-bold text-center p-16 rounded-none shadow-[0_0_15px_#333333] mt-2">
-		<p class="text-4xl px-4">
-			Please <strong>log in</strong> to post your uni-fail!
-
-		</p>
-	</div>
+    <div class="w-full bg-[#1A568E] text-[#FFA500] font-bold text-center p-16 rounded-none shadow-[0_0_15px_#333333] mt-2">
+        <p class="text-4xl px-4">
+            Please <strong>log in</strong> to post your uni-fail!
+        </p>
+    </div>
 </ng-template>
 
 
