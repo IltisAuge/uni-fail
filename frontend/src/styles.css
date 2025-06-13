@@ -14,8 +14,10 @@
 
     --button-green: #27AE60;
     --button-green-hover: #219150;
+    --button-green-text: #FFF;
     --button-red: #E74C3C;
     --button-red-hover: #C0392B;
+    --button-red-text: #FFF;
 
     --nav-background: #FFFFFF;
     --nav-text: #2C3E50;
@@ -34,8 +36,10 @@
 
     --button-green: #27AE60;
     --button-green-hover: #219150;
+    --button-green-text: #FFF;
     --button-red: #E74C3C;
     --button-red-hover: #C0392B;
+    --button-red-text: #FFF;
 
     --nav-background: #15151E;
     --nav-text: #DBE0EC;
@@ -51,6 +55,30 @@ body {
 html, body {
     height: 100%;
     margin: 0;
+}
+
+.button-green, .button-red {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-green {
+    background-color: var(--button-green);
+    color: var(--button-green-text);
+}
+
+.button-red {
+    background-color: var(--button-red);
+    color: var(--button-red-text);
+}
+
+form input:not([type="submit"]) {
+    background: var(--input-background);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
 }
 
 

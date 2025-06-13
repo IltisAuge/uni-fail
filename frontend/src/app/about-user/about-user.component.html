@@ -1,1 +1,46 @@
-<p>about-user works!</p>
+<div class="flex flex-col justify-center">
+    <h1 class="text-3xl mb-10 text-center">Dein Konto</h1>
+    <p>Hallo <strong>{{name}}</strong>, du bist über {{provider}} angemeldet.</p>
+    <p>E-Mail: {{email}}</p>
+    <p class="mt-10 mb-2">Dein aktueller Anzeigename: {{displayName}}</p>
+    <p *ngIf="!isDisplayNameAvailable" class="text-red-500 mb-2">Dieser Anzeigename ist nicht verfügbar!</p>
+    <form [formGroup]="displayNameForm" (ngSubmit)="onSubmit()">
+        <div class="flex gap-5 flex-col sm:flex-row w-fit">
+            <input formControlName="displayName" type="text" placeholder="Neuer Anzeigename">
+            <input class="button-green" type="submit" value="Anzeigename ändern">
+        </div>
+    </form>
+    <div class="flex gap-5 mt-10 flex-col sm:flex-row w-fit">
+        <div class="image-wrapper h-[128px] w-[128px]">
+            <img ngSrc="{{avatarURL}}" height="128px" width="128px" alt="Dein Avatar"/>
+        </div>
+        <button (click)="openModal()" class="mt-auto hover:cursor-pointer">Dein Avatar ändern</button>
+    </div>
+</div>
+
+<dialog #avatarDialog class="w-full fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 max-w-2xl rounded-lg p-4 bg-[var(--background-card)] backdrop:bg-black/50">
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
+        <h3 class="text-xl font-semibold">Wähle ein Avatar aus</h3>
+        <button (click)="closeModal()" class="hover:text-gray-400 hover:cursor-pointer">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="py-4 space-y-4 flex flex-wrap justify-center">
+        <div *ngFor="let imgSrc of avatarURLs; let i = index" class="image-wrapper m-3 h-[128px] w-[128px] relative">
+            <img
+                [src]="imgSrc"
+                (click)="selectAvatar(i)"
+                [ngClass]="{
+                  'border-4 border-blue-400': selectedAvatarIndex === i,
+                  'cursor-pointer': true
+                }"
+                class="w-full h-full object-cover transition-all duration-100" alt="Avatar" />
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end space-x-2 border-t border-[var(--border-color)] pt-4">
+        <button (click)="acceptAvatar()" class="button-green">Auswählen</button>
+    </div>
+</dialog>

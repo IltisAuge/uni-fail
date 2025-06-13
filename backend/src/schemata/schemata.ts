@@ -19,12 +19,24 @@ export const PostModel = model('Post', PostSchema);
 const UserSchema = new Schema({
 	_id: String,
 	provider: String,
-	name: String,
 	email: String,
+    name: String,
 	isAdmin: {
 		type: Boolean,
 		default: false,
 		required: true
-	}
+	},
+    displayName: String,
+    avatarKey: String
 });
 export const UserModel = model('User', UserSchema);
+
+const DisplayNamesSchema = new Schema({
+    _id: Number,
+    names: {
+        type: [String],
+        default: []
+    }
+});
+
+export const DisplayNamesModel = model('DisplayNames', DisplayNamesSchema);
