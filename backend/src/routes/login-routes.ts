@@ -1,7 +1,13 @@
 import {Router} from 'express';
 import {GoogleLoginController} from '../login-providers/google-login';
 import {MicrosoftLoginController} from '../login-providers/microsoft-login';
-import {UserController} from '../controller/user-controller';
+import {
+    getRandomDisplayName,
+    removeAvailableDisplayName,
+    saveUser,
+    setAvatarKey,
+    setDisplayName
+} from '../controller/user-controller';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -9,7 +15,6 @@ dotenv.config();
 const loginRouter = Router();
 const googleLoginController = new GoogleLoginController();
 const microsoftLoginController = new MicrosoftLoginController();
-const userController = new UserController();
 
 loginRouter.get('/', (req, res) => {
 	let loginController: GoogleLoginController | MicrosoftLoginController;
@@ -78,7 +83,9 @@ loginRouter.get('/check-login', (req, res) => {
 	res.json({user: req.session.user});
 });
 
-if (!(process.env.PRODUCTION as unknown as boolean)) {
+// Only enable this endpoint in development
+if (process.env.PRODUCTION === 'false') {
+    console.log("Enabled /login/mock endpoint")
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as unknown as boolean;
         req.session.user = {
@@ -86,15 +93,33 @@ if (!(process.env.PRODUCTION as unknown as boolean)) {
             provider: 'mock-provider',
             name: 'Mock User',
             email: 'mock@user.de',
-            isAdmin: isAdmin
+            isAdmin: isAdmin,
+            displayName: 'Mock User Display Name',
+            avatarKey: 'mockAvatar.jpg'
         }
         res.status(302).send("Mocked session with admin=" + isAdmin);
     });
+} else {
+    console.log("Not enabled /login/mock endpoint")
 }
 
 async function completeAuthentication(userData: any, req: any, res: any) {
-    const userDocument = await userController.saveUser(userData);
+    let userDocument = await saveUser(userData);
     if (userDocument) {
+        if (!userDocument.avatarKey) {
+            console.log("No avatarKey set");
+            userDocument = await setAvatarKey(userDocument._id, '307ce493-b254-4b2d-8ba4-d12c080d6651.jpg');
+            console.log("Default avatarKey set");
+            console.log(userDocument);
+        }
+        if (!userDocument.displayName) {
+            console.log("No displayName set");
+            const randomDisplayName = getRandomDisplayName();
+            console.log("setting random name: " + randomDisplayName);
+            await removeAvailableDisplayName(randomDisplayName);
+            userDocument = await setDisplayName(userDocument._id, randomDisplayName);
+            console.log(userDocument);
+        }
         req.session.user = userDocument;
         res.redirect(process.env.AUTH_RETURN_URL as string);
         return;

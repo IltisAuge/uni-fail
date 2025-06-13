@@ -20,8 +20,8 @@ export class GoogleLoginController extends LoginController {
 		const decodedToken = this.decodeToken(idToken);
 		const payload = decodedToken.payload;
 		return {
+            _id: payload.sub,
 			provider: 'google',
-			_id: payload.sub,
 			email: payload.email,
 			name: payload.name
 		};

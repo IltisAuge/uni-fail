@@ -1,12 +1,128 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AuthService} from '../auth/auth.service';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {isPlatformBrowser, NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-about-user',
   standalone: true,
-  imports: [],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgForOf,
+        NgClass,
+        NgOptimizedImage,
+        NgIf
+    ],
   templateUrl: './about-user.component.html',
   styleUrl: './about-user.component.css'
 })
-export class AboutUserComponent {
+export class AboutUserComponent implements OnInit {
+    name: string = "";
+    email: string = "";
+    provider: string = "";
+    displayName: string = "";
+    userId: string = "";
+    displayNameForm: FormGroup;
+    avatarURL: string | undefined;
+    isModalOpen: boolean = false;
+    avatarIds: string[] = [];
+    avatarURLs: string[] = [];
+    selectedAvatarIndex: number = -1;
+    isDisplayNameAvailable: boolean = true;
+    @ViewChild('avatarDialog') avatarDialogRef!: ElementRef<HTMLDialogElement>;
 
+    constructor(@Inject(PLATFORM_ID) private platformId: Object,
+        private fb: FormBuilder, private http: HttpClient, private authService: AuthService) {
+        this.displayNameForm = this.fb.group({
+            displayName: ['', Validators.required]
+        });
+    }
+
+    ngOnInit() {
+        this.authService.getLoggedInUser().subscribe(resp => {
+            console.log("authService update in about-user:", resp);
+            if (!resp || !resp.success) {
+                this.name = "Could not check authentication status! Make sure the API server is running correctly!";
+                return;
+            }
+            const user = resp.user;
+            if (user) {
+                this.userId = user._id;
+                this.name = user.name;
+                this.email = user.email;
+                this.provider = user.provider;
+                this.provider = String(this.provider).charAt(0).toUpperCase() + String(this.provider).slice(1);
+                this.displayName = user.displayName;
+                this.avatarURL = environment.apiBaseUrl + '/avatars/' + user.avatarKey;
+            } else if (isPlatformBrowser(this.platformId)) {
+                // Redirect to home if user is not logged in
+                window.location.href = '/';
+            }
+        });
+        this.http.get(environment.apiBaseUrl + '/avatars').subscribe(resp => {
+            if (!resp) {
+                return;
+            }
+            console.log(resp);
+            const array = resp as string[];
+            this.avatarIds = array;
+            for (const id in array) {
+                this.avatarURLs.push(environment.apiBaseUrl + '/avatars/' + array[id]);
+            }
+        })
+    }
+
+    onSubmit() {
+        if (this.displayNameForm.valid) {
+            const body = this.displayNameForm.value;
+            this.http.post(environment.apiBaseUrl + '/user/set-display-name', body, {
+                observe: 'response',
+                responseType: 'json'
+            }).subscribe({
+                next: resp => {
+                    if (resp.status === 200) {
+                        this.isDisplayNameAvailable = true;
+                        this.authService.reloadUserData();
+                    }
+                },
+                error: err => {
+                    if (err.status === 400 && err.error?.error === 'Not available') {
+                        this.isDisplayNameAvailable = false;
+                    }
+                }
+            });
+        } else {
+            console.log("Form is invalid!");
+        }
+    }
+
+    openModal() {
+        this.avatarDialogRef.nativeElement.showModal();
+        this.isModalOpen = true;
+    }
+
+    closeModal() {
+        this.avatarDialogRef.nativeElement.close();
+        this.isModalOpen = false;
+    }
+
+    acceptAvatar() {
+        const avatarId = this.avatarIds[this.selectedAvatarIndex];
+        console.log("send avatarId=" + avatarId);
+        this.http.post(environment.apiBaseUrl + '/user/set-avatar', {
+            avatarId: avatarId
+        }).subscribe(resp => {
+            console.log(resp);
+            this.authService.reloadUserData();
+        });
+        this.closeModal();
+        this.selectedAvatarIndex = -1;
+    }
+
+    selectAvatar(index: number) {
+        this.selectedAvatarIndex = index;
+    }
 }

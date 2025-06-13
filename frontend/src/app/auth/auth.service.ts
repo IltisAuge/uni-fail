@@ -12,6 +12,13 @@ export class AuthService {
 	constructor(private http: HttpClient) {
 	}
 
+    reloadUserData() {
+        const resp = this.checkLogin();
+        resp.subscribe(r => {
+            console.log(r);
+        })
+    }
+
     checkLogin(): Observable<{ success: boolean, user?: any }> {
         return this.http.get<{ user: any }>(environment.apiBaseUrl + '/login/check-login', { withCredentials: true }).pipe(
             map(resp => {
