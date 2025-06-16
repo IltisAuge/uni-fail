@@ -4,25 +4,18 @@ import cors from 'cors';
 import loginRoutes from './routes/login-routes';
 import postRoutes from './routes/post-routes';
 import userRoutes from './routes/user-routes';
+import adminRoutes from './routes/admin-routes';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'node:path';
 import {downloadAllFiles} from './s3';
-import {loadAvailableDisplayNames} from './controller/user-controller';
+import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
 
 dotenv.config();
 
 declare module 'express-session' {
 	interface SessionData {
-		user?: {
-			_id: string;
-			provider: string;
-			email: string;
-			name: string;
-			isAdmin: boolean;
-            displayName: string;
-            avatarKey: string;
-		},
+        userId: string,
 		oAuthState: string;
 		oAuthNonce: string;
 	}
@@ -51,6 +44,19 @@ server.use(cors({
 server.use('/login', loginRoutes);
 server.use('/post', postRoutes);
 server.use('/user', userRoutes);
+server.use('/admin', adminRoutes);
+server.get('/me', async (req, res) => {
+    if (!req.session.userId) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+    const user = await getUser(req.session.userId);
+    if (user) {
+        res.json({user: user});
+        return;
+    }
+    res.status(404).json({error:'User not found. Id=' + req.session.userId});
+})
 server.get('/avatars', (req, res) => {
     fs.readdir('./avatars', (err, files) => {
         res.json(files);
@@ -62,7 +68,7 @@ server.get('/avatars/:id', (req, res) => {
     res.status(200).sendFile(avatarFilePath);
 });
 server.post('/logout', (req, res) => {
-    req.session.user = undefined;
+    req.session.userId = undefined;
     res.status(200).send("Logout successful");
 });
 server.get('/', (req, res) => {

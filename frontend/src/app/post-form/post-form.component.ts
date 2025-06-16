@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../auth/auth.service';
 import {environment} from '../../environments/environment';
+import {filter} from 'rxjs';
 
 @Component({
 	selector: 'app-post-form',
@@ -26,8 +27,10 @@ export class PostFormComponent {
 			tags: ['', Validators.required]
 		});
 
-		this.authService.isLoggedIn().subscribe(isLoggedIn => {
-			this.isLoggedIn = isLoggedIn;
+        this.authService.getLoggedInUser().pipe(
+            filter(state => state.success)
+        ).subscribe(state => {
+			this.isLoggedIn = !!state.user;
 		});
 	}
 

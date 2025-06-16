@@ -3,8 +3,9 @@ import {HttpService} from './http.service';
 import {AuthService} from './auth/auth.service';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
-import {RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser} from '@angular/common';
+import {filter} from 'rxjs';
 
 @Component({
 	selector: 'app-root',
@@ -20,11 +21,14 @@ export class AppComponent implements OnInit {
 	isAdmin: boolean = false;
 	user: any | undefined;
     theme: string = 'light';
+    userId: string = '';
+    displayName: string = '';
 
 	constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         private httpService: HttpService,
-        private authService: AuthService) {
+        private authService: AuthService,
+        private router: Router) {
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
 
@@ -34,7 +38,10 @@ export class AppComponent implements OnInit {
 				this.apiResponse = r;
 			}
 		});
-		this.authService.getLoggedInUser().subscribe(resp => {
+        this.authService.getLoggedInUser().pipe(
+            filter(state => state.success)
+        ).subscribe(resp => {
+            console.log("authService update in app.component");
 			if (!resp || !resp.success) {
 				this.username = "Could not check authentication status! Make sure the API server is running correctly!";
 				return;
@@ -43,6 +50,8 @@ export class AppComponent implements OnInit {
 			if (user) {
                 this.user = user;
                 this.isAdmin = user.isAdmin;
+                this.userId = user._id;
+                this.displayName = user.displayName;
                 this.username = "Logged in via " + user.provider + " as " + user.name + " (" + user.email + ")";
                 return;
             }
@@ -63,5 +72,11 @@ export class AppComponent implements OnInit {
         localStorage.setItem('theme', nextTheme);
         this.theme = nextTheme;
         document.documentElement.setAttribute('data-theme', nextTheme);
+    }
+
+    openMockUserPage() {
+        this.router.navigate(['/user/' + this.userId]).then(r => {
+            console.log(r);
+        });
     }
 }

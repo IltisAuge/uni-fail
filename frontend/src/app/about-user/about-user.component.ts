@@ -4,6 +4,8 @@ import {AuthService} from '../auth/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {isPlatformBrowser, NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import {Router} from '@angular/router';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'app-about-user',
@@ -35,20 +37,25 @@ export class AboutUserComponent implements OnInit {
     @ViewChild('avatarDialog') avatarDialogRef!: ElementRef<HTMLDialogElement>;
 
     constructor(@Inject(PLATFORM_ID) private platformId: Object,
-        private fb: FormBuilder, private http: HttpClient, private authService: AuthService) {
+                private fb: FormBuilder,
+                private http: HttpClient,
+                private authService: AuthService,
+                private router: Router) {
         this.displayNameForm = this.fb.group({
             displayName: ['', Validators.required]
         });
     }
 
     ngOnInit() {
-        this.authService.getLoggedInUser().subscribe(resp => {
-            console.log("authService update in about-user:", resp);
-            if (!resp || !resp.success) {
+        this.authService.getLoggedInUser().pipe(
+            filter(state => state.success)
+        ).subscribe(state => {
+            console.log("authService update in about-user:", state);
+            if (!state || !state.success) {
                 this.name = "Could not check authentication status! Make sure the API server is running correctly!";
                 return;
             }
-            const user = resp.user;
+            const user = state.user;
             if (user) {
                 this.userId = user._id;
                 this.name = user.name;
@@ -59,7 +66,7 @@ export class AboutUserComponent implements OnInit {
                 this.avatarURL = environment.apiBaseUrl + '/avatars/' + user.avatarKey;
             } else if (isPlatformBrowser(this.platformId)) {
                 // Redirect to home if user is not logged in
-                window.location.href = '/';
+                this.router.navigate(['/']);
             }
         });
         this.http.get(environment.apiBaseUrl + '/avatars').subscribe(resp => {
@@ -78,14 +85,15 @@ export class AboutUserComponent implements OnInit {
     onSubmit() {
         if (this.displayNameForm.valid) {
             const body = this.displayNameForm.value;
-            this.http.post(environment.apiBaseUrl + '/user/set-display-name', body, {
+            this.http.post<any>(environment.apiBaseUrl + '/user/set-display-name', body, {
                 observe: 'response',
                 responseType: 'json'
             }).subscribe({
                 next: resp => {
-                    if (resp.status === 200) {
+                    if (resp.status === 200 && resp.body && resp.body.user) {
                         this.isDisplayNameAvailable = true;
-                        this.authService.reloadUserData();
+                        console.log("user response:", resp.body.user);
+                        this.authService.setUser(true, resp.body.user);
                     }
                 },
                 error: err => {
@@ -112,11 +120,11 @@ export class AboutUserComponent implements OnInit {
     acceptAvatar() {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
         console.log("send avatarId=" + avatarId);
-        this.http.post(environment.apiBaseUrl + '/user/set-avatar', {
+        this.http.post<any>(environment.apiBaseUrl + '/user/set-avatar', {
             avatarId: avatarId
         }).subscribe(resp => {
             console.log(resp);
-            this.authService.reloadUserData();
+            this.authService.setUser(true, resp.user);
         });
         this.closeModal();
         this.selectedAvatarIndex = -1;
