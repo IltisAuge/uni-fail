@@ -1,5 +1,8 @@
 import {DisplayNamesModel, UserModel} from '../schemata/schemata';
+import NodeCache from 'node-cache';
+import {IUser} from '../user.interface';
 
+const userCache = new NodeCache();
 let availableDisplayNames: string[] = [];
 
 export async function loadAvailableDisplayNames(): Promise<string[]> {
@@ -42,10 +45,12 @@ export async function isDisplayNameAvailable(displayName: string): Promise<boole
     return !includes && !existsUser;
 }
 
-export async function saveUser(userData: { _id: string, provider: string, name: string, email: string, displayName: string, avatarKey: string }): Promise<any> {
+export async function saveUser(userData: IUser) {
+    userCache.set(userData._id, userData);
+    const data = { ...userData };
     const res = await UserModel.findOneAndUpdate(
-        {_id: userData._id},
-        {$set: userData},
+        {_id: data._id},
+        {$set: data},
         {
             upsert: true,
             new: true,  // return new/updated document
@@ -56,41 +61,49 @@ export async function saveUser(userData: { _id: string, provider: string, name: 
     return res;
 }
 
-export async function setDisplayName( _id: string, displayName: string): Promise<any> {
-    const res = await UserModel.findOneAndUpdate(
-        {_id: _id},
-        {$set: {displayName: displayName}},
-        {
-            upsert: true,
-            new: true,  // return new/updated document
-            setDefaultsOnInsert: true
-        }
-    );
-    console.log(res);
-    return res;
+export async function getUser(userId: string): Promise<IUser | undefined> {
+    const cachedUser = userCache.get(userId) as IUser | undefined;
+    if (cachedUser) {
+        return cachedUser;
+    }
+    const user = await UserModel.findOne({ _id: userId }).exec();
+    if (user) {
+        userCache.set(userId, user);
+        return user;
+    }
+    return undefined;
 }
 
-export async function setAvatarKey( _id: string, avatarKey: string): Promise<any> {
-    const res = await UserModel.findOneAndUpdate(
-        {_id: _id},
-        {$set: {avatarKey: avatarKey}},
+async function updateUserField(userId: string, field: string, value: any) {
+    const cachedUser = userCache.get(userId) as IUser | undefined;
+    if (cachedUser) {
+        cachedUser[field] = value;
+        userCache.set(userId, cachedUser);
+        console.log("new cached user: ", cachedUser);
+    }
+    return UserModel.findOneAndUpdate(
+        {_id: userId},
+        {$set: {[field]: value}},
         {
             upsert: true,
             new: true,  // return new/updated document
             setDefaultsOnInsert: true
         }
     );
-    console.log(res);
-    return res;
+}
+
+export async function setDisplayName( _id: string, displayName: string) {
+    return await updateUserField(_id, "displayName", displayName);
+}
+
+export async function setAvatarKey( _id: string, avatarKey: string) {
+    return await updateUserField(_id, "avatarKey", avatarKey);
 }
 
 export async function setAdmin(_id: string, status: boolean) {
-    return UserModel.findOneAndUpdate(
-        {_id: _id},
-        {$set: {isAdmin: status}},
-        {
-            new: true,  // return new/updated document
-            setDefaultsOnInsert: true
-        }
-    )
+    return await updateUserField(_id, "isAdmin", status);
+}
+
+export async function setBlocked(_id: string, status: boolean) {
+    return await updateUserField(_id, "isBlocked", status);
 }

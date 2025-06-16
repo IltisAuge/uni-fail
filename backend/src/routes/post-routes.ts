@@ -1,12 +1,13 @@
 import {Router} from 'express';
 import {PostController} from '../controller/post-controller';
-import {PostModel, UserModel} from '../schemata/schemata';
+import {PostModel} from '../schemata/schemata';
+import {getUser} from '../controller/user-controller';
 
 const postRouter = Router();
 const postController = new PostController();
 
 postRouter.use((req, res, next) => {
-    if (req.path !== '/get' && !req.session.user) {
+    if (req.path !== '/get' && !req.session.userId) {
 		res.status(401).send();
 	}
 	next();
@@ -26,13 +27,18 @@ postRouter.use('/get', (req, res) => {
     }
 });
 
-postRouter.post('/create', (req, res) => {
+postRouter.post('/create', async (req, res) => {
     const content = req.body.content;
 	const tags = req.body.tags;
-	const user = req.session.user!;
+	const userId = req.session.userId!;
+    const user = await getUser(userId);
+    if (!user) {
+        res.status(404).send("User not found!");
+        return;
+    }
 	console.log(content);
 	console.log(tags);
-	postController.createPost(user._id, content, tags).then(result => {
+	postController.createPost(userId, content, tags).then(result => {
 		res.status(200).json(result);
 	}).catch(error => {
 		res.status(500).send(error);
@@ -41,9 +47,9 @@ postRouter.post('/create', (req, res) => {
 
 postRouter.delete('/delete/:id', async (req, res) => {
 	const postId = req.params.id;
-	const user = req.session.user!;
-	const fullUser = await UserModel.findById(user._id);
-	if (!fullUser) {
+    const userId = req.session.userId!;
+    const user = await getUser(userId);
+	if (!user) {
 		res.status(404).send("User not found!");
 		return;
 	}
@@ -52,7 +58,7 @@ postRouter.delete('/delete/:id', async (req, res) => {
 		res.status(404).send("Post with id '" + postId + "' not found");
 		return;
 	}
-	if (post.userId !== user._id && !fullUser.isAdmin) {
+	if (post.userId !== userId && !user.isAdmin) {
 		res.status(403).send("No permission to delete this post");
 	}
 	post.deleteOne().then(result => {

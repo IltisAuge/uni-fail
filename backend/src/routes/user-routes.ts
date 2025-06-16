@@ -1,19 +1,18 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import {UserModel} from '../schemata/schemata';
-import {isDisplayNameAvailable} from '../controller/user-controller';
+import {getUser, isDisplayNameAvailable, setAvatarKey, setDisplayName} from '../controller/user-controller';
 
 dotenv.config();
 
 const userRouter = Router();
 
 userRouter.post('/set-display-name', async (req, res) => {
-    if (!req.session.user) {
+    if (!req.session.userId) {
         res.status(401).send();
         return;
     }
-    const userId = req.session.user._id;
-    const user = await UserModel.findById(userId);
+    const userId = req.session.userId;
+    const user = await getUser(userId);
     if (!user) {
         res.status(404).json({error: 'User not found!'});
         return;
@@ -28,13 +27,9 @@ userRouter.post('/set-display-name', async (req, res) => {
         return;
     }
     console.log("Set user displayname from " + user.displayName + " to " + displayName);
-    user.displayName = displayName as string;
-    user.save().then(result => {
+    setDisplayName(userId, displayName).then(result => {
         if (result) {
-            if (req.session.user) {
-                req.session.user.displayName = displayName;
-            }
-            res.status(200).json({displayName: displayName});
+            res.status(200).json({user: result});
             return;
         }
         res.status(500).send();
@@ -42,11 +37,11 @@ userRouter.post('/set-display-name', async (req, res) => {
 });
 
 userRouter.post('/set-avatar', async (req, res) => {
-    if (!req.session.user) {
+    if (!req.session.userId) {
         return;
     }
-    const userId = req.session.user._id;
-    const user = await UserModel.findById(userId);
+    const userId = req.session.userId;
+    const user = await getUser(userId);
     if (!user) {
         res.status(404).json({error: 'User not found!'});
         return;
@@ -56,14 +51,9 @@ userRouter.post('/set-avatar', async (req, res) => {
         res.status(400).json({error: 'No avatarId given in body!'});
         return;
     }
-    user.avatarKey = avatarId;
-    user.save().then(result => {
+    setAvatarKey(userId, avatarId).then(result => {
         if (result) {
-            console.log(result);
-            if (req.session.user) {
-                req.session.user.avatarKey = avatarId;
-            }
-            res.status(200).json(result);
+            res.status(200).json({user: result});
             return;
         }
         res.status(500).send();

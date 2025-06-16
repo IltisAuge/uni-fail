@@ -1,53 +1,61 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, catchError, map, Observable, of} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, of, shareReplay, switchMap, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+
+interface UserState {
+    success: boolean;
+    user?: any;
+}
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
-	private user = new BehaviorSubject<{ success: boolean, user?: any }>({success: true});
+    private userSubject = new BehaviorSubject<UserState>({ success: false, user: undefined });
+    private user$ = this.userSubject.asObservable();
 
 	constructor(private http: HttpClient) {
 	}
 
-    reloadUserData() {
-        const resp = this.checkLogin();
-        resp.subscribe(r => {
-            console.log(r);
-        })
+    private loadUser(): Observable<UserState> {
+        return this.http.get<{ user: any }>(environment.apiBaseUrl + '/me', { withCredentials: true }).pipe(
+            tap(resp => {
+                console.log("LOADED USER:", resp.user);
+                this.userSubject.next({ success: true, user: resp.user });
+            }),
+            switchMap(resp => of({ success: true, user: resp.user })),
+            catchError(err => {
+                const state: UserState = err.status === 401 ? { success: true, user: undefined } : { success: false };
+                this.userSubject.next(state);
+                return of(state);
+            }),
+            // to not make multiple requests on multiple subscriptions
+            shareReplay(1)
+        );
     }
 
-    checkLogin(): Observable<{ success: boolean, user?: any }> {
-        return this.http.get<{ user: any }>(environment.apiBaseUrl + '/login/check-login', { withCredentials: true }).pipe(
-            map(resp => {
-                const userObj = { success: true, user: resp.user };
-                this.user.next(userObj);
-                return userObj;
-            }),
-            catchError(() => {
-                const errorObj = { success: false };
-                this.user.next(errorObj);
-                return of(errorObj);
+    getLoggedInUser(): Observable<UserState> {
+        const currentState = this.userSubject.value;
+        if (!currentState.success) {
+            this.loadUser().subscribe();
+        }
+        return this.user$;
+    }
+
+    reloadUser(): Observable<UserState> {
+        return this.loadUser().pipe(
+            tap(state => {
+                console.log("Reloaded user:", state);
             })
         );
     }
 
-	getLoggedInUser(): Observable<any> {
-        if (this.user.value.user === undefined) {
-            this.checkLogin().subscribe();
-        }
-        return this.user.asObservable();
-	}
-
-	isLoggedIn(): Observable<boolean> {
-		return this.getLoggedInUser().pipe(
-			map(state => !!state && !!state.user)
-		);
-	}
+    setUser(success: boolean, user?: any) {
+        this.userSubject.next({success: success, user: user});
+    }
 
     resetUser() {
-        this.user.next({success: true, user: undefined});
+        this.userSubject.next({success: true, user: undefined});
     }
 }

@@ -2,10 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from "../auth/auth.service";
-import {HttpService} from "../http.service";
 import {FormsModule} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {filter} from 'rxjs';
 
 @Component({
     selector: 'app-navigation',
@@ -27,9 +26,11 @@ export class NavigationComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.authService.isLoggedIn().subscribe(isLoggedIn => {
-			this.isLoggedIn = isLoggedIn;
-		})
+        this.authService.getLoggedInUser().pipe(
+            filter(state => state.success)
+        ).subscribe(state => {
+            this.isLoggedIn = !!state.user;
+        });
 	}
 
 	logout() {

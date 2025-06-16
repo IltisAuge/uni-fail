@@ -1,13 +1,7 @@
 import {Router} from 'express';
 import {GoogleLoginController} from '../login-providers/google-login';
 import {MicrosoftLoginController} from '../login-providers/microsoft-login';
-import {
-    getRandomDisplayName,
-    removeAvailableDisplayName,
-    saveUser,
-    setAvatarKey,
-    setDisplayName
-} from '../controller/user-controller';
+import {getRandomDisplayName, getUser, saveUser} from '../controller/user-controller';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -79,24 +73,12 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 	microsoftLoginController.getUserData(jwt).then(userData => completeAuthentication(userData, req, res));
 });
 
-loginRouter.get('/check-login', (req, res) => {
-	res.json({user: req.session.user});
-});
-
 // Only enable this endpoint in development
 if (process.env.PRODUCTION === 'false') {
     console.log("Enabled /login/mock endpoint")
     loginRouter.get('/mock', (req, res) => {
-        const isAdmin = req.query.admin as unknown as boolean;
-        req.session.user = {
-            _id: '000000000',
-            provider: 'mock-provider',
-            name: 'Mock User',
-            email: 'mock@user.de',
-            isAdmin: isAdmin,
-            displayName: 'Mock User Display Name',
-            avatarKey: 'mockAvatar.jpg'
-        }
+        const isAdmin = req.query.admin as string;
+        req.session.userId = '000000000';
         res.status(302).send("Mocked session with admin=" + isAdmin);
     });
 } else {
@@ -104,27 +86,28 @@ if (process.env.PRODUCTION === 'false') {
 }
 
 async function completeAuthentication(userData: any, req: any, res: any) {
-    let userDocument = await saveUser(userData);
-    if (userDocument) {
-        if (!userDocument.avatarKey) {
-            console.log("No avatarKey set");
-            userDocument = await setAvatarKey(userDocument._id, '307ce493-b254-4b2d-8ba4-d12c080d6651.jpg');
-            console.log("Default avatarKey set");
-            console.log(userDocument);
+    let user = await getUser(userData._id);
+    if (!user) {
+        // User does not yet exist in the database
+        const avatarId = '307ce493-b254-4b2d-8ba4-d12c080d6651.jpg';
+        const randomDisplayName = getRandomDisplayName();
+        user = {
+            _id: userData._id,
+            provider: userData.provider,
+            email: userData.email,
+            name: userData.name,
+            isAdmin: false,
+            displayName: randomDisplayName,
+            avatarKey: avatarId,
+            isBlocked: false
+        };
+        if (!await saveUser(user)) {
+            res.status(500).send('Saving user failed!');
+            return;
         }
-        if (!userDocument.displayName) {
-            console.log("No displayName set");
-            const randomDisplayName = getRandomDisplayName();
-            console.log("setting random name: " + randomDisplayName);
-            await removeAvailableDisplayName(randomDisplayName);
-            userDocument = await setDisplayName(userDocument._id, randomDisplayName);
-            console.log(userDocument);
-        }
-        req.session.user = userDocument;
-        res.redirect(process.env.AUTH_RETURN_URL as string);
-        return;
     }
-    res.status(500).send('Authentication failed!');
+    req.session.userId = user._id;
+    res.redirect(process.env.AUTH_RETURN_URL as string);
 }
 
 export default loginRouter;

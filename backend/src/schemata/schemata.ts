@@ -1,4 +1,5 @@
-import {Schema, model} from "mongoose";
+import {model, Schema} from "mongoose";
+import {IUserDocument} from '../user.interface';
 
 export interface PostType {
 	_id: string;
@@ -16,20 +17,20 @@ const PostSchema = new Schema<PostType>({
 });
 export const PostModel = model('Post', PostSchema);
 
-const UserSchema = new Schema({
-	_id: String,
-	provider: String,
-	email: String,
+const UserSchema = new Schema<IUserDocument>({
+    _id: String,
+    provider: String,
+    email: String,
     name: String,
-	isAdmin: {
-		type: Boolean,
-		default: false,
-		required: true
-	},
+    isAdmin: Boolean,
     displayName: String,
-    avatarKey: String
+    avatarKey: String,
+    isBlocked: Boolean,
+}, {
+    timestamps: true,
 });
-export const UserModel = model('User', UserSchema);
+
+export const UserModel = model<IUserDocument>('User', UserSchema);
 
 const DisplayNamesSchema = new Schema({
     _id: Number,
