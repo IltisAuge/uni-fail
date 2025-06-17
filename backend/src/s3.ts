@@ -21,7 +21,9 @@ export async function downloadAllFiles() {
         const key = object.Key;
         if (!key) continue;
 
-        const avatarFile = path.resolve('./avatars') + '/' + object.Key;
+        const avatarDir = path.resolve('./avatars');
+        const avatarFile = path.join(avatarDir, key);
+        fs.mkdirSync(avatarDir, { recursive: true });
         console.log(avatarFile);
 
         const fileStream = fs.createWriteStream(avatarFile);

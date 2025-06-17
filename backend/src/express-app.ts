@@ -81,6 +81,6 @@ downloadAllFiles().then(r => {
 loadAvailableDisplayNames().then(r => {
     console.log("Loaded available display names");
     console.log(r);
-})
+});
 
 export default server;
