@@ -1,0 +1,37 @@
+.pedestal {
+    margin-top: auto;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.pedestal-head {
+    font-weight: bold;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+.pedestal-head p {
+    width: 100%;
+}
+
+.pedestal-body {
+    border: 1px solid var(--border-color);
+    font-weight: bold;
+    color: white;
+    font-size: x-large;
+}
+
+.pedestal:first-child {
+    border-right: none;
+}
+
+.pedestal:nth-child(3) {
+    border-left: none;
+}
+
+@media (max-width: 500px) {
+    .pedestal {
+        white-space: wrap;
+        text-wrap: wrap;
+    }
+}
