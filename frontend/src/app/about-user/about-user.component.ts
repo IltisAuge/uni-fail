@@ -77,7 +77,7 @@ export class AboutUserComponent implements OnInit {
             const array = resp as string[];
             this.avatarIds = array;
             for (const id in array) {
-                this.avatarURLs.push(environment.apiBaseUrl + '/avatars/' + array[id]);
+                this.avatarURLs.push(environment.apiBaseUrl + '/avatar/' + array[id]);
             }
         })
     }
