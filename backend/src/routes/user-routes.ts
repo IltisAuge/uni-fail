@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
 import {getUser, isDisplayNameAvailable, setAvatarKey, setDisplayName} from '../controller/user-controller';
+import path from 'node:path';
 
 dotenv.config();
 
@@ -34,6 +35,17 @@ userRouter.post('/set-display-name', async (req, res) => {
         }
         res.status(500).send();
     });
+});
+
+userRouter.get('/:id/avatar', async (req, res) => {
+    const userId = req.params.id;
+    const user = await getUser(userId);
+    if (!user) {
+        res.status(404).json({error: 'User not found with id ' + userId});
+        return;
+    }
+    const avatarFilePath = path.resolve('./avatars') + '/' + user?.avatarKey;
+    res.status(200).sendFile(avatarFilePath);
 });
 
 userRouter.post('/set-avatar', async (req, res) => {

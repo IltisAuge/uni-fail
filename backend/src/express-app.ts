@@ -62,7 +62,7 @@ server.get('/avatars', (req, res) => {
         res.json(files);
     });
 });
-server.get('/avatars/:id', (req, res) => {
+server.get('/avatar/:id', (req, res) => {
     const objectId = req.params.id;
     const avatarFilePath = path.resolve('./avatars') + '/' + objectId;
     res.status(200).sendFile(avatarFilePath);

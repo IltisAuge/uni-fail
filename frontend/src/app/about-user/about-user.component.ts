@@ -63,7 +63,7 @@ export class AboutUserComponent implements OnInit {
                 this.provider = user.provider;
                 this.provider = String(this.provider).charAt(0).toUpperCase() + String(this.provider).slice(1);
                 this.displayName = user.displayName;
-                this.avatarURL = environment.apiBaseUrl + '/avatars/' + user.avatarKey;
+                this.avatarURL = environment.apiBaseUrl + '/user/' + user._id + '/avatar';
             } else if (isPlatformBrowser(this.platformId)) {
                 // Redirect to home if user is not logged in
                 this.router.navigate(['/']);
