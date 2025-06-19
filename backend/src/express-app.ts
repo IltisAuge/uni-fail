@@ -1,15 +1,16 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
-import loginRoutes from './routes/login-routes';
-import postRoutes from './routes/post-routes';
-import userRoutes from './routes/user-routes';
-import adminRoutes from './routes/admin-routes';
+import loginRouter from './routes/login-routes';
+import postRouter from './routes/post-routes';
+import userRouter from './routes/user-routes';
+import adminRouter from './routes/admin-routes';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'node:path';
 import {downloadAllFiles} from './s3';
 import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
+import rankingRouter from './routes/ranking-routes';
 
 dotenv.config();
 
@@ -41,10 +42,11 @@ server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
-server.use('/login', loginRoutes);
-server.use('/post', postRoutes);
-server.use('/user', userRoutes);
-server.use('/admin', adminRoutes);
+server.use('/login', loginRouter);
+server.use('/post', postRouter);
+server.use('/user', userRouter);
+server.use('/admin', adminRouter);
+server.use('/ranking', rankingRouter);
 server.get('/me', async (req, res) => {
     if (!req.session.userId) {
         res.status(401).send("Unauthorized");

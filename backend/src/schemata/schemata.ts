@@ -1,5 +1,6 @@
 import {model, Schema} from "mongoose";
 import {IUserDocument} from '../user.interface';
+import {IPostDocument} from '../post.interface';
 
 export interface PostType {
 	_id: string;
@@ -8,14 +9,15 @@ export interface PostType {
 	content: string;
 	tags: string[];
 }
-const PostSchema = new Schema<PostType>({
-	_id: String,
-	userId: String,
+const PostSchema = new Schema<IPostDocument>({
+    _id: String,
+    title: String,
+    content: String,
+    userId: String,
     creationTime: String,
-	content: String,
-	tags: [String]
+    tags: [String]
 });
-export const PostModel = model('Post', PostSchema);
+export const PostModel = model<IPostDocument>('Post', PostSchema);
 
 const UserSchema = new Schema<IUserDocument>({
     _id: String,
