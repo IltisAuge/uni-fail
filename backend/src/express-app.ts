@@ -71,7 +71,7 @@ server.get('/avatar/:id', (req, res) => {
 });
 server.post('/logout', (req, res) => {
     req.session.userId = undefined;
-    res.status(200).send("Logout successful");
+    res.status(200).json({msg: "Logout successful"});
 });
 server.get('/', (req, res) => {
 	res.header('Content-Type', 'text/plain');

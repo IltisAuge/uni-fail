@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {NgIf} from '@angular/common';
 import {AuthService} from '../auth/auth.service';
@@ -25,7 +25,6 @@ export class UserAdminViewComponent implements OnInit {
     isAdmin: boolean = false;
 
     constructor(private route: ActivatedRoute,
-                private router: Router,
                 private http: HttpClient,
                 private authService: AuthService) {
     }
@@ -37,9 +36,6 @@ export class UserAdminViewComponent implements OnInit {
             const user = state.user;
             console.log("user check", user, typeof user, user?.isAdmin);
             if (!user || !user.isAdmin) {
-                // Redirect user to home if user is not logged in or is not an admin
-                console.log("redirect to home: user=", user);
-                //this.router.navigateByUrl('/');
                 return;
             }
             this.route.params.subscribe(params => {

@@ -11,6 +11,7 @@ import {AccessDeniedComponent} from './access-denied/access-denied.component';
 import {accessGuard} from './access.guard';
 
 export const routes: Routes = [
+    { path: 'dummy', component: HomeComponent },
 	{ path: '', component: HomeComponent, canActivate: [accessGuard] },
 	{ path: 'search', component: SearchComponent, canActivate: [accessGuard] },
 	{ path: 'ranking', component: RankingComponent, canActivate: [accessGuard] },
