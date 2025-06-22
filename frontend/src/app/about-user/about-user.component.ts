@@ -61,10 +61,10 @@ export class AboutUserComponent implements OnInit {
                 this.provider = user.provider;
                 this.provider = String(this.provider).charAt(0).toUpperCase() + String(this.provider).slice(1);
                 this.displayName = user.displayName;
-                this.avatarURL = environment.apiBaseUrl + '/user/' + user._id + '/avatar';
+                this.avatarURL = environment.apiBaseUrl + '/avatar/' + user.avatarKey;
             }
         });
-        this.http.get(environment.apiBaseUrl + '/avatars').subscribe(resp => {
+        this.http.get(environment.apiBaseUrl + '/avatars', { withCredentials: true }).subscribe(resp => {
             if (!resp) {
                 return;
             }
