@@ -82,7 +82,8 @@ export class AboutUserComponent implements OnInit {
             const body = this.displayNameForm.value;
             this.http.post<any>(environment.apiBaseUrl + '/user/set-display-name', body, {
                 observe: 'response',
-                responseType: 'json'
+                responseType: 'json',
+                withCredentials: true
             }).subscribe({
                 next: resp => {
                     if (resp.status === 200 && resp.body && resp.body.user) {
@@ -117,7 +118,7 @@ export class AboutUserComponent implements OnInit {
         console.log("send avatarId=" + avatarId);
         this.http.post<any>(environment.apiBaseUrl + '/user/set-avatar', {
             avatarId: avatarId
-        }).subscribe(resp => {
+        }, { withCredentials: true }).subscribe(resp => {
             console.log(resp);
             this.authService.setUser(true, resp.user);
         });

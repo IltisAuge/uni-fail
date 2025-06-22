@@ -46,7 +46,8 @@ export class UserAdminViewComponent implements OnInit {
                 this.userId = params['id'];
                 console.log("userId=",this.userId);
                 this.http.get<any>(environment.apiBaseUrl + '/admin/user/' + this.userId, {
-                    observe: 'response'
+                    observe: 'response',
+                    withCredentials: true
                 }).subscribe({
                     next: resp => {
                         console.log("response:", resp);
@@ -75,7 +76,8 @@ export class UserAdminViewComponent implements OnInit {
         this.http.post<{ user: any }>(environment.apiBaseUrl + '/admin/reset-display-name', {
             userId: this.userId
         }, {
-            observe: 'response'
+            observe: 'response',
+            withCredentials: true
         }).subscribe({
             next: resp => {
                 if (resp.status === 200 && resp.body && resp.body.user) {
@@ -93,7 +95,8 @@ export class UserAdminViewComponent implements OnInit {
             userId: this.userId,
             status: status
         }, {
-            observe: 'response'
+            observe: 'response',
+            withCredentials: true
         }).subscribe({
             next: resp => {
                 if (resp.status === 200 && resp.body && resp.body.user) {
@@ -111,7 +114,8 @@ export class UserAdminViewComponent implements OnInit {
             userId: this.userId,
             status: status
         }, {
-            observe: 'response'
+            observe: 'response',
+            withCredentials: true
         }).subscribe({
             next: resp => {
                 if (resp.status === 200 && resp.body && resp.body.user) {
