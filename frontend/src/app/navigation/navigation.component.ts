@@ -85,10 +85,9 @@ export class NavigationComponent implements OnInit {
         if (this.isMobile) {
             this.menuOpen = false;
         }
-		this.http.post(environment.apiBaseUrl + '/logout', {
-			method: 'POST',
-			credentials: 'include'
-		}, { observe: 'response' }).subscribe(result => {
+		this.http.post(environment.apiBaseUrl + '/logout', {},
+            { observe: 'response', withCredentials: true }
+        ).subscribe(result => {
 			if (result.status === 200) {
 				this.authService.resetUser();
                 console.log("Current url: " + this.router.url);
