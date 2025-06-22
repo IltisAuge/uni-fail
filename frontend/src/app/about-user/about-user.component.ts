@@ -1,10 +1,9 @@
-import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../auth/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {isPlatformBrowser, NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
-import {Router} from '@angular/router';
+import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {filter} from 'rxjs';
 
 @Component({
@@ -36,11 +35,10 @@ export class AboutUserComponent implements OnInit {
     isDisplayNameAvailable: boolean = true;
     @ViewChild('avatarDialog') avatarDialogRef!: ElementRef<HTMLDialogElement>;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    constructor(
                 private fb: FormBuilder,
                 private http: HttpClient,
-                private authService: AuthService,
-                private router: Router) {
+                private authService: AuthService) {
         this.displayNameForm = this.fb.group({
             displayName: ['', Validators.required]
         });
@@ -64,9 +62,6 @@ export class AboutUserComponent implements OnInit {
                 this.provider = String(this.provider).charAt(0).toUpperCase() + String(this.provider).slice(1);
                 this.displayName = user.displayName;
                 this.avatarURL = environment.apiBaseUrl + '/user/' + user._id + '/avatar';
-            } else if (isPlatformBrowser(this.platformId)) {
-                // Redirect to home if user is not logged in
-                this.router.navigate(['/']);
             }
         });
         this.http.get(environment.apiBaseUrl + '/avatars').subscribe(resp => {

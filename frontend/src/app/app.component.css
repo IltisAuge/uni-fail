@@ -1,3 +1,9 @@
 :host {
     display: flex;
 }
+
+@media (max-width: 768px) {
+    :host {
+        flex-direction: column;
+    }
+}

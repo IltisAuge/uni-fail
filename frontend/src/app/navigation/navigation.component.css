@@ -1,17 +1,9 @@
 :host {
-    position: sticky;
-    width: 20%;
-    height: 100vh;
+    min-height: 100vh;
 }
 
-nav {
-    border-right: 1px solid var(--border-color);
+header, nav {
     background-color: var(--nav-background);
-}
-
-.navbar-logo > img {
-    width: calc(100% - 2rem);
-    margin: 0 auto;
 }
 
 nav > ul > li:first-child .nav-item {
@@ -23,12 +15,20 @@ nav > ul > li:first-child .nav-item {
     text-decoration: none;
     font-size: 1.25rem;
     transition: color .3s;
-    padding: 2rem 0;
+    padding: 2rem 2rem;
     border-bottom: 1px solid var(--border-color);
-    display: block;
+    display: flex;
+    gap: 1rem;
+    min-width: fit-content;
 }
 
 .nav-item:hover {
     color: #FFD700;
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    :host {
+        min-height: auto;
+    }
 }

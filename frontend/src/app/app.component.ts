@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
     }
 
     openMockUserPage() {
-        this.router.navigate(['/user/' + this.userId]).then(r => {
+        this.router.navigateByUrl('/user/' + this.userId).then(r => {
             console.log(r);
         });
     }
