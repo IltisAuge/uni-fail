@@ -1,32 +1,69 @@
 <!--If no posts are available-->
 <div *ngIf="!loading && posts.length === 0 && !error" class="text-center text-[var(--text-primary)] mt-6">
-    No posts available.
+    Es sind noch keine Posts online
 </div>
 <!-- Loop over posts -->
 <div *ngFor="let post of posts" class="bg-[var(--background-card)] rounded-2xl shadow-md p-4 mt-2 mb-3 border-2 border-[var(--border-color)] mx-auto flex items-start gap-4">
-
-    <!-- Profile Picture on the left -->
-    <!-- Hardcoded image for now, replace with post.profilePictureUrl when ready -->
-    <img [src]="getPostImage(post)" alt="Profile picture" class="w-16 h-16 rounded-full object-cover flex-shrink-0" />
-
-    <!-- Content -->
-    <div class="flex flex-col flex-1">
-        <h2 class="text-xl font-semibold  text-[var(--text-primary)] mb-2">
-            {{ post.title || 'Untitled Post' }}
-        </h2>
-        <p class="text-[var(--text-secondary)] mb-4 break-words">
-            {{ getPreview(post.content) }}
-        </p>
+    <!-- For small screen sizes -->
+    <div class="md:hidden flex flex-col gap-5">
+        <!-- Image and title in one line -->
+        <div class="flex gap-5 items-center">
+            <ng-container *ngTemplateOutlet="image; context: { post: post }"></ng-container>
+            <ng-container *ngTemplateOutlet="title; context: { post: post }"></ng-container>
+        </div>
+        <!-- Tags aligned horizontally -->
+        <div>
+            <ng-container *ngTemplateOutlet="tags; context: { post: post, vertical: false }"></ng-container>
+        </div>
+        <!-- Content preview -->
+        <div>
+            <ng-container *ngTemplateOutlet="content_preview; context: { post: post }"></ng-container>
+        </div>
     </div>
 
-    <!-- Right: Tags stacked vertically -->
-    <div class="flex flex-col gap-2">
-    <span *ngFor="let tag of getFirstThreeTags(post.tags)" class="bg-[var(--input-background)] border-1 border-[var(--border-color)] text-[var(--text-primary)] text-sm px-3 py-1 rounded-full">
-      {{ tag }}
-    </span>
+    <!-- For medium and large screens -->
+    <div class="hidden md:flex w-full gap-5">
+        <!-- Image on the left -->
+        <div>
+            <ng-container *ngTemplateOutlet="image; context: { post: post }"></ng-container>
+        </div>
+        <!-- Title and content preview -->
+        <div class="flex flex-col flex-1 gap-2">
+            <ng-container *ngTemplateOutlet="title; context: { post: post }"></ng-container>
+            <ng-container *ngTemplateOutlet="content_preview; context: { post: post }"></ng-container>
+        </div>
+        <!-- Tags stacked vertically -->
+        <div>
+            <ng-container *ngTemplateOutlet="tags; context: { post: post, vertical: true }"></ng-container>
+        </div>
     </div>
-
 </div>
+
+<ng-template #title let-post="post">
+    <h2 class="text-xl font-semibold  text-[var(--text-primary)]">
+        {{ post.title || 'Untitled Post' }}
+    </h2>
+</ng-template>
+
+<ng-template #content_preview let-post="post">
+    <p class="text-[var(--text-secondary)] mb-4 break-words">
+        {{ getPreview(post.content) }}
+    </p>
+</ng-template>
+
+<ng-template #image let-post="post">
+    <img [src]="getPostImage(post)" alt="Profile picture" class="w-16 h-16 rounded-full object-cover flex-shrink-0" />
+</ng-template>
+
+<ng-template #tags let-post="post" let-vertical="vertical">
+    <div class="flex flex-wrap gap-2 items-end" [ngClass]="{
+            'flex-col': vertical
+        }">
+        <span *ngFor="let tag of getFirstThreeTags(post.tags)" class="bg-[var(--input-background)] border-1 border-[var(--border-color)] text-[var(--text-primary)] text-sm px-3 py-1 rounded-full w-fit">
+            {{ tag }}
+        </span>
+    </div>
+</ng-template>
 
 
 

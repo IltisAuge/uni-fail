@@ -11,6 +11,7 @@ import path from 'node:path';
 import {downloadAllFiles} from './s3';
 import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
 import rankingRouter from './routes/ranking-routes';
+import tagRouter from './routes/tag-routes';
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ server.use('/post', postRouter);
 server.use('/user', userRouter);
 server.use('/admin', adminRouter);
 server.use('/ranking', rankingRouter);
+server.use('/tag', tagRouter);
 server.get('/me', async (req, res) => {
     if (!req.session.userId) {
         res.status(401).send("Unauthorized");

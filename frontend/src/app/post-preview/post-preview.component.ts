@@ -54,7 +54,9 @@ export class PostPreviewComponent implements OnInit {
 
     //to only show the first 3 tags
     getFirstThreeTags(tags: string[]): string[] {
-        return tags ? tags.slice(0, 3) : [];
+        return tags ? tags.slice(0, 3)
+            .map((tag) => tag.replace('uni:', ''))
+            .sort((a, b) => b.length - a.length) : [];
     }
 
     getPostImage(post: Post): string {

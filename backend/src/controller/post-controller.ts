@@ -20,11 +20,12 @@ export async function getPost(postId: string): Promise<IPost | undefined> {
     return undefined;
 }
 
-export async function createPost(userId: string, content: string, tags: string[]): Promise<IPost> {
+export async function createPost(userId: string, title: string, content: string, tags: string[]): Promise<IPost> {
     const date = new Date();
     const postId = crypto.randomUUID().toString();
-    postCache.set(postId, {_id: postId, creationTime: date.toISOString(), userId, content, tags});
-    const model = new PostModel({_id: postId, creationTime: date.toISOString(), userId, content, tags});
+    const postObject = {_id: postId, creationTime: date.toISOString(), userId: userId, title: title, content: content, tags: tags};
+    postCache.set(postId, postObject);
+    const model = new PostModel(postObject);
     try {
         return await model.save();
     } catch (error) {
