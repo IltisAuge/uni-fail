@@ -1,16 +1,13 @@
-<div class="container"
-     *ngIf="isLoggedIn; else notLoggedIn">
-
+<div class="container">
     <form [formGroup]="postForm"
           (ngSubmit)="onSubmit()"
-          class="bg-[var(--background-card)] post-form flex flex-col gap-2 min-w-2xl mx-auto p-8
+          class="bg-[var(--background-card)] post-form flex flex-col gap-2 mx-auto p-8
                 rounded-xl shadow-lg text-[var(text-primary)] mt-2">
         <h2 class="text-3xl font-bold text-center border-b-2 border-[var(--border-color)] pb-2">
             Erstelle einen neuen Post
         </h2>
         <p class="text-center">
             Teile <strong>KEINE</strong> Namen oder sensible Informationen <br>
-            #wir wollen nicht verklagt werden😅!
         </p>
 
         <label for="content"
@@ -18,41 +15,69 @@
             Deine Story
         </label>
 
+        <input type="text" formControlName="title" placeholder="Titel"
+               class=" border-2 focus:outline-none focus:ring-2 focus:ring-[#FFA500]">
+
         <textarea id="content"
                   formControlName="content"
                   placeholder="Erzähle dein Uni-fail..."
-                  class="p-3 border-2 border-[#FFA500] rounded-md text-base bg-white resize-y min-h-[120px]
+                  class="p-3 border-2 border-[var(--border-color)] rounded-md text-base bg-[var(--input-background)] resize-y min-h-[120px]
                         focus:outline-none focus:ring-2 focus:ring-[#FFA500] ">
         </textarea>
 
-        <label for="tags"
-               class="font-semibold text-[#FFFFFF] text-lg">
-            Tags
-        </label>
-        <input id="tags"
-               formControlName="tags"
-               placeholder="z.B. der Name deiner Uni ..."
-               class="p-3 border-2 border-[#FFA500] rounded-md text-base bg-white
-                    focus:outline-none focus:ring-2 focus:ring-[#FFA500]"/>
+        <div *ngIf="selectedTags.length > 0" class="my-4">
+            <span class="w-full flex flex-wrap gap-2">
+                <span>Ausgewähle Tags:</span>
+                <span *ngFor="let tag of selectedTags"
+                      class="bg-[var(--input-background)] whitespace-pre border-1 border-[var(--border-color)] text-[var(--text-primary)] text-sm px-3 py-1 rounded-full">
+                    {{ tag.displayName }}
+                </span>
+            </span>
+        </div>
 
-        <button type="submit"
-                [disabled]="postForm.invalid"
-                [ngClass]="{
-                    'cursor-not-allowed opacity-50': postForm.invalid,
-                    'hover:text-[#333333] hover:border-[#FFD700]': postForm.valid
-                  }"
-                class="bg-[#FFA500] text-[#1A568E] font-bold py-3 px-6 rounded-md border-2 border-[#FFA500] shadow-md">
-            Submit
-        </button>
+        <div class="flex gap-5">
+            <button
+                   (click)="openModal()"
+                   class="button-green w-fit">Tags hinzufügen</button>
+
+            <button type="submit"
+                    [disabled]="postForm.invalid"
+                    [ngClass]="{
+                        'cursor-not-allowed opacity-50': postForm.invalid,
+                        'hover:text-[#333333] hover:border-[#FFD700]': postForm.valid
+                      }"
+                    class="button-green flex-1">
+                Veröffentlichen
+            </button>
+        </div>
     </form>
 </div>
 
-<ng-template #notLoggedIn>
-    <div class="w-full bg-[#1A568E] text-[#FFA500] font-bold text-center p-16 rounded-none shadow-[0_0_15px_#333333] mt-2">
-        <p class="text-4xl px-4">
-            Please <strong>log in</strong> to post your uni-fail!
-        </p>
+<dialog #tagsDialog class="w-full fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 max-w-2xl rounded-lg p-4 bg-[var(--background-card)] backdrop:bg-black/50">
+    <!-- Header -->
+    <div class="flex flex-col items-center w-full border-b border-[var(--border-color)] text-[var(--text-primary)]">
+        <div class="flex justify-between w-full">
+            <h3 class="text-xl font-semibold">Wähle passende Tags aus</h3>
+            <button (click)="closeModal()" class="hover:text-gray-400 hover:cursor-pointer">✕</button>
+        </div>
+        <div class="w-full m-4 flex flex-wrap gap-2 md:gap-5">
+            <form class="flex-1">
+                <input #tagFilter type="text" placeholder="Suche nach Tags" class="w-full min-w-fit" (input)="filterTags(tagFilter.value)">
+            </form>
+            <button class="button-green" (click)="closeModal()">Auswahl bestätigen</button>
+        </div>
     </div>
-</ng-template>
 
+    <!-- Body -->
+    <div class="py-4 space-y-4 text-[var(--text-primary)]">
+        <p *ngIf="tagFilter.value.length > 0" class="font-bold">{{displayedTags.length}} gefilterte Tags:</p>
+        <div class="flex flex-wrap justify-center">
+            <p *ngFor="let tag of displayedTags" class="cursor-pointer p-4" [ngClass]="{
+                  'text-blue-500': selectedTags.includes(tag)
+                }" (click)="toggleTagSelection(tag)">
+                {{tag.displayName}}
+            </p>
+        </div>
+    </div>
+</dialog>
 

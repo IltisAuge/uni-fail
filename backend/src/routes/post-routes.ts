@@ -26,6 +26,8 @@ postRouter.use('/get', (req, res) => {
 });
 
 postRouter.post('/create', async (req, res) => {
+    console.log(req.body);
+    const title = req.body.title;
     const content = req.body.content;
 	const tags = req.body.tags;
 	const userId = req.session.userId!;
@@ -36,7 +38,7 @@ postRouter.post('/create', async (req, res) => {
     }
 	console.log(content);
 	console.log(tags);
-	createPost(userId, content, tags).then(result => {
+	createPost(userId, title, content, tags).then(result => {
 		res.status(200).json(result);
 	}).catch(error => {
 		res.status(500).send(error);
