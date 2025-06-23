@@ -6,6 +6,7 @@ import {provideHttpClient} from '@angular/common/http';
 import {provideZoneChangeDetection} from '@angular/core';
 import {routes} from './app/app.routes';
 import {provideRouter} from '@angular/router';
+import {provideAnimations} from '@angular/platform-browser/animations';
 
 export default function bootstrap() {
 	return bootstrapApplication(AppComponent, {
@@ -13,7 +14,8 @@ export default function bootstrap() {
 			provideServerRendering(),
 			provideHttpClient(),
 			provideRouter(routes),
-			provideZoneChangeDetection({eventCoalescing: true})
+			provideZoneChangeDetection({eventCoalescing: true}),
+            provideAnimations()
 		]
 	});
 }

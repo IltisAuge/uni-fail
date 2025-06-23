@@ -9,12 +9,11 @@
         <img
             src="assets/logo-unifail.jpg"
             alt="Unifail Logo"
-            class="max-w-[15rem] md:max-w-[20rem] p-[1rem] md:mx-auto"/>
+            class="max-w-[15rem] md:max-w-[20rem] w-[100%] p-[1rem] md:mx-auto"/>
     </div>
 
     <!-- DROPDOWN NAVIGATION -->
-    <nav *ngIf="menuOpen"
-         class="sticky left-0 w-full">
+    <nav *ngIf="menuOpen" @dropdownAnimation class="overflow-hidden w-full">
         <ul class="flex flex-col space-y-2 py-4 whitespace-nowrap">
             <li>
                 <a class="nav-item"

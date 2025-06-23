@@ -17,6 +17,7 @@ import {
     faUser
 } from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
     selector: 'app-navigation',
@@ -27,6 +28,17 @@ import {HttpClient} from '@angular/common/http';
         RouterLinkActive,
         FormsModule,
         FaIconComponent
+    ],
+    animations: [
+        trigger('dropdownAnimation', [
+            transition(':enter', [
+                style({ height: '0', opacity: 0 }),
+                animate('300ms ease', style({ height: '*', opacity: 1 })),
+            ]),
+            transition(':leave', [
+                animate('300ms ease', style({ height: '0', opacity: 0 })),
+            ])
+        ])
     ],
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.css'

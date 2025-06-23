@@ -7,6 +7,7 @@ interface Post {
     title: string;
     content: string;
     tags: string[];
+    userId: string;
 }
 
 @Component({
@@ -56,5 +57,7 @@ export class PostPreviewComponent implements OnInit {
         return tags ? tags.slice(0, 3) : [];
     }
 
-
+    getPostImage(post: Post): string {
+        return environment.apiBaseUrl + '/user/' + post.userId + '/avatar';
+    }
 }

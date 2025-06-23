@@ -10,6 +10,10 @@ nav > ul > li:first-child .nav-item {
     border-top: 1px solid var(--border-color);
 }
 
+nav > ul > li {
+    width: 100%;
+}
+
 .nav-item {
     color: var(--nav-text);
     text-decoration: none;
@@ -20,6 +24,7 @@ nav > ul > li:first-child .nav-item {
     display: flex;
     gap: 1rem;
     min-width: fit-content;
+    width: 100%;
 }
 
 .nav-item:hover {
@@ -30,5 +35,9 @@ nav > ul > li:first-child .nav-item {
 @media (max-width: 768px) {
     :host {
         min-height: auto;
+    }
+
+    .nav-item {
+        justify-content: center;
     }
 }
