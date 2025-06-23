@@ -14,11 +14,11 @@
             </h2>
         </div>
         <!-- Tags aligned horizontally -->
-        <div class="flex flex-wrap gap-2 items-end">
-        <span *ngFor="let tag of getFirstThreeTags(post.tags)" class="bg-[var(--input-background)] border-1 border-[var(--border-color)] text-[var(--text-primary)] text-sm px-3 py-1 rounded-full w-fit">
-            {{ tag }}
-        </span>
-    </div>
+        <div *ngIf="post.tags.length > 0" class="flex flex-wrap gap-2 items-end">
+            <span *ngFor="let tag of getFirstThreeTags(post.tags)" class="bg-[var(--input-background)] border-1 border-[var(--border-color)] text-[var(--text-primary)] text-sm px-3 py-1 rounded-full w-fit">
+                {{ tag }}
+            </span>
+        </div>
         <!-- Content preview -->
         <p class="text-[var(--text-secondary)] mb-4 break-all">
             {{ getPreview(post.content) }}
