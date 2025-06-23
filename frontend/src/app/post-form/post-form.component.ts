@@ -46,7 +46,7 @@ export class PostFormComponent {
 		});
 
         this.http.get<{tags: string[]}>(environment.apiBaseUrl + '/tag/get/all',
-            { observe: 'response' }
+            { observe: 'response', withCredentials: true }
         ).subscribe(resp => {
             console.log("received tags:", resp.body?.tags);
             if (resp.status === 200 && resp.body) {
@@ -65,7 +65,7 @@ export class PostFormComponent {
             };
 			this.http.post(environment.apiBaseUrl + '/post/create',
                 payload,
-                { observe: 'response' }
+                { observe: 'response', withCredentials: true }
             ).subscribe(resp => {
                 if (resp.status === 200) {
                     // Redirect to post view
