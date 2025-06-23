@@ -32,7 +32,7 @@ jobs:
       - name: Build Angular (Browser + Server)
         run: |
           cd frontend
-          npm run build:prod
+          ng build --configuration=production --base-href=/
 
       - name: Copy package.json to server
         uses: appleboy/scp-action@v0.1.7
