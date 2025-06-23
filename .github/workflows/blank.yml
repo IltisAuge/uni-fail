@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          
+
       - name: Clean install dependencies
         run: |
           cd frontend
@@ -32,7 +32,7 @@ jobs:
       - name: Build Angular (Browser + Server)
         run: |
           cd frontend
-          ng build --configuration=production --base-href=/
+          npm run build:prod
 
       - name: Copy package.json to server
         uses: appleboy/scp-action@v0.1.7
@@ -43,7 +43,7 @@ jobs:
           source: "frontend/package.json"
           target: "/root/uni-fail/frontend"
           strip_components: 1
-          
+
       - name: Clean old frontend build on server
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -59,7 +59,7 @@ jobs:
           mkdir -p frontend_deploy
           cp -r frontend/dist/frontend/browser frontend_deploy/
           cp -r frontend/dist/frontend/server frontend_deploy/
-    
+
       - name: Copy built Angular app (dist/) to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -69,7 +69,7 @@ jobs:
           source: "frontend_deploy"
           target: "/root/uni-fail/frontend/dist/frontend"
           strip_components: 1
-      
+
       # --- BACKEND BUILD & DEPLOY ---
 
       - name: Install backend dependencies
