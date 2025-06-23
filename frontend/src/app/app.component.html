@@ -1,16 +1,10 @@
-<app-navigation></app-navigation>
-<main class="w-full flex flex-col justify-center items-center p-[2rem]">
-	<div class="h-full w-full flex justify-center items-center">
+<div class="flex h-screen w-screen flex-col md:flex-row">
+    <app-navigation></app-navigation>
+    <main class="flex-1 overflow-y-auto p-[0.5rem] md:p-[2rem] flex flex-col items-center">
         <router-outlet></router-outlet>
-    </div>
-
-    <!--DEBUG CODE:<br>
-    {{ apiResponse }}<br>
-    {{ username }}<br>
-    DisplayName: {{ displayName }}<br>
-    Is Admin: {{ isAdmin }}-->
-    <div class="mt-auto flex gap-10">
-        <button (click)="toggleTheme()" class="hover:cursor-pointer">Toggle theme (Current: {{theme}})</button>
-        <a (click)="openMockUserPage()">Mock user admin view</a>
-    </div>
-</main>
+        <div class="mt-auto flex gap-10">
+            <button (click)="toggleTheme()" class="hover:cursor-pointer">Toggle theme (Current: {{theme}})</button>
+            <a (click)="openMockUserPage()">Mock user admin view</a>
+        </div>
+    </main>
+</div>

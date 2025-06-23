@@ -35,6 +35,7 @@ nav > ul > li {
 @media (max-width: 768px) {
     :host {
         min-height: auto;
+        width: 100%;
     }
 
     .nav-item {

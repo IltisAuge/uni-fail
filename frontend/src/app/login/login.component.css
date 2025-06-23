@@ -1,3 +1,10 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .login-btn {
 	display: flex;
 	transition: background-color .3s, box-shadow .3s;

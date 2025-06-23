@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container xl:max-w-[60%]">
     <form [formGroup]="postForm"
           (ngSubmit)="onSubmit()"
           class="bg-[var(--background-card)] post-form flex flex-col gap-2 mx-auto p-8
@@ -35,7 +35,7 @@
             </span>
         </div>
 
-        <div class="flex gap-5">
+        <div class="flex gap-5 flex-wrap">
             <button
                    (click)="openModal()"
                    class="button-green w-fit">Tags hinzufügen</button>
