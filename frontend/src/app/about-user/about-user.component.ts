@@ -1,11 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../auth/auth.service';
+import {AuthService} from '../services/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {filter} from 'rxjs';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 @Component({
   selector: 'app-about-user',
@@ -62,7 +62,6 @@ export class AboutUserComponent implements OnInit {
                 this.name = user.name;
                 this.email = user.email;
                 this.provider = user.provider;
-                this.provider = String(this.provider).charAt(0).toUpperCase() + String(this.provider).slice(1);
                 this.displayName = user.displayName;
                 this.avatarURL = environment.apiBaseUrl + '/avatar/' + user.avatarKey;
             }

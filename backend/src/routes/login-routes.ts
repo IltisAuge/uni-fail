@@ -12,7 +12,7 @@ const microsoftLoginController = new MicrosoftLoginController();
 
 loginRouter.get('/', (req, res) => {
 	let loginController: GoogleLoginController | MicrosoftLoginController;
-	switch (req.query.provider) {
+	switch (String(req.query.provider).toLowerCase()) {
 		case 'google':
 			loginController = googleLoginController;
 			break;

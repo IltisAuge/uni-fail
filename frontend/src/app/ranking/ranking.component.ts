@@ -2,7 +2,7 @@ import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChild
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {isPlatformBrowser, NgIf} from '@angular/common';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 @Component({
   selector: 'app-ranking',

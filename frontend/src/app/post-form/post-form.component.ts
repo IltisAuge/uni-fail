@@ -1,11 +1,11 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../auth/auth.service';
+import {AuthService} from '../services/auth.service';
 import {environment} from '../../environments/environment';
 import {filter} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 interface Tag {
     name: string;

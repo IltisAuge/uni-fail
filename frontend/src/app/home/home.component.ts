@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {PostPreviewComponent} from '../post-preview/post-preview.component';
 import {Title} from '@angular/platform-browser';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 @Component({
   selector: 'app-home',

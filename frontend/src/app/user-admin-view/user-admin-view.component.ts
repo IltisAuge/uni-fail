@@ -3,9 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {NgIf} from '@angular/common';
-import {AuthService} from '../auth/auth.service';
+import {AuthService} from '../services/auth.service';
 import {filter} from 'rxjs';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 @Component({
   selector: 'app-user-admin-view',

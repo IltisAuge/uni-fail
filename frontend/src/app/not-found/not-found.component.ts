@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {faExclamation, faTriangleExclamation} from '@fortawesome/free-solid-svg-icons';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 @Component({
   selector: 'app-not-found',

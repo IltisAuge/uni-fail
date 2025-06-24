@@ -27,7 +27,7 @@ export class MicrosoftLoginController extends LoginController {
 
 	async getUserData(decoded_token: MicrosoftIdToken) {
 		return {
-			provider: 'microsoft',
+			provider: 'Microsoft',
 			_id: decoded_token.oid,
 			email: decoded_token.email,
 			name: decoded_token.name

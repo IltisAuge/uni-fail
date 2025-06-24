@@ -1,6 +1,6 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
-import {AuthService} from './auth/auth.service';
+import {AuthService} from './services/auth.service';
 import {filter, map} from 'rxjs';
 import {UserAdminViewComponent} from './user-admin-view/user-admin-view.component';
 import {AboutUserComponent} from './about-user/about-user.component';

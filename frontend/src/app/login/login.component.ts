@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpService} from '../http.service';
+import {HttpService} from '../services/http.service';
 import {environment} from '../../environments/environment';
-import {TitleService} from '../title.service';
+import {TitleService} from '../services/title.service';
 
 @Component({
 	selector: 'app-login',

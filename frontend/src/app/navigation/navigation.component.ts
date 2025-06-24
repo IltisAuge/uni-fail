@@ -1,7 +1,7 @@
 import {Component, HostListener, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {AuthService} from "../auth/auth.service";
+import {AuthService} from "../services/auth.service";
 import {FormsModule} from "@angular/forms";
 import {environment} from "../../environments/environment";
 import {filter, Subscription} from 'rxjs';

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {HttpService} from './http.service';
-import {AuthService} from './auth/auth.service';
+import {HttpService} from './services/http.service';
+import {AuthService} from './services/auth.service';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
