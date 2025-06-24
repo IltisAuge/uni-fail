@@ -26,7 +26,6 @@ postRouter.use('/get', (req, res) => {
 });
 
 postRouter.post('/create', async (req, res) => {
-    console.log(req.body);
     const title = req.body.title;
     const content = req.body.content;
 	const tags = req.body.tags;

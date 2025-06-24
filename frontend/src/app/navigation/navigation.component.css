@@ -28,7 +28,7 @@ nav > ul > li {
 }
 
 .nav-item:hover {
-    color: #FFD700;
+    color: var(--text-hover);
     cursor: pointer;
 }
 

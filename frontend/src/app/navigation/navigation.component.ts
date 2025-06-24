@@ -9,6 +9,7 @@ import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {
     faBars,
     faCircleInfo,
+    faFolder,
     faHome,
     faPlus,
     faRankingStar,
@@ -52,10 +53,10 @@ export class NavigationComponent implements OnInit {
     protected readonly faSearch = faSearch;
     protected readonly faRankingStar = faRankingStar;
     protected readonly faPlus = faPlus;
-    protected readonly faCircleInfo = faCircleInfo;
     protected readonly faUser = faUser;
     protected readonly faRightFromBracket = faRightFromBracket;
     protected readonly faBars = faBars;
+    protected readonly faFolder = faFolder;
     menuOpen = false;
     isMobile = false;
 

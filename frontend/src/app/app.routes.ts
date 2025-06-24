@@ -10,6 +10,7 @@ import {UserAdminViewComponent} from './user-admin-view/user-admin-view.componen
 import {AccessDeniedComponent} from './access-denied/access-denied.component';
 import {accessGuard} from './access.guard';
 import {NotFoundComponent} from './not-found/not-found.component';
+import {UserPostsComponent} from './user-posts/user-posts.component';
 
 export const routes: Routes = [
     { path: 'dummy', component: HomeComponent },
@@ -19,6 +20,7 @@ export const routes: Routes = [
 	{ path: 'post', component: PostFormComponent, canActivate: [accessGuard] },
 	{ path: 'about-us', component: AboutUsComponent, canActivate: [accessGuard] },
 	{ path: 'my-account', component: AboutUserComponent, canActivate: [accessGuard] },
+    { path: 'my-posts', component: UserPostsComponent, canActivate: [accessGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'user/:id', component: UserAdminViewComponent, canActivate: [accessGuard] },
     { path: 'access-denied', component:  AccessDeniedComponent },

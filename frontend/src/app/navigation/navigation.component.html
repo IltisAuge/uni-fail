@@ -1,4 +1,4 @@
-<header class="relative p-4 z-20 shadow-lg h-full border-r border-[var(--border-color)]">
+<header class="relative md:p-4 z-20 shadow-lg h-full border-r border-[var(--border-color)]">
     <div class="flex flex-wrap justify-around items-center gap-1">
         <button
             *ngIf="isMobile"
@@ -47,12 +47,12 @@
                     <span>Post erstellen</span>
                 </a>
             </li>
-            <li>
+            <li *ngIf="isLoggedIn">
                 <a class="nav-item"
-                   routerLink="/about-us"
+                   routerLink="/my-posts"
                    routerLinkActive="active-link">
-                    <fa-icon [icon]="faCircleInfo"></fa-icon>
-                    <span>Über uns</span>
+                    <fa-icon [icon]="faFolder"></fa-icon>
+                    <span>Deine Posts</span>
                 </a>
             </li>
             <li *ngIf="isLoggedIn; else login">

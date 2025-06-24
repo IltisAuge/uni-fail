@@ -3,13 +3,15 @@ import {HttpService} from './http.service';
 import {AuthService} from './auth/auth.service';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
-import {isPlatformBrowser} from '@angular/common';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {filter} from 'rxjs';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {faCircle, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-root',
-    imports: [NavigationComponent, RouterOutlet],
+    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
 	templateUrl: './app.component.html',
 	standalone: true,
 	styleUrl: './app.component.css'
@@ -79,4 +81,7 @@ export class AppComponent implements OnInit {
             console.log(r);
         });
     }
+
+    protected readonly faCircle = faCircle;
+    protected readonly faCircleInfo = faCircleInfo;
 }
