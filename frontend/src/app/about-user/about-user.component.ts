@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {filter} from 'rxjs';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-about-user',
@@ -38,10 +39,12 @@ export class AboutUserComponent implements OnInit {
     constructor(
                 private fb: FormBuilder,
                 private http: HttpClient,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private titleService: TitleService) {
         this.displayNameForm = this.fb.group({
             displayName: ['', Validators.required]
         });
+        this.titleService.setTitle('Dein Konto');
     }
 
     ngOnInit() {

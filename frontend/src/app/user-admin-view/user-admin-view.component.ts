@@ -5,6 +5,7 @@ import {environment} from '../../environments/environment';
 import {NgIf} from '@angular/common';
 import {AuthService} from '../auth/auth.service';
 import {filter} from 'rxjs';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-user-admin-view',
@@ -26,7 +27,8 @@ export class UserAdminViewComponent implements OnInit {
 
     constructor(private route: ActivatedRoute,
                 private http: HttpClient,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private titleService: TitleService) {
     }
 
     ngOnInit() {
@@ -70,6 +72,7 @@ export class UserAdminViewComponent implements OnInit {
         this.email = userData.email;
         this.isBlocked = userData.isBlocked;
         this.isAdmin = userData.isAdmin;
+        this.titleService.setTitle('Benutzer ' + this.displayName);
     }
 
     resetDisplayName() {

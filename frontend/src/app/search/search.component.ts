@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-search',
@@ -8,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
-
+    constructor(private titleService: TitleService) {
+        this.titleService.setTitle('Suche');
+    }
 }

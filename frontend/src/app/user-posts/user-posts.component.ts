@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-user-posts',
@@ -8,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './user-posts.component.css'
 })
 export class UserPostsComponent {
-
+    constructor(titleService: TitleService) {
+        titleService.setTitle('Deine Posts');
+    }
 }

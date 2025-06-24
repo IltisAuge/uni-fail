@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {faExclamation, faTriangleExclamation} from '@fortawesome/free-solid-svg-icons';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-not-found',
@@ -13,6 +14,9 @@ import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 })
 export class NotFoundComponent {
 
-    protected readonly faExclamation = faExclamation;
     protected readonly faTriangleExclamation = faTriangleExclamation;
+
+    constructor(titleService: TitleService) {
+        titleService.setTitle('404');
+    }
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-access-denied',
@@ -8,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './access-denied.component.css'
 })
 export class AccessDeniedComponent {
-
+    constructor(private titleService: TitleService) {
+        this.titleService.setTitle('Kein Zugriff');
+    }
 }

@@ -5,6 +5,7 @@ import {AuthService} from '../auth/auth.service';
 import {environment} from '../../environments/environment';
 import {filter} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {TitleService} from '../title.service';
 
 interface Tag {
     name: string;
@@ -32,8 +33,11 @@ export class PostFormComponent {
 	constructor(
 		private fb: FormBuilder,
         private http: HttpClient,
-		private authService: AuthService
+		private authService: AuthService,
+        private titleSerivce: TitleService,
 	) {
+        this.titleSerivce.setTitle('Post erstellen');
+
 		this.postForm = this.fb.group({
 			content: ['', Validators.required],
             title: ['', Validators.required]

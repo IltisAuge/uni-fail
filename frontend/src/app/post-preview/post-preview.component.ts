@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+import {TitleService} from '../title.service';
 
 interface Post {
     title: string;
@@ -23,7 +24,8 @@ export class PostPreviewComponent implements OnInit {
     loading = true;
     error = '';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+    }
 
     ngOnInit(): void {
         this.http.get<Post[]>(environment.apiBaseUrl + '/post/get?filter=newest') //Change the amount of post shown by '/post/get?filter=newest&max=numberofposts'

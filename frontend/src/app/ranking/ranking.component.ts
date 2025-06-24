@@ -2,6 +2,7 @@ import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChild
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {isPlatformBrowser, NgIf} from '@angular/common';
+import {TitleService} from '../title.service';
 
 @Component({
   selector: 'app-ranking',
@@ -18,7 +19,9 @@ export class RankingComponent implements OnInit {
     @ViewChildren('itemRef') itemRefs!: QueryList<ElementRef<HTMLElement>>;
 
     constructor(@Inject(PLATFORM_ID) private platformId: Object,
-                private http: HttpClient) {
+                private http: HttpClient,
+                private titleService: TitleService) {
+        this.titleService.setTitle('Rangliste');
     }
 
     ngOnInit() {
