@@ -1,10 +1,11 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
 	selector: 'app-root',
@@ -21,11 +22,15 @@ export class AppComponent implements OnInit {
     theme: string = 'light';
 
 	constructor(
-        @Inject(PLATFORM_ID) private platformId: Object) {
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private http: HttpClient) {
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
 
 	ngOnInit() {
+        this.http.get(`${environment.apiBaseUrl}/csrf-token`, { withCredentials: true }).subscribe((res) => {
+            console.log(res);
+        });
         if (isPlatformBrowser(this.platformId)) {
             let storedTheme = localStorage.getItem("theme");
             if (storedTheme) {

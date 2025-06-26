@@ -53,6 +53,16 @@ server.use('/user', userRouter);
 server.use('/admin', adminRouter);
 server.use('/ranking', rankingRouter);
 server.use('/tag', tagRouter);
+server.get('/csrf-token', (req, res) => {
+    const csrfToken = req.csrfToken();
+    res.cookie('XSRF-TOKEN', csrfToken, {
+        httpOnly: false,
+        secure: process.env.PRODUCTION === 'true',
+        sameSite: process.env.PRODUCTION === 'true' ? 'none' : 'lax',
+        domain: process.env.PRODUCTION === 'true' ? '.' + process.env.DOMAIN : undefined
+    });
+    res.json({token: csrfToken});
+});
 server.get('/me', async (req, res) => {
     if (!req.session.userId) {
         res.status(401).send("Unauthorized");
