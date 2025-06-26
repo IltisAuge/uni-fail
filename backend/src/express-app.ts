@@ -46,7 +46,7 @@ server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
-server.use(csrf({ cookie: true }));
+//server.use(csrf({ cookie: true }));
 server.use('/login', loginRouter);
 server.use('/post', postRouter);
 server.use('/user', userRouter);
