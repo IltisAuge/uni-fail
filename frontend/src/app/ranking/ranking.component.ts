@@ -5,17 +5,17 @@ import {isPlatformBrowser, NgIf} from '@angular/common';
 import {TitleService} from '../services/title.service';
 
 @Component({
-  selector: 'app-ranking',
-  standalone: true,
+    selector: 'app-ranking',
+    standalone: true,
     imports: [
         NgIf
     ],
-  templateUrl: './ranking.component.html',
-  styleUrl: './ranking.component.css'
+    templateUrl: './ranking.component.html',
+    styleUrl: './ranking.component.css'
 })
 export class RankingComponent implements OnInit {
 
-    rankedUnis: any[] = [];
+    rankedUnis: {_id: string, totalUpvotes: number}[] = [];
     @ViewChildren('itemRef') itemRefs!: QueryList<ElementRef<HTMLElement>>;
 
     constructor(@Inject(PLATFORM_ID) private platformId: Object,
@@ -25,22 +25,23 @@ export class RankingComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.http.get(environment.apiBaseUrl + '/ranking/most-votes?limit=3', {observe: 'response'}).subscribe(res => {
-            console.log(res);
-            const body = res.body;
-            if (body) {
-                this.rankedUnis = body as any;
+        this.http.get<{_id: string, totalUpvotes: number}[]>(
+            `${environment.apiBaseUrl}/ranking/most-votes?limit=3`,
+        ).subscribe({
+            next: (resp) => {
+                this.rankedUnis = resp;
                 this.rankedUnis.forEach(uni => {
                     uni._id = String(uni._id).replace('uni:', '');
                 })
-                console.log(this.rankedUnis);
                 this.rescalePodestals();
+            },
+            error: (error) => {
+                console.log('An error occurred while fetching ranking most votes:', error);
             }
         });
     }
 
     rescalePodestals() {
-        // Zeit lassen für Rendering
         setTimeout(() => {
             let maxWidth = 0;
 

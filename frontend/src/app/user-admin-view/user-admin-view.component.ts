@@ -6,15 +6,16 @@ import {NgIf} from '@angular/common';
 import {AuthService} from '../services/auth.service';
 import {filter} from 'rxjs';
 import {TitleService} from '../services/title.service';
+import {IUser} from '../user.interface';
 
 @Component({
-  selector: 'app-user-admin-view',
-  standalone: true,
+    selector: 'app-user-admin-view',
+    standalone: true,
     imports: [
         NgIf
     ],
-  templateUrl: './user-admin-view.component.html',
-  styleUrl: './user-admin-view.component.css'
+    templateUrl: './user-admin-view.component.html',
+    styleUrl: './user-admin-view.component.css'
 })
 export class UserAdminViewComponent implements OnInit {
 
@@ -36,7 +37,6 @@ export class UserAdminViewComponent implements OnInit {
             filter(state => state.success)
         ).subscribe(state => {
             const user = state.user;
-            console.log("user check", user, typeof user, user?.isAdmin);
             if (!user || !user.isAdmin) {
                 return;
             }
@@ -46,20 +46,16 @@ export class UserAdminViewComponent implements OnInit {
                     return;
                 }
                 this.userId = params['id'];
-                console.log("userId=",this.userId);
-                this.http.get<any>(environment.apiBaseUrl + '/admin/user/' + this.userId, {
-                    observe: 'response',
+                console.log("userId=", this.userId);
+                this.http.get<{ user: IUser }>(`${environment.apiBaseUrl}/admin/user/${this.userId}`, {
                     withCredentials: true
                 }).subscribe({
-                    next: resp => {
-                        console.log("response:", resp);
-                        if (resp.status === 200 && resp.body && resp.body.user) {
-                            console.log("Set userdata to: ",resp.body.user);
-                            this.setUserData(resp.body.user);
-                        }
+                    next: (resp) => {
+                        console.log("Set userdata to: ", resp.user);
+                        this.setUserData(resp.user);
                     },
-                    error: err => {
-                        console.error(err);
+                    error: (error) => {
+                        console.error('An error occurred while fetching user information:', error);
                     }
                 });
             });
@@ -76,57 +72,48 @@ export class UserAdminViewComponent implements OnInit {
     }
 
     resetDisplayName() {
-        this.http.post<{ user: any }>(environment.apiBaseUrl + '/admin/reset-display-name', {
+        this.http.post<{ user: IUser }>(`${environment.apiBaseUrl}/admin/reset-display-name`, {
             userId: this.userId
         }, {
-            observe: 'response',
             withCredentials: true
         }).subscribe({
-            next: resp => {
-                if (resp.status === 200 && resp.body && resp.body.user) {
-                    this.setUserData(resp.body.user);
-                }
+            next: (resp) => {
+                this.setUserData(resp.user);
             },
-            error: err => {
-                console.log(err);
+            error: (error) => {
+                console.log('An error occurred while resetting display name:', error);
             }
         });
     }
 
     setBlocked(status: boolean) {
-        this.http.post<{ user: any }>(environment.apiBaseUrl + '/admin/block-user', {
+        this.http.post<{ user: IUser }>(`${environment.apiBaseUrl}/admin/block-user`, {
             userId: this.userId,
             status: status
         }, {
-            observe: 'response',
             withCredentials: true
         }).subscribe({
-            next: resp => {
-                if (resp.status === 200 && resp.body && resp.body.user) {
-                    this.setUserData(resp.body.user);
-                }
+            next: (resp) => {
+                this.setUserData(resp.user);
             },
-            error: err => {
-                console.log(err);
+            error: (error) => {
+                console.log('An error occurred while setting blocked status of user:', error);
             }
         });
     }
 
     setAdmin(status: boolean) {
-        this.http.post<{ user: any }>(environment.apiBaseUrl + '/admin/set-admin', {
+        this.http.post<{ user: IUser }>(`${environment.apiBaseUrl}/admin/set-admin`, {
             userId: this.userId,
             status: status
         }, {
-            observe: 'response',
             withCredentials: true
         }).subscribe({
-            next: resp => {
-                if (resp.status === 200 && resp.body && resp.body.user) {
-                    this.setUserData(resp.body.user);
-                }
+            next: (resp) => {
+                this.setUserData(resp.user);
             },
-            error: err => {
-                console.log(err);
+            error: (error) => {
+                console.log('An error occurred while setting admin:', error);
             }
         });
     }

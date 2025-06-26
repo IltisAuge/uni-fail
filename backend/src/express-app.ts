@@ -8,10 +8,12 @@ import adminRouter from './routes/admin-routes';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'node:path';
-import {downloadAllFiles} from './s3';
+import {downloadAllAvatars} from './s3';
 import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
 import rankingRouter from './routes/ranking-routes';
 import tagRouter from './routes/tag-routes';
+import csrf from 'csurf';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -25,6 +27,7 @@ declare module 'express-session' {
 
 const server = express();
 server.set('trust proxy', 1);
+server.use(cookieParser());
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 server.use(session({
@@ -43,6 +46,7 @@ server.use(cors({
 	origin: process.env.HOST,
 	credentials: true
 }));
+server.use(csrf({ cookie: true }));
 server.use('/login', loginRouter);
 server.use('/post', postRouter);
 server.use('/user', userRouter);
@@ -62,14 +66,23 @@ server.get('/me', async (req, res) => {
     res.status(404).json({error:'User not found. Id=' + req.session.userId});
 })
 server.get('/avatars', (req, res) => {
+    if (!fs.existsSync('./avatars')) {
+        res.status(500).send('Avatar directory does not exist');
+        return;
+    }
     fs.readdir('./avatars', (err, files) => {
         res.json(files);
     });
 });
 server.get('/avatar/:id', (req, res) => {
     const objectId = req.params.id;
-    const avatarFilePath = path.resolve('./avatars') + '/' + objectId;
-    res.status(200).sendFile(avatarFilePath);
+    const base = path.basename(objectId);
+    const avatarFilePath = path.resolve('./avatars', base);
+    if (!fs.existsSync(avatarFilePath)) {
+        res.status(404).json({ error: 'Avatar not found' });
+        return;
+    }
+    res.sendFile(avatarFilePath);
 });
 server.post('/logout', (req, res) => {
     req.session.userId = undefined;
@@ -79,7 +92,8 @@ server.get('/', (req, res) => {
 	res.header('Content-Type', 'text/plain');
 	res.send('Welcome to the API of uni-fail!');
 });
-downloadAllFiles().then(r => {
+
+downloadAllAvatars().then(r => {
     console.log("Downloaded all files");
 });
 loadAvailableDisplayNames().then(r => {

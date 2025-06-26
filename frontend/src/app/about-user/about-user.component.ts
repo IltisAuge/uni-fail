@@ -51,7 +51,6 @@ export class AboutUserComponent implements OnInit {
         this.authService.getLoggedInUser().pipe(
             filter(state => state.success)
         ).subscribe(state => {
-            console.log("authService update in about-user:", state);
             if (!state || !state.success) {
                 this.name = "Could not check authentication status! Make sure the API server is running correctly!";
                 return;
@@ -66,65 +65,71 @@ export class AboutUserComponent implements OnInit {
                 this.avatarURL = environment.apiBaseUrl + '/avatar/' + user.avatarKey;
             }
         });
-        this.http.get(environment.apiBaseUrl + '/avatars', { withCredentials: true }).subscribe(resp => {
-            if (!resp) {
-                return;
-            }
-            console.log(resp);
-            const array = resp as string[];
-            this.avatarIds = array;
-            for (const id in array) {
-                this.avatarURLs.push(environment.apiBaseUrl + '/avatar/' + array[id]);
-            }
-        })
-    }
-
-    onSubmit() {
-        if (this.displayNameForm.valid) {
-            const body = this.displayNameForm.value;
-            this.http.post<any>(environment.apiBaseUrl + '/user/set-display-name', body, {
-                observe: 'response',
-                responseType: 'json',
-                withCredentials: true
-            }).subscribe({
-                next: resp => {
-                    if (resp.status === 200 && resp.body && resp.body.user) {
-                        this.isDisplayNameAvailable = true;
-                        console.log("user response:", resp.body.user);
-                        this.authService.setUser(true, resp.body.user);
-                    }
-                },
-                error: err => {
-                    if (err.status === 400 && err.error?.error === 'Not available') {
-                        this.isDisplayNameAvailable = false;
-                    }
+        this.http.get(`${environment.apiBaseUrl}/avatars`, {
+            withCredentials: true
+        }).subscribe({
+            next: (resp) => {
+                this.avatarIds = resp as string[];
+                for (const id in this.avatarIds) {
+                    this.avatarURLs.push(environment.apiBaseUrl + '/avatar/' + this.avatarIds[id]);
                 }
-            });
-        } else {
-            console.log("Form is invalid!");
-        }
+            },
+            error: (error)=> {
+                console.error("An error occurred while loading avatars:", error);
+            }
+        });
     }
 
-    openModal() {
+    setDisplayName() {
+        if (this.displayNameForm.invalid) {
+            return;
+        }
+        const body = this.displayNameForm.value;
+        this.http.post<{user:{}}>(`${environment.apiBaseUrl}/user/set-display-name`, body, {
+            withCredentials: true
+        }).subscribe({
+            next: (resp) => {
+                if (resp.user) {
+                    this.isDisplayNameAvailable = true;
+                    this.authService.setUser(true, resp.user);
+                }
+            },
+            error: (err) => {
+                if (err.status === 400 && err.error?.error === 'Not available') {
+                    this.isDisplayNameAvailable = false;
+                    return;
+                }
+                console.error("An error occurred while setting user display name:", err);
+            }
+        });
+    }
+
+    openAvatarModal() {
         this.avatarDialogRef.nativeElement.showModal();
         this.isModalOpen = true;
     }
 
-    closeModal() {
+    closeAvatarModal() {
         this.avatarDialogRef.nativeElement.close();
         this.isModalOpen = false;
     }
 
     acceptAvatar() {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
-        console.log("send avatarId=" + avatarId);
-        this.http.post<any>(environment.apiBaseUrl + '/user/set-avatar', {
+        this.http.post<{user: {}}>(environment.apiBaseUrl + '/user/set-avatar', {
             avatarId: avatarId
-        }, { withCredentials: true }).subscribe(resp => {
-            console.log(resp);
-            this.authService.setUser(true, resp.user);
+        },
+        {
+            withCredentials: true
+        }).subscribe({
+            next: (resp) => {
+                this.authService.setUser(true, resp.user);
+            },
+            error: (err) => {
+                console.error("An error occurred while setting user avatar:", err);
+            }
         });
-        this.closeModal();
+        this.closeAvatarModal();
         this.selectedAvatarIndex = -1;
     }
 

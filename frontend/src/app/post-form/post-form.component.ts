@@ -7,7 +7,7 @@ import {filter} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {TitleService} from '../services/title.service';
 
-interface Tag {
+interface ITag {
     name: string;
     displayName: string;
 }
@@ -22,18 +22,17 @@ interface Tag {
     styleUrl: './post-form.component.css'
 })
 export class PostFormComponent {
-	postForm: FormGroup;
-	isLoggedIn: boolean = false;
+
     @ViewChild('tagsDialog') tagsDialogRef!: ElementRef<HTMLDialogElement>;
+	postForm: FormGroup;
     isModalOpen: boolean = false;
-    tags: Tag[] = [];
-    displayedTags: Tag[] = [];
-    selectedTags: Tag[] = [];
+    tags: ITag[] = [];
+    displayedTags: ITag[] = [];
+    selectedTags: ITag[] = [];
 
 	constructor(
 		private fb: FormBuilder,
         private http: HttpClient,
-		private authService: AuthService,
         private titleSerivce: TitleService,
 	) {
         this.titleSerivce.setTitle('Post erstellen');
@@ -43,55 +42,57 @@ export class PostFormComponent {
             title: ['', Validators.required]
         });
 
-        this.authService.getLoggedInUser().pipe(
-            filter(state => state.success)
-        ).subscribe(state => {
-			this.isLoggedIn = !!state.user;
-		});
-
-        this.http.get<{tags: string[]}>(environment.apiBaseUrl + '/tag/get/all',
-            { observe: 'response', withCredentials: true }
-        ).subscribe(resp => {
-            console.log("received tags:", resp.body?.tags);
-            if (resp.status === 200 && resp.body) {
-                this.tags = resp.body.tags
-                    .map((tag) =>
-                        ({name: tag, displayName: tag.replace('uni:', '')}));
+        this.http.get<{tags: string[]}>(`${environment.apiBaseUrl}/tag/get/all`, {
+            withCredentials: true
+        }).subscribe({
+            next: (resp) => {
+                this.tags = resp.tags.map((tag) => (
+                    {
+                        name: tag,
+                        displayName: tag.replace('uni:', '')
+                    }
+                ));
+            },
+            error: (error) => {
+                console.error('An error occurred while fetching tags:', error);
             }
         });
 	}
 
-	onSubmit() {
+	createPost() {
 		if (this.postForm.valid) {
             const payload = {
                 ...this.postForm.value,
-                tags: this.selectedTags.map(t => t.name)
+                tags: this.selectedTags.map(tag => tag.name)
             };
-			this.http.post(environment.apiBaseUrl + '/post/create',
-                payload,
-                { observe: 'response', withCredentials: true }
-            ).subscribe(resp => {
-                if (resp.status === 200) {
+			this.http.post(`${environment.apiBaseUrl}/post/create`, payload,
+            {
+                withCredentials: true
+            }).subscribe({
+                next: () => {
                     // Redirect to post view
+                },
+                error: (error) => {
+                    console.error('An error occurred while creating post:', error);
                 }
             });
 		}
 	}
 
-    openModal() {
+    openTagsModal() {
         this.tagsDialogRef.nativeElement.showModal();
         this.isModalOpen = true;
         this.filterTags('');
     }
 
-    closeModal() {
+    closeTagsModal() {
         this.tagsDialogRef.nativeElement.close();
         this.isModalOpen = false;
     }
 
     filterTags(filter: string) {
         filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        let filtered: Tag[];
+        let filtered: ITag[];
         if (filter.length === 0) {
             const uniTags = this.tags.filter(tag => tag.name.startsWith('uni:') && !this.selectedTags.includes(tag));
             const hashTags = this.tags.filter(tag => tag.name.startsWith('#') && !this.selectedTags.includes(tag));
@@ -102,7 +103,6 @@ export class PostFormComponent {
                 ...shuffledHash.slice(0, 15),
                 ...shuffledUni.slice(0, 5)
             ];
-            console.log("additional tags:", additionalTags);
             filtered = [...this.selectedTags, ...additionalTags.sort(() => 0.5 - Math.random())];
         } else {
             filtered = this.tags
@@ -111,11 +111,11 @@ export class PostFormComponent {
         this.displayedTags = filtered;
     }
 
-    toggleTagSelection(tag: Tag) {
+    toggleTagSelection(tag: ITag) {
         if (this.selectedTags.includes(tag)) {
             this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
-        } else {
-            this.selectedTags.push(tag);
+            return;
         }
+        this.selectedTags.push(tag);
     }
 }

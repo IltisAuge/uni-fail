@@ -113,6 +113,13 @@ async function completeAuthentication(userData: any, req: any, res: any) {
         }
     }
     req.session.userId = user._id;
+    const csrfToken = req.csrfToken();
+    res.cookie('XSRF-TOKEN', csrfToken, {
+        key: 'XSRF-TOKEN',
+        secure: process.env.PRODUCTION === 'true',
+        sameSite: process.env.PRODUCTION === 'true' ? 'none' : 'lax',
+        domain: process.env.PRODUCTION === 'true' ? '.' + process.env.DOMAIN : undefined
+    });
     res.redirect(process.env.AUTH_RETURN_URL as string);
 }
 

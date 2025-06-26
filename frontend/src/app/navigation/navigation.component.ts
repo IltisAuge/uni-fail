@@ -4,11 +4,10 @@ import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/rout
 import {AuthService} from "../services/auth.service";
 import {FormsModule} from "@angular/forms";
 import {environment} from "../../environments/environment";
-import {filter, Subscription} from 'rxjs';
+import {filter} from 'rxjs';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {
     faBars,
-    faCircleInfo,
     faFolder,
     faHome,
     faPlus,
@@ -46,9 +45,6 @@ import {animate, style, transition, trigger} from '@angular/animations';
 })
 export class NavigationComponent implements OnInit {
 
-	isLoggedIn: boolean = false;
-    private routerSubscription!: Subscription;
-
     protected readonly faHome = faHome;
     protected readonly faSearch = faSearch;
     protected readonly faRankingStar = faRankingStar;
@@ -57,6 +53,8 @@ export class NavigationComponent implements OnInit {
     protected readonly faRightFromBracket = faRightFromBracket;
     protected readonly faBars = faBars;
     protected readonly faFolder = faFolder;
+
+    isLoggedIn: boolean = false;
     menuOpen = false;
     isMobile = false;
 
@@ -74,7 +72,7 @@ export class NavigationComponent implements OnInit {
             this.isLoggedIn = !!state.user;
         });
         this.onResize();
-        this.routerSubscription = this.router.events.subscribe((event) => {
+        this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd && this.isMobile) {
                 this.menuOpen = false;
             }
@@ -87,7 +85,9 @@ export class NavigationComponent implements OnInit {
             return;
         }
         this.isMobile = window.innerWidth < 768;
-        if (!this.isMobile) this.menuOpen = true;
+        if (!this.isMobile) {
+            this.menuOpen = true;
+        }
     }
 
     toggleMenu() {
@@ -98,18 +98,21 @@ export class NavigationComponent implements OnInit {
         if (this.isMobile) {
             this.menuOpen = false;
         }
-		this.http.post(environment.apiBaseUrl + '/logout', {},
-            { observe: 'response', withCredentials: true }
-        ).subscribe(result => {
-			if (result.status === 200) {
+		this.http.post(environment.apiBaseUrl + '/logout', { },
+        {
+            observe: 'response', withCredentials: true
+        }).subscribe({
+            next: () => {
 				this.authService.resetUser();
-                console.log("Current url: " + this.router.url);
                 const currentUrl = this.router.url;
                 // Redirect to dummy url, then redirect to reload the current component and reactivate the AccessGuard
                 this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(async () => {
                     await this.router.navigateByUrl(currentUrl);
                 });
-			}
+			},
+            error: (error) => {
+                console.error('An error occurred while logging out:', error);
+            }
 		});
 	}
 }

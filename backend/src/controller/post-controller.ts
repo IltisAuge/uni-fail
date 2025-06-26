@@ -46,26 +46,25 @@ export async function getNewestPosts(max: number) {
         .exec();
 }
 
-export async function getUniRankingMostVotes(limit: number) {
+/**
+ *
+ * @param limit
+ * @return an array of universities with the most upvoted posts, limited by a given amount
+ * The array contains objects with the following structure:
+ * _id is the name of the university starting with 'uni:'
+ * totalUpvotes is the sum of upvotes this university received on user posts
+ */
+export async function getUniRankingMostVotes(limit: number): Promise<{_id: string, totalUpvotes: number}[]> {
     return PostModel.aggregate([
-        // 1. Zerlege jeden Tag in einem Post zu einem einzelnen Dokument
         { $unwind: "$tags" },
-
-        // 2. Optional: Filtere nur Uni-Tags (falls nötig)
         { $match: { tags: { $regex: /^uni:/i } } },
-
-        // 3. Gruppiere nach Uni-Tag und summiere Upvotes
         {
             $group: {
                 _id: "$tags",
                 totalUpvotes: { $sum: "$upvotes" }
             }
         },
-
-        // 4. Sortiere nach den meisten Upvotes
         { $sort: { totalUpvotes: -1 } },
-
-        // 5. Begrenze auf die gewünschte Anzahl
         { $limit: limit }
     ]);
 }

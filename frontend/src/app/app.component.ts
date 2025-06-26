@@ -1,13 +1,10 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {HttpService} from './services/http.service';
-import {AuthService} from './services/auth.service';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
-import {filter} from 'rxjs';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faCircle, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
+import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-root',
@@ -17,49 +14,18 @@ import {faCircle, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 	styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
+
+    protected readonly faCircleInfo = faCircleInfo;
+
 	title = 'frontend';
-	apiResponse: any = 'Requesting API response...';
-	username: any = 'Not logged in';
-	isAdmin: boolean = false;
-	user: any | undefined;
     theme: string = 'light';
-    userId: string = '';
-    displayName: string = '';
 
 	constructor(
-        @Inject(PLATFORM_ID) private platformId: Object,
-        private httpService: HttpService,
-        private authService: AuthService,
-        private router: Router) {
+        @Inject(PLATFORM_ID) private platformId: Object) {
 		console.log("ENVIRONMENT: production=" + environment.production + " apiBaseUrl=" + environment.apiBaseUrl);
 	}
 
-	ngOnInit(): void {
-		this.httpService.get("/").subscribe(r => {
-			if (!!r) {
-				this.apiResponse = r;
-			}
-		});
-        this.authService.getLoggedInUser().pipe(
-            filter(state => state.success)
-        ).subscribe(resp => {
-            console.log("authService update in app.component");
-			if (!resp || !resp.success) {
-				this.username = "Could not check authentication status! Make sure the API server is running correctly!";
-				return;
-			}
-			const user = resp.user;
-			if (user) {
-                this.user = user;
-                this.isAdmin = user.isAdmin;
-                this.userId = user._id;
-                this.displayName = user.displayName;
-                this.username = "Logged in via " + user.provider + " as " + user.name + " (" + user.email + ")";
-                return;
-            }
-            this.username = "Not logged in";
-            this.isAdmin = false;
-		});
+	ngOnInit() {
         if (isPlatformBrowser(this.platformId)) {
             let storedTheme = localStorage.getItem("theme");
             if (storedTheme) {
@@ -75,13 +41,4 @@ export class AppComponent implements OnInit {
         this.theme = nextTheme;
         document.documentElement.setAttribute('data-theme', nextTheme);
     }
-
-    openMockUserPage() {
-        this.router.navigateByUrl('/user/' + this.userId).then(r => {
-            console.log(r);
-        });
-    }
-
-    protected readonly faCircle = faCircle;
-    protected readonly faCircleInfo = faCircleInfo;
 }

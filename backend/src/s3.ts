@@ -10,7 +10,7 @@ const s3 = new AWS.S3({ region: process.env.S3_REGION as string,
     })
 });
 
-export async function downloadAllFiles() {
+export async function downloadAllAvatars() {
     const listedObjects = await s3.listObjectsV2({
         Bucket: process.env.S3_BUCKET_NAME as string
     }).promise();

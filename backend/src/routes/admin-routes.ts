@@ -29,13 +29,11 @@ adminRouter.post('/reset-display-name', async (req, res) => {
         return;
     }
     setDisplayName(userId, getRandomDisplayName()).then(doc => {
-        console.log("Saved. Set displayname to " + user.displayName);
-        console.log(doc);
         res.status(200).json({user: doc});
-    }).catch((e) => {
-        console.error(e);
-        res.status(500).send();
-    })
+    }).catch((error) => {
+        console.error('An error occurred while resetting display name:', error);
+        res.status(500).json({error:'An error occurred while resetting display name'});
+    });
 });
 
 adminRouter.post('/block-user', async (req, res) => {
@@ -51,10 +49,11 @@ adminRouter.post('/block-user', async (req, res) => {
     }
     setBlocked(userId, req.body.status).then(doc => {
         res.status(200).json({user: doc});
-    }).catch((e) => {
-        res.status(500).send();
+    }).catch((error) => {
+        console.error('An error occurred while setting user blocked status:', error);
+        res.status(500).json({error:'An error occurred while setting user blocked status'});
     });
-})
+});
 
 adminRouter.post('/set-admin', async (req, res) => {
     const userId = req.body.userId;
@@ -69,10 +68,10 @@ adminRouter.post('/set-admin', async (req, res) => {
     }
     setAdmin(userId, req.body.status).then(doc => {
         res.status(200).json({user: doc});
-    }).catch((e) => {
-        console.log(e);
-        res.status(500).send();
-    })
-})
+    }).catch((error) => {
+        console.error('An error occurred while setting user admin:', error);
+        res.status(500).json({error:'An error occurred while setting user admin'});
+    });
+});
 
 export default adminRouter;

@@ -15,7 +15,9 @@
 	"dependencies": {
 		"@types/mongoose": "^5.11.97",
 		"aws-sdk": "^2.1692.0",
+		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
+		"csurf": "^1.11.0",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
 		"express-session": "^1.18.1",
@@ -27,7 +29,9 @@
 		"ts-randomstring": "^1.0.8"
 	},
 	"devDependencies": {
+		"@types/cookie-parser": "^1.4.9",
 		"@types/cors": "^2.8.18",
+		"@types/csurf": "^1.11.5",
 		"@types/express": "^5.0.2",
 		"@types/express-session": "^1.18.1",
 		"@types/jest": "^29.5.14",

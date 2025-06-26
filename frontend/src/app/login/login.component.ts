@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpService} from '../services/http.service';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
 
@@ -16,12 +15,11 @@ import {TitleService} from '../services/title.service';
 })
 export class LoginComponent {
 
-	constructor(private http: HttpService,
-                private titleService: TitleService) {
+	constructor(private titleService: TitleService) {
         this.titleService.setTitle('Anmelden');
 	}
 
 	openLoginPage(provider: string) {
-		window.location.href = environment.apiBaseUrl + '/login?provider=' + provider;
+		window.location.href = `${environment.apiBaseUrl}/login?provider=${provider}`;
 	}
 }
