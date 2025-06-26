@@ -13,13 +13,34 @@ export class MicrosoftLoginController extends LoginController {
 	getAuthURL(): string {
 		return this.formatURL('https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize?\n' +
 			'client_id={client_id}\n' +
-			'&response_type=code%20id_token\n' +
+			'&response_type=code\n' +
 			'&redirect_uri={return_uri}\n' +
-			'&response_mode=form_post\n' +
 			'&nonce={nonce}\n' +
 			'&scope={scope}\n' +
 			'&state={state}\n');
 	}
+
+    async requestIdToken(authCode: string): Promise<MicrosoftIdToken | undefined> {
+        const tokenURL = this.formatURL('https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token');
+        const response = await fetch(tokenURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                grant_type: 'authorization_code',
+                code: authCode,
+                redirect_uri: process.env.MICROSOFT_RETURN_URL as string,
+                client_id: process.env.MICROSOFT_CLIENT_ID as string,
+                client_secret: process.env.MICROSOFT_CLIENT_SECRET as string
+            })
+        });
+        const data = await response.json();
+        if (!data.id_token) {
+            return undefined;
+        }
+        return this.decodeJWT(data.id_token);
+    }
 
 	decodeJWT(id_token: string): MicrosoftIdToken {
 		return jwtDecode<MicrosoftIdToken>(id_token);

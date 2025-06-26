@@ -46,17 +46,17 @@ loginRouter.get('/google-auth-return', (req, res) => {
 	googleLoginController.getUserData(code).then(userData => completeAuthentication(userData, req, res));
 });
 
-loginRouter.post('/microsoft-auth-return', (req, res) => {
-	const id_token = req.body.id_token as string;
-	if (id_token == undefined) {
-		res.send('No id_token');
+loginRouter.get('/microsoft-auth-return', (req, res) => {
+	const authCode = req.query.code as string;
+	if (authCode == undefined) {
+		res.send('No authCode');
 		return;
 	}
-	if (id_token.constructor !== String) {
-		res.send('id_token is not a string');
+	if (authCode.constructor !== String) {
+		res.send('authCode is not a string');
 		return;
 	}
-	const state = req.body.state;
+	const state = req.query.state;
 	if (state == undefined) {
 		res.send('No state');
 		return;
@@ -65,12 +65,17 @@ loginRouter.post('/microsoft-auth-return', (req, res) => {
 		res.send('Invalid oAuthState');
 		return;
 	}
-	const jwt = microsoftLoginController.decodeJWT(id_token);
-	if (jwt.nonce != req.session.oAuthNonce) {
-		res.send('Invalid oAuthNonce');
-		return;
-	}
-	microsoftLoginController.getUserData(jwt).then(userData => completeAuthentication(userData, req, res));
+    microsoftLoginController.requestIdToken(authCode).then((jwt) => {
+        if (!jwt) {
+            res.send('JWT invalid');
+            return;
+        }
+        if (jwt.nonce != req.session.oAuthNonce) {
+            res.send('Invalid oAuthNonce');
+            return;
+        }
+        microsoftLoginController.getUserData(jwt).then(userData => completeAuthentication(userData, req, res));
+    })
 });
 
 // Only enable this endpoint in development
@@ -89,6 +94,7 @@ async function completeAuthentication(userData: any, req: any, res: any) {
     let user = await getUser(userData._id);
     if (!user) {
         // User does not yet exist in the database
+        // Set default avatar and random display name
         const avatarId = '307ce493-b254-4b2d-8ba4-d12c080d6651.jpg';
         const randomDisplayName = getRandomDisplayName();
         user = {

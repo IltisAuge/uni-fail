@@ -1,46 +1,33 @@
 name: uni-fail
 
 services:
-    nginx:
-        image: nginx
-        container_name: uni-fail_nginx
-        ports:
-            - 80:80
-            - 443:443
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
-            - ./dist/uni-fail/browser/:/usr/share/nginx/html/
-            - ../certs/fullchain.pem:/etc/ssl/certs/fullchain.pem
-            - ../certs/privkey.pem:/etc/ssl/private/privkey.pem
-        networks:
-            - uni-fail
-        deploy:
-            resources:
-                limits:
-                    memory: 100M
     angular:
-        build: .
+        build: ./frontend
         container_name: uni-fail_angular
         ports:
             - 4000:4000
         volumes:
-            - ./dist/:/app/dist/
+            - ./frontend/dist/:/app/dist/
         networks:
             - uni-fail
+            - nginx_shared
         deploy:
             resources:
                 limits:
                     memory: 100M
     api-server:
-        build: ./api-server
+        build: ./backend
         container_name: uni-fail_api-server
         ports:
             - 5010:5010
         volumes:
-            - ./api-server/main.js:/app/main.js
-            - ./api-server/uploads/:/app/uploads/
+            - ./backend/dist/:/app/dist/
+            - ./backend/.env:/app/.env
+            - ./backend/google_client.json:/app/google_client.json
+            - ./backend/uploads/:/app/uploads/
         networks:
             - uni-fail
+            - nginx_shared
         deploy:
             resources:
                 limits:
@@ -49,10 +36,10 @@ services:
         image: mongo
         container_name: uni-fail_mongodb
         ports:
-            - 27017:27017
+            - 27018:27017
         environment:
             MONGO_INITDB_ROOT_USERNAME: 'root'
-            MONGO_INITDB_ROOT_PASSWORD: 'CHANGEME'
+            MONGO_INITDB_ROOT_PASSWORD: 'CHANGE_ME'
         volumes:
             - uni-fail_mongodb:/data/db
         networks:
@@ -61,3 +48,5 @@ volumes:
     uni-fail_mongodb:
 networks:
     uni-fail:
+    nginx_shared:
+        external: true

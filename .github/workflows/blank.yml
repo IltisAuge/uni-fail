@@ -1,4 +1,4 @@
-name: Deploy Angular Frontend
+name: Build and deploy Frontend & Backend services
 
 on:
   push:
