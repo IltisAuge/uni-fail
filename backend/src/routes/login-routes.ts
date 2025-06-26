@@ -116,6 +116,7 @@ async function completeAuthentication(userData: any, req: any, res: any) {
     const csrfToken = req.csrfToken();
     res.cookie('XSRF-TOKEN', csrfToken, {
         key: 'XSRF-TOKEN',
+        httpOnly: false,
         secure: process.env.PRODUCTION === 'true',
         sameSite: process.env.PRODUCTION === 'true' ? 'none' : 'lax',
         domain: process.env.PRODUCTION === 'true' ? '.' + process.env.DOMAIN : undefined

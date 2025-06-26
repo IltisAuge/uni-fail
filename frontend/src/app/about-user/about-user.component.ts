@@ -6,6 +6,7 @@ import {environment} from '../../environments/environment';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {filter} from 'rxjs';
 import {TitleService} from '../services/title.service';
+import {IUser} from '../user.interface';
 
 @Component({
   selector: 'app-about-user',
@@ -85,14 +86,12 @@ export class AboutUserComponent implements OnInit {
             return;
         }
         const body = this.displayNameForm.value;
-        this.http.post<{user:{}}>(`${environment.apiBaseUrl}/user/set-display-name`, body, {
+        this.http.post<{user:IUser}>(`${environment.apiBaseUrl}/user/set-display-name`, body, {
             withCredentials: true
         }).subscribe({
             next: (resp) => {
-                if (resp.user) {
-                    this.isDisplayNameAvailable = true;
-                    this.authService.setUser(true, resp.user);
-                }
+                this.isDisplayNameAvailable = true;
+                this.authService.setUser(true, resp.user);
             },
             error: (err) => {
                 if (err.status === 400 && err.error?.error === 'Not available') {

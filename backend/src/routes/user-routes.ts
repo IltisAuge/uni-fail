@@ -27,7 +27,7 @@ userRouter.post('/set-display-name', async (req, res) => {
         res.status(400).json({error: 'Not available'});
         return;
     }
-    console.log("Set user displayname from " + user.displayName + " to " + displayName);
+    console.log("Set user display name from " + user.displayName + " to " + displayName);
     setDisplayName(userId, displayName).then(result => {
         if (result) {
             res.status(200).json({user: result});
