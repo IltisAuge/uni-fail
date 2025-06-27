@@ -1,0 +1,79 @@
+<div class="container mx-auto p-4 max-w-3xl">
+    <div *ngIf="loading" class="text-center text-[var(--text-secondary)]">
+        Post-Details werden geladen...
+    </div>
+
+    <div *ngIf="error" class="text-center text-[var(--button-red)]">
+        {{ error }}
+    </div>
+
+    <!--"getting back" button-->
+    <div class="mb-4">
+        <button
+            (click)="goBack()"
+            class="px-4 py-2 rounded bg-[var(--button-blue)] font-semibold text-[var(--button-blue-text)] hover:bg-[var(--button-blue-hover)] transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--button-green)] active:scale-95 shadow-sm hover:shadow-md"
+        >
+            ← Zurück zur Übersicht
+        </button>
+    </div>
+
+
+    <div *ngIf="post && !loading" class="bg-[var(--background-card)] text-[var(--text-primary)] rounded-lg shadow-[var(--shadow-card)] p-10 mt-8">
+        <div class="flex items-center mb-4">
+            <img [src]="getPostImage(post)" alt="User Avatar" class="rounded-full mr-3 w-12 h-12 object-cover">
+            <div>
+                <p class="text-sm text-[var(--text-secondary)]">
+                    Verfasst von {{ post.author || 'Anzeigename' }} am {{ post.createdAt | date:'dd.MM.yyyy' }}
+                </p>
+                <p class="text-sm text-[var(--text-secondary)]">DHBW Stuttgart, lustig, tag3</p>
+            </div>
+        </div>
+
+        <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+
+        <!--scroll area-->
+        <div class="max-h-64 overflow-y-auto whitespace-pre-wrap text-[var(--text-primary)] leading-relaxed mb-6">
+            {{ post.content }}
+        </div>
+
+        <!--Tags-->
+        <div *ngIf="post.tags.length > 0; else noTags" class="flex flex-wrap gap-2 mb-6">
+      <span *ngFor="let tag of post.tags"
+            class="bg-[var(--button-green)] text-[var(--button-green-text)] text-xs font-semibold px-2 py-1 rounded-full">
+        {{ tag }}
+      </span>
+        </div>
+        <ng-template #noTags>
+            <p class="text-sm text-[var(--text-secondary)]">Keine Tags vorhanden.</p>
+        </ng-template>
+
+
+
+        <div class="flex justify-between items-center text-sm mt-6 pt-4">
+            <button class="Loeschbutton font-bold py-2 px-4 rounded">
+                Post löschen
+                <span class="Loeschbutton__inner">
+                    <span class="Loeschbutton__blobs">
+                      <span class="Loeschbutton__blob"></span>
+                      <span class="Loeschbutton__blob"></span>
+                      <span class="Loeschbutton__blob"></span>
+                      <span class="Loeschbutton__blob"></span>
+                    </span>
+                </span>
+            </button>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <defs>
+                    <filter id="goo">
+                        <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10"></feGaussianBlur>
+                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7" result="goo"></feColorMatrix>
+                        <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+
+    <div *ngIf="!loading && !post && !error" class="text-center text-[var(--text-secondary)] mt-8">
+        Dieser Post konnte nicht gefunden werden.
+    </div>
+    </div>
+</div>

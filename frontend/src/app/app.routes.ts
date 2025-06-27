@@ -11,6 +11,7 @@ import {AccessDeniedComponent} from './access-denied/access-denied.component';
 import {accessGuard} from './access.guard';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {UserPostsComponent} from './user-posts/user-posts.component';
+import { PostComponent } from './post/post.component';
 
 export const routes: Routes = [
     { path: 'dummy', component: HomeComponent },
@@ -24,5 +25,6 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'user/:id', component: UserAdminViewComponent, canActivate: [accessGuard] },
     { path: 'access-denied', component:  AccessDeniedComponent },
+    { path: 'post/:id', component: PostComponent },
     { path: '**', component: NotFoundComponent },
 ];
