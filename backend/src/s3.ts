@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fs from 'fs';
-import AWS, {Credentials} from 'aws-sdk';
+import AWS from 'aws-sdk';
+const { Credentials } = AWS;
 
 const s3 = new AWS.S3({ region: process.env.S3_REGION as string,
     credentials: new Credentials({

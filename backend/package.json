@@ -8,34 +8,32 @@
 	"main": "src/express-app.ts",
 	"scripts": {
 		"test": "jest",
-		"dev": "ts-node-dev src/express-app.ts",
-		"build": "tsc",
-		"start": "node dist/index.js",
+		"build": "vite build",
+		"start": "vite",
 		"eslint:ts": "eslint src/**/*.ts",
 		"eslint:ts:fix": "eslint src/**/*.ts --fix"
 	},
 	"dependencies": {
-		"@eslint/js": "^9.30.0",
-		"@types/mongoose": "^5.11.97",
 		"aws-sdk": "^2.1692.0",
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"csurf": "^1.11.0",
 		"dotenv": "^16.5.0",
-		"eslint-plugin-import": "^2.32.0",
-		"eslint-plugin-promise": "^7.2.1",
 		"express": "^5.1.0",
 		"express-session": "^1.18.1",
-		"globals": "^16.2.0",
 		"google-auth-library": "^9.15.1",
 		"jwt-decode": "^4.0.0",
-		"mongodb": "^6.16.0",
 		"node-cache": "^5.1.2",
 		"node-fetch": "^3.3.2",
-		"ts-randomstring": "^1.0.8",
-		"typescript-eslint": "^8.35.0"
+		"ts-randomstring": "^1.0.8"
 	},
 	"devDependencies": {
+        "globals": "^16.2.0",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-promise": "^7.2.1",
+        "typescript-eslint": "^8.35.0",
+        "@types/mongoose": "^5.11.97",
+        "@eslint/js": "^9.30.0",
 		"@types/cookie-parser": "^1.4.9",
 		"@types/cors": "^2.8.18",
 		"@types/csurf": "^1.11.5",
@@ -49,6 +47,9 @@
 		"supertest-session": "^5.0.1",
 		"ts-jest": "^29.3.4",
 		"tsx": "^4.20.3",
-		"typescript": "^5.8.3"
+		"typescript": "^5.8.3",
+		"vite": "^6.3.5",
+		"vite-plugin-node": "^5.0.1",
+		"vite-tsconfig-paths": "^5.1.4"
 	}
 }
