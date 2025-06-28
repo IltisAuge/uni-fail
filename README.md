@@ -13,7 +13,7 @@ You need to add a few files and configurations to start the development services
 
 ### Pulling and first setup
 
-Pull this repository by opening a new terminal. Navigate to the desired destination directory and run ``git pull https://github.com/IltisAuge/uni-fail.git .``.
+Pull this repository by opening a new terminal. Navigate to the desired destination directory and run ``git pull https://github.com/IltisAuge/uni-fail.git``.
 
 After pulling the project from Github, install all required Node packages.
 To do this, open a terminal and navigate to `/frontend` in the project's directory. Then run `npm install --force`. --force is required because Angular 18 requires tailwindcss@"^2.0.0 || ^3.0.0" but this project uses TailwindCSS 4 as it is also compatible via Angular 18.
