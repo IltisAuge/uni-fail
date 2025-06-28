@@ -1,14 +1,15 @@
 {
-	"compilerOptions": {
-		"target": "ES2022",
+    "compilerOptions": {
+        "target": "ES2022",
         "module": "ES2022",
-		"moduleResolution": "node",
-		"strict": true,
-		"esModuleInterop": true,
-		"outDir": "dist",
-		"rootDir": "src",
-		"resolveJsonModule": true
-	},
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "rootDir": "src",
+        "esModuleInterop": true,
+        "moduleDetection": "force",
+        "resolveJsonModule": true,
+        "strict": true
+    },
 	"include": [
 		"src",
 		"types",
