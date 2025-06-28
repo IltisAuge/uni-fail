@@ -1,19 +1,18 @@
+import fs from 'fs';
+import path from 'node:path';
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import loginRouter from './routes/login-routes';
 import postRouter from './routes/post-routes';
 import userRouter from './routes/user-routes';
 import adminRouter from './routes/admin-routes';
-import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'node:path';
 import {downloadAllAvatars} from './s3';
 import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
 import rankingRouter from './routes/ranking-routes';
 import tagRouter from './routes/tag-routes';
-import csrf from 'csurf';
-import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -31,20 +30,20 @@ server.use(cookieParser());
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 server.use(session({
-	secret: process.env.SESSION_SECRET as string,
-	resave: false,
-	saveUninitialized: false,
-	proxy: true,
-	cookie: {
-		secure: process.env.PRODUCTION == 'true',
-		httpOnly: true,
-		sameSite: process.env.PRODUCTION == 'true' ? 'none' : undefined,
-		domain: process.env.PRODUCTION == 'true' ? '.' + process.env.DOMAIN : undefined
-	}
+    secret: process.env.SESSION_SECRET as string,
+    resave: false,
+    saveUninitialized: false,
+    proxy: true,
+    cookie: {
+        secure: process.env.PRODUCTION == 'true',
+        httpOnly: true,
+        sameSite: process.env.PRODUCTION == 'true' ? 'none' : undefined,
+        domain: process.env.PRODUCTION == 'true' ? `.${  process.env.DOMAIN}` : undefined,
+    },
 }));
 server.use(cors({
-	origin: process.env.HOST,
-	credentials: true
+    origin: process.env.HOST,
+    credentials: true,
 }));
 //server.use(csrf({ cookie: true }));
 server.use('/login', loginRouter);
@@ -59,22 +58,22 @@ server.get('/csrf-token', (req, res) => {
         httpOnly: false,
         secure: process.env.PRODUCTION === 'true',
         sameSite: process.env.PRODUCTION === 'true' ? 'none' : 'lax',
-        domain: process.env.PRODUCTION === 'true' ? '.' + process.env.DOMAIN : undefined
+        domain: process.env.PRODUCTION === 'true' ? `.${  process.env.DOMAIN}` : undefined,
     });
     res.json({token: csrfToken});
 });
 server.get('/me', async (req, res) => {
     if (!req.session.userId) {
-        res.status(401).send("Unauthorized");
+        res.status(401).send('Unauthorized');
         return;
     }
     const user = await getUser(req.session.userId);
     if (user) {
-        res.json({user: user});
+        res.json({user});
         return;
     }
-    res.status(404).json({error:'User not found. Id=' + req.session.userId});
-})
+    res.status(404).json({error:`User not found. Id=${  req.session.userId}`});
+});
 server.get('/avatars', (req, res) => {
     if (!fs.existsSync('./avatars')) {
         res.status(500).send('Avatar directory does not exist');
@@ -96,19 +95,24 @@ server.get('/avatar/:id', (req, res) => {
 });
 server.post('/logout', (req, res) => {
     req.session.userId = undefined;
-    res.status(200).json({msg: "Logout successful"});
+    res.status(200).json({msg: 'Logout successful'});
 });
 server.get('/', (req, res) => {
-	res.header('Content-Type', 'text/plain');
-	res.send('Welcome to the API of uni-fail!');
+    res.header('Content-Type', 'text/plain');
+    res.send('Welcome to the API of uni-fail!');
 });
 
-downloadAllAvatars().then(r => {
-    console.log("Downloaded all files");
+downloadAllAvatars().then(() => {
+    console.log('Downloaded all files');
+    return;
+}).catch((error) => {
+    console.log('An error occurred while downloading avatars:', error);
 });
-loadAvailableDisplayNames().then(r => {
-    console.log("Loaded available display names");
-    console.log(r);
+loadAvailableDisplayNames().then((displayNames) => {
+    console.log('Loaded available display names');
+    return displayNames;
+}).catch((error) => {
+    console.log('An error occurred while loading available display names:', error);
 });
 
 export default server;

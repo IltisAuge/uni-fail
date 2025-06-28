@@ -7,10 +7,10 @@ import {TitleService} from '../services/title.service';
     selector: 'app-not-found',
     standalone: true,
     imports: [
-        FaIconComponent
+        FaIconComponent,
     ],
     templateUrl: './not-found.component.html',
-    styleUrl: './not-found.component.css'
+    styleUrl: './not-found.component.css',
 })
 export class NotFoundComponent {
 

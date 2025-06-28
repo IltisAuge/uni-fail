@@ -1,9 +1,7 @@
 import {Component, HostListener, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {AuthService} from "../services/auth.service";
-import {FormsModule} from "@angular/forms";
-import {environment} from "../../environments/environment";
+import {FormsModule} from '@angular/forms';
 import {filter} from 'rxjs';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {
@@ -14,10 +12,12 @@ import {
     faRankingStar,
     faRightFromBracket,
     faSearch,
-    faUser
+    faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {environment} from '../../environments/environment';
+import {AuthService} from '../services/auth.service';
 
 @Component({
     selector: 'app-navigation',
@@ -27,7 +27,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
         RouterLink,
         RouterLinkActive,
         FormsModule,
-        FaIconComponent
+        FaIconComponent,
     ],
     animations: [
         trigger('dropdownAnimation', [
@@ -37,11 +37,11 @@ import {animate, style, transition, trigger} from '@angular/animations';
             ]),
             transition(':leave', [
                 animate('300ms ease', style({ height: '0', opacity: 0 })),
-            ])
-        ])
+            ]),
+        ]),
     ],
     templateUrl: './navigation.component.html',
-    styleUrl: './navigation.component.css'
+    styleUrl: './navigation.component.css',
 })
 export class NavigationComponent implements OnInit {
 
@@ -58,17 +58,17 @@ export class NavigationComponent implements OnInit {
     menuOpen = false;
     isMobile = false;
 
-	constructor(
+    constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         private authService: AuthService,
         private http: HttpClient,
         private router: Router) {
-	}
+    }
 
-	ngOnInit(): void {
+    ngOnInit(): void {
         this.authService.getLoggedInUser().pipe(
-            filter(state => state.success)
-        ).subscribe(state => {
+            filter((state) => state.success),
+        ).subscribe((state) => {
             this.isLoggedIn = !!state.user;
         });
         this.onResize();
@@ -77,7 +77,7 @@ export class NavigationComponent implements OnInit {
                 this.menuOpen = false;
             }
         });
-	}
+    }
 
     @HostListener('window:resize', [])
     onResize() {
@@ -94,25 +94,30 @@ export class NavigationComponent implements OnInit {
         this.menuOpen = !this.menuOpen;
     }
 
-	logout() {
+    logout() {
         if (this.isMobile) {
             this.menuOpen = false;
         }
-		this.http.post(environment.apiBaseUrl + '/logout', { },
-        {
-            observe: 'response', withCredentials: true
-        }).subscribe({
+        this.http.post(`${environment.apiBaseUrl  }/logout`, { },
+            {
+                observe: 'response', withCredentials: true,
+            }).subscribe({
             next: () => {
-				this.authService.resetUser();
+                this.authService.resetUser();
                 const currentUrl = this.router.url;
                 // Redirect to dummy url, then redirect to reload the current component and reactivate the AccessGuard
-                this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(async () => {
-                    await this.router.navigateByUrl(currentUrl);
-                });
-			},
+                this.router
+                    .navigateByUrl('/dummy', { skipLocationChange: true })
+                    .then(async () => {
+                        await this.router.navigateByUrl(currentUrl);
+                        return;
+                    }).catch((error) => {
+                        throw error;
+                    });
+            },
             error: (error) => {
                 console.error('An error occurred while logging out:', error);
-            }
-		});
-	}
+            },
+        });
+    }
 }

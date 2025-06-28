@@ -10,7 +10,7 @@ import { IPost } from '../post-preview/post-preview.component';
     standalone: true,
     imports: [CommonModule],
     templateUrl: './post.component.html',
-    styleUrls: ['./post.component.css']
+    styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit {
 
@@ -21,11 +21,11 @@ export class PostComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private http: HttpClient,// injection
-        private router: Router
+        private router: Router,
     ) { }
 
     ngOnInit(): void {
-        this.route.paramMap.subscribe(params => {
+        this.route.paramMap.subscribe((params) => {
             const postId = params.get('id');
             if (postId) {
                 this.fetchPostDetails(postId);
@@ -52,7 +52,7 @@ export class PostComponent implements OnInit {
                 this.error = 'Fehler beim Laden des Posts. Bitte versuche es später erneut.';
                 this.loading = false;
                 console.error('Fehler beim Abrufen der Post-Details:', err);
-            }
+            },
         });
     }
 
@@ -71,17 +71,17 @@ export class PostComponent implements OnInit {
         if (confirm('Bist du sicher, dass du diesen Post endgültig löschen möchtest?')) {
             this.http.delete(`${environment.apiBaseUrl}/post/delete/${this.post._id}`, {withCredentials: true })
                 .subscribe({ // Direkt HttpClient.delete nutzen
-                next: (response) => {
-                    console.log('Post erfolgreich gelöscht:', response);
-                    alert('Post deleted');
-                    this.router.navigateByUrl('/home');
-                },
-                error: (err) => {
-                    console.error('Fehler beim Löschen des Posts:', err);
-                    alert('Error deleting');
-                    this.error = 'Deleting did not work';
-                }
-            });
+                    next: (response) => {
+                        console.log('Post erfolgreich gelöscht:', response);
+                        alert('Post deleted');
+                        this.router.navigateByUrl('/home');
+                    },
+                    error: (err) => {
+                        console.error('Fehler beim Löschen des Posts:', err);
+                        alert('Error deleting');
+                        this.error = 'Deleting did not work';
+                    },
+                });
         }
     }
 
