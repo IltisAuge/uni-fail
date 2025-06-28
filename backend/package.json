@@ -11,8 +11,10 @@
 		"build": "vite build --ssr src/server.ts",
 		"start": "vite",
 		"eslint:ts": "eslint src/**/*.ts",
-		"eslint:ts:fix": "eslint src/**/*.ts --fix"
-	},
+		"eslint:ts:fix": "eslint src/**/*.ts --fix",
+        "analyse": "npm run eslint:ts",
+        "analyse:fix": "npm run eslint:ts:fix"
+    },
 	"dependencies": {
 		"aws-sdk": "^2.1692.0",
 		"cookie-parser": "^1.4.7",
