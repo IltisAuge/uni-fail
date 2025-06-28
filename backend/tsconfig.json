@@ -10,12 +10,9 @@
         "resolveJsonModule": true,
         "strict": true
     },
-	"include": [
-		"src",
-		"types",
-		".env",
-		"google_client.json",
-		"package.json",
-		"package-lock.json"
-	]
+    "include": [
+        "src/**/*",
+        "types/**/*",
+        "**/*.json"
+    ]
 }
