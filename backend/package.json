@@ -10,8 +10,10 @@
 		"test": "jest",
 		"dev": "ts-node-dev src/express-app.ts",
 		"build": "tsc",
-		"start": "node dist/index.js"
-	},
+		"start": "node dist/index.js",
+        "eslint:ts": "eslint src/**/*.ts",
+        "eslint:ts:fix": "eslint src/**/*.ts --fix"
+    },
 	"dependencies": {
 		"@types/mongoose": "^5.11.97",
 		"aws-sdk": "^2.1692.0",

@@ -18,13 +18,13 @@ jobs:
             -   name: Setup Node.js
                 uses: actions/setup-node@v3
                 with:
-                    node-version: '18'
+                    node-version: '20'
 
             -   name: Install dependencies
-                run: npm install
+                run: npm install --force
 
             -   name: Run ESLint
-                run: npm run lint
+                run: npm run eslint:ts
 
     lint-backend:
         name: Lint Backend
@@ -40,10 +40,10 @@ jobs:
             -   name: Setup Node.js
                 uses: actions/setup-node@v3
                 with:
-                    node-version: '18'
+                    node-version: '20'
 
             -   name: Install dependencies
                 run: npm install
 
             -   name: Run ESLint
-                run: npm run lint
+                run: npm run eslint:ts
