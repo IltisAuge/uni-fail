@@ -2,11 +2,13 @@ import fs from 'fs';
 import path from 'node:path';
 import {OAuth2Client} from 'google-auth-library';
 import {LoginController} from '@/controller/login-controller';
+import {fileURLToPath} from 'url';
 
 export class GoogleLoginController extends LoginController {
 
+    dirname = path.dirname(fileURLToPath(import.meta.url));
     keys = JSON.parse(
-        fs.readFileSync(path.resolve(__dirname, '../../google_client.json'), 'utf-8'),
+        fs.readFileSync(path.resolve(this.dirname, '../../google_client.json'), 'utf-8'),
     );
 
     getAuthURL() {

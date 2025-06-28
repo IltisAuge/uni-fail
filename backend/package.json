@@ -8,7 +8,7 @@
 	"main": "src/express-app.ts",
 	"scripts": {
 		"test": "jest",
-		"build": "vite build",
+		"build": "vite build --ssr src/server.ts",
 		"start": "vite",
 		"eslint:ts": "eslint src/**/*.ts",
 		"eslint:ts:fix": "eslint src/**/*.ts --fix"
