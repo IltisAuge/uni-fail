@@ -30,7 +30,25 @@ postRouter.get('/get', (req, res) => {
     }
 });
 
-/*get*/
+postRouter.get('/search', async (req, res) => {
+    const query = req.query.q;
+    if (!query) {
+        res.status(401).json({error: 'No search query'});
+        return;
+    }
+    const posts = await PostModel.find({
+        $or: [
+            // Titel contains the search query (case-insensitive)
+            { title: { $regex: query, $options: 'i' } },
+            // A tag contains the search query (case-insensitive)
+            { tags: { $elemMatch: { $regex: query, $options: 'i' } } },
+            // A tag starts with "uni:" and contains the search query (case-insensitive)
+            { tags: { $elemMatch: { $regex: `^uni:.*${query}.*`, $options: 'i' } } }
+        ]
+    });
+    res.json({items: posts});
+});
+
 postRouter.get('/:id', async (req, res) => {
     try {
         const postId = req.params.id;
@@ -96,25 +114,6 @@ postRouter.delete('/delete/:id', async (req, res) => {
     deletePost(postId).then(result => {
 		res.status(result.acknowledged ? 200 : 500).send();
 	});
-});
-
-postRouter.get('/search', async (req, res) => {
-    const query = req.query.q;
-    if (!query) {
-        res.status(401).json({error: 'No search query'});
-        return;
-    }
-    const posts = await PostModel.find({
-        $or: [
-            // Titel contains the search query (case-insensitive)
-            { title: { $regex: query, $options: 'i' } },
-            // A tag contains the search query (case-insensitive)
-            { tags: { $elemMatch: { $regex: query, $options: 'i' } } },
-            // A tag starts with "uni:" and contains the search query (case-insensitive)
-            { tags: { $elemMatch: { $regex: `^uni:.*${query}.*`, $options: 'i' } } }
-        ]
-    });
-    res.json({items: posts});
 });
 
 export default postRouter;
