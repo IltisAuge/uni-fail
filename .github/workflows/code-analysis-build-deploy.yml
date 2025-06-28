@@ -1,4 +1,4 @@
-name: Build and deploy Frontend & Backend services
+name: Code Analysis and build + deploy Frontend & Backend services
 
 on:
     push:
@@ -48,6 +48,7 @@ jobs:
               working-directory: backend
 
     build-and-deploy:
+        name: Build and deploy
         needs: code-analysis
         if: github.ref == 'refs/heads/dev'
         runs-on: ubuntu-latest
