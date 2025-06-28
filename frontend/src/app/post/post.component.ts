@@ -39,6 +39,8 @@ export class PostComponent implements OnInit {
     fetchPostDetails(id: string): void {
         this.loading = true;
         this.error = null;
+
+
         //get Backend end point
         this.http.get<IPost>(`${environment.apiBaseUrl}/post/${id}`, {withCredentials:true}).subscribe({
             next: (data) => {
@@ -60,6 +62,27 @@ export class PostComponent implements OnInit {
 
     deletePost(): void {
         // Call the backend to delete the post
+        if (!this.post || !this.post._id) {
+            console.error('Kein Post oder keine gültige ID zum Löschen verfügbar.');
+            alert('Error.');
+            return;
+        }
+
+        if (confirm('Bist du sicher, dass du diesen Post endgültig löschen möchtest?')) {
+            this.http.delete(`${environment.apiBaseUrl}/post/delete/${this.post._id}`, {withCredentials: true })
+                .subscribe({ // Direkt HttpClient.delete nutzen
+                next: (response) => {
+                    console.log('Post erfolgreich gelöscht:', response);
+                    alert('Post deleted');
+                    this.router.navigateByUrl('/home');
+                },
+                error: (err) => {
+                    console.error('Fehler beim Löschen des Posts:', err);
+                    alert('Error deleting');
+                    this.error = 'Deleting did not work';
+                }
+            });
+        }
     }
 
     //return button

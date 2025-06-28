@@ -8,7 +8,7 @@
     border-radius: 30px;
 }
 
-.Loeschbutton {
+.delete-button {
     z-index: 1;
     position: relative;
     padding: 20px 46px;
@@ -26,7 +26,7 @@
     border-radius: 30px;
 }
 
-.Loeschbutton::before {
+.delete-button::before {
     content: "";
     z-index: 1;
     position: absolute;
@@ -38,7 +38,7 @@
     border-radius: 30px;
 }
 
-.Loeschbutton::after {
+.delete-button::after {
     content: "";
     z-index: -2;
     position: absolute;
@@ -50,19 +50,19 @@
     border-radius: 30px;
 }
 
-.Loeschbutton:hover {
+.delete-button:hover {
     color: var(--button-red-text);
     border-radius: 30px;
 }
 
-.Loeschbutton:hover::after {
+.delete-button:hover::after {
     transition: all 0.3s;
     left: 0;
     top: 0;
     border-radius: 30px;
 }
 
-.Loeschbutton__inner {
+.delete-button__inner {
     z-index: -1;
     overflow: hidden;
     position: absolute;
@@ -74,14 +74,14 @@
     background: var(--background-card);
 }
 
-.Loeschbutton__blobs {
+.delete-button__blobs {
     position: relative;
     display: block;
     height: 100%;
     filter: url('#goo');
 }
 
-.Loeschbutton__blob {
+.delete-button__blob {
     position: absolute;
     top: 2px;
     width: 25%;
@@ -93,35 +93,35 @@
 }
 
 @supports (filter: url('#goo')) {
-    .Loeschbutton__blob {
+    .delete-button__blob {
         transform: translate3d(0,150%,0) scale(1.4);
     }
 }
 
 /*Position & delay*/
-.Loeschbutton__blob:nth-child(1) {
+.delete-button__blob:nth-child(1) {
     left: 0%;
     transition-delay: 0s;
 }
-.Loeschbutton__blob:nth-child(2) {
+.delete-button__blob:nth-child(2) {
     left: 30%;
     transition-delay: 0.08s;
 }
-.Loeschbutton__blob:nth-child(3) {
+.delete-button__blob:nth-child(3) {
     left: 60%;
     transition-delay: 0.16s;
 }
-.Loeschbutton__blob:nth-child(4) {
+.delete-button__blob:nth-child(4) {
     left: 90%;
     transition-delay: 0.24s;
 }
 
-.Loeschbutton:hover .Loeschbutton__blob {
+.delete-button:hover .delete-button__blob {
     transform: translateZ(0) scale(1.7);
 }
 
 @supports (filter: url('#goo')) {
-    .Loeschbutton:hover .Loeschbutton__blob {
+    .delete-button:hover .delete-button__blob {
         transform: translateZ(0) scale(1.4);
     }
 }

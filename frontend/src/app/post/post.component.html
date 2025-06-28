@@ -23,9 +23,8 @@
             <img [src]="getPostImage(post)" alt="User Avatar" class="rounded-full mr-3 w-12 h-12 object-cover">
             <div>
                 <p class="text-sm text-[var(--text-secondary)]">
-                    Verfasst von {{ post.author || 'Anzeigename' }} am {{ post.createdAt | date:'dd.MM.yyyy' }}
+                    Verfasst von {{ post?.userName || 'Unbekannt' }} am {{ post.createdAt | date:'dd.MM.yyyy' }}
                 </p>
-                <p class="text-sm text-[var(--text-secondary)]">DHBW Stuttgart, lustig, tag3</p>
             </div>
         </div>
 
@@ -50,14 +49,14 @@
 
 
         <div class="flex justify-between items-center text-sm mt-6 pt-4">
-            <button class="Loeschbutton font-bold py-2 px-4 rounded">
+            <button (click)="deletePost()" class="delete-button font-bold py-2 px-4 rounded">
                 Post löschen
-                <span class="Loeschbutton__inner">
-                    <span class="Loeschbutton__blobs">
-                      <span class="Loeschbutton__blob"></span>
-                      <span class="Loeschbutton__blob"></span>
-                      <span class="Loeschbutton__blob"></span>
-                      <span class="Loeschbutton__blob"></span>
+                <span class="delete-button__inner">
+                    <span class="delete-button__blobs">
+                      <span class="delete-button__blob"></span>
+                      <span class="delete-button__blob"></span>
+                      <span class="delete-button__blob"></span>
+                      <span class="delete-button__blob"></span>
                     </span>
                 </span>
             </button>

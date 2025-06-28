@@ -25,7 +25,7 @@ postRouter.get('/get', (req, res) => {
                 .then(result => res.status(200).json(result));
             break;
         default:
-            res.status(400).json("Unknown filter option '" + filter + "'");
+            res.status(400).json({error: "Unknown filter ...."});
             break;
     }
 });
@@ -35,15 +35,28 @@ postRouter.get('/:id', async (req, res) => {
     try {
         const postId = req.params.id;
         const post = await getPost(postId);
+
         if (!post) {
             res.status(404).json({message: "No post with id " + postId});
+            return;
         }
-        res.status(200).json(post);
+
+        const author = await getUser(post.userId);
+
+        const postWithUser = {
+            ...post,
+            userName: author?.displayName || 'unbekannt'
+        };
+
+        console.log('Fetching post with ID:', postId);
+        console.log('Author is:', author?.displayName);
+        res.status(200).json(postWithUser);
     } catch (err) {
         console.error('Error getting post with ID', err);
         res.status(500).send({message: 'Servererror getting post'});
     }
 });
+
 
 postRouter.post('/create', async (req, res) => {
     const title = req.body.title;

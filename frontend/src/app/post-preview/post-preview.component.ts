@@ -12,6 +12,7 @@ export interface IPost {
     userId: string;
     createdAt?: Date;
     author?: string;
+    userName?: string;
     // for the evaluation, yet to be implemented
     //upvotes?: number;
     //downvote?: number;

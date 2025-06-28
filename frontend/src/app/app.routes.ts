@@ -11,7 +11,7 @@ import {AccessDeniedComponent} from './access-denied/access-denied.component';
 import {accessGuard} from './access.guard';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {UserPostsComponent} from './user-posts/user-posts.component';
-import { PostComponent } from './post/post.component';
+import {PostComponent} from './post/post.component';
 
 export const routes: Routes = [
     { path: 'dummy', component: HomeComponent },
