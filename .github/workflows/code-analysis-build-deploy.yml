@@ -1,4 +1,4 @@
-name: Build and deploy Frontend & Backend services
+name: Code Analysis and build + deploy Frontend & Backend services
 
 on:
     push:
