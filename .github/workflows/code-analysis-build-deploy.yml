@@ -1,16 +1,56 @@
 name: Build and deploy Frontend & Backend services
 
 on:
-    workflow_run:
-        workflows: ["Code Analysis"]
-        types:
-            - completed
+    push:
+        branches: ['**']
+    pull_request:
+        branches: ['**']
     workflow_dispatch:
 
 jobs:
-    build-and-deploy:
+    code-analysis:
+        name: Code Analysis (Frontend & Backend)
         runs-on: ubuntu-latest
 
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '20'
+
+            # === Frontend ===
+            - name: Install frontend dependencies
+              run: npm install --force
+              working-directory: frontend
+
+            - name: Run ESLint (frontend - TypeScript)
+              run: npm run eslint:ts
+              working-directory: frontend
+
+            - name: Run ESLint (frontend - HTML)
+              run: npm run eslint:html
+              working-directory: frontend
+
+            - name: Run StyleLint (frontend)
+              run: npm run stylelint
+              working-directory: frontend
+
+            # === Backend ===
+            - name: Install backend dependencies
+              run: npm install
+              working-directory: backend
+
+            - name: Run ESLint (backend - TypeScript)
+              run: npm run eslint:ts
+              working-directory: backend
+
+    build-and-deploy:
+        needs: code-analysis
+        if: github.ref == 'refs/heads/dev'
+        runs-on: ubuntu-latest
         steps:
             -   name: Checkout code
                 uses: actions/checkout@v3
