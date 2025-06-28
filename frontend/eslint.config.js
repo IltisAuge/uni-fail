@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import tsEslint from 'typescript-eslint';
 import parser from '@angular-eslint/template-parser';
 import angularEslintTemplate from '@angular-eslint/eslint-plugin-template';
 import importPlugin from 'eslint-plugin-import';
@@ -8,7 +8,6 @@ import promisePlugin from 'eslint-plugin-promise';
 export default [
     js.configs.recommended,
 
-    // Für Angular HTML Templates
     {
         files: ['**/*.html'],
         languageOptions: {
@@ -30,17 +29,16 @@ export default [
         },
     },
 
-    // Für TypeScript & JavaScript
     {
         files: ['**/*.ts', '**/*.js'],
         languageOptions: {
-            parser: tseslint.parser,
+            parser: tsEslint.parser,
             parserOptions: {
                 project: './tsconfig.json',
             },
         },
         plugins: {
-            '@typescript-eslint': tseslint.plugin,
+            '@typescript-eslint': tsEslint.plugin,
             import: importPlugin,
             promise: promisePlugin,
         },
