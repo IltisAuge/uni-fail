@@ -1,7 +1,6 @@
 {
 	"name": "frontend",
 	"version": "0.0.0",
-	"type": "module",
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve",
@@ -16,6 +15,8 @@
 		"eslint:ts:fix": "eslint src/**/*.ts --fix",
 		"stylelint": "stylelint \"src/**/*.css\"",
         "stylelint:fix": "stylelint \"src/**/*.css\" --fix",
+        "analyse": "npm run eslint:ts && npm run eslint:html && npm run stylelint",
+        "analyse:fix": "npm run eslint:ts:fix && npm run eslint:html:fix && npm run stylelint:fix",
 		"htmlformat": "prettier --write \"src/**/*.{html}\""
 	},
 	"private": true,

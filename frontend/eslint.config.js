@@ -1,12 +1,12 @@
-import js from '@eslint/js';
-import tsEslint from 'typescript-eslint';
-import parser from '@angular-eslint/template-parser';
-import angularEslintTemplate from '@angular-eslint/eslint-plugin-template';
-import importPlugin from 'eslint-plugin-import';
-import promisePlugin from 'eslint-plugin-promise';
-import globals from 'globals';
+const js = require('@eslint/js');
+const tsEslint = require('typescript-eslint');
+const parser = require('@angular-eslint/template-parser');
+const angularEslintTemplate = require('@angular-eslint/eslint-plugin-template');
+const importPlugin = require('eslint-plugin-import');
+const promisePlugin = require('eslint-plugin-promise');
+const globals = require('globals');
 
-export default [
+module.exports = [
     js.configs.recommended,
 
     {

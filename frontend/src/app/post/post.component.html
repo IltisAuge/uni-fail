@@ -23,7 +23,7 @@
             <img [src]="getPostImage(post)" alt="User Avatar" class="rounded-full mr-3 w-12 h-12 object-cover">
             <div>
                 <p class="text-sm text-[var(--text-secondary)]">
-                    Verfasst von {{ post?.userName || 'Unbekannt' }} am {{ post.createdAt | date:'dd.MM.yyyy' }}
+                    Verfasst von {{ post.userName || 'Unbekannt' }} am {{ post.createdAt | date:'dd.MM.yyyy' }}
                 </p>
             </div>
         </div>

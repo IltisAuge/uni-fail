@@ -1,5 +1,5 @@
 /** @type {import('stylelint').Config} */
-export default {
+module.exports = {
     extends: 'stylelint-config-standard',
     plugins: ['@stylistic/stylelint-plugin'],
     rules: {
