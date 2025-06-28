@@ -1,12 +1,13 @@
-import {Router, Request, Response} from 'express';
+import {Router} from 'express';
 import {createPost, deletePost, getNewestPosts, getPost} from '../controller/post-controller';
 import {getUser} from '../controller/user-controller';
+import {PostModel} from '../schemata/schemata';
 
 const postRouter = Router();
 
 postRouter.use((req, res, next) => {
     const isPublic = req.method === 'GET' &&
-        (req.path === '/get' || /^\/[^\/]+$/.test(req.path));
+        (req.path === '/get' || req.path === '/search' || /^\/[^\/]+$/.test(req.path));
 
     if (!isPublic && !req.session.userId) {
         res.status(401).send("Unauthorized:Authentification required.");
@@ -14,7 +15,6 @@ postRouter.use((req, res, next) => {
 
     next();
 });
-
 
 postRouter.get('/get', (req, res) => {
     const filter = req.query.filter;
@@ -96,6 +96,25 @@ postRouter.delete('/delete/:id', async (req, res) => {
     deletePost(postId).then(result => {
 		res.status(result.acknowledged ? 200 : 500).send();
 	});
+});
+
+postRouter.get('/search', async (req, res) => {
+    const query = req.query.q;
+    if (!query) {
+        res.status(401).json({error: 'No search query'});
+        return;
+    }
+    const posts = await PostModel.find({
+        $or: [
+            // Titel contains the search query (case-insensitive)
+            { title: { $regex: query, $options: 'i' } },
+            // A tag contains the search query (case-insensitive)
+            { tags: { $elemMatch: { $regex: query, $options: 'i' } } },
+            // A tag starts with "uni:" and contains the search query (case-insensitive)
+            { tags: { $elemMatch: { $regex: `^uni:.*${query}.*`, $options: 'i' } } }
+        ]
+    });
+    res.json({items: posts});
 });
 
 export default postRouter;
