@@ -1,6 +1,6 @@
-import {PostModel} from '../schemata/schemata';
 import dotenv from 'dotenv';
 import NodeCache from 'node-cache';
+import {PostModel} from '../schemata/schemata';
 import {IPost} from '../post.interface';
 
 dotenv.config();
@@ -24,7 +24,7 @@ export async function getPost(postId: string): Promise<IPost | undefined> {
 export async function createPost(userId: string, title: string, content: string, tags: string[]): Promise<IPost> {
     const date = new Date();
     const postId = crypto.randomUUID().toString();
-    const postObject = {_id: postId, creationTime: date.toISOString(), userId: userId, title: title, content: content, tags: tags};
+    const postObject = {_id: postId, creationTime: date.toISOString(), userId, title, content, tags};
     postCache.set(postId, postObject);
     const model = new PostModel(postObject);
     try {
@@ -58,15 +58,15 @@ export async function getNewestPosts(max: number) {
  */
 export async function getUniRankingMostVotes(limit: number): Promise<{_id: string, totalUpvotes: number}[]> {
     return PostModel.aggregate([
-        { $unwind: "$tags" },
+        { $unwind: '$tags' },
         { $match: { tags: { $regex: /^uni:/i } } },
         {
             $group: {
-                _id: "$tags",
-                totalUpvotes: { $sum: "$upvotes" }
-            }
+                _id: '$tags',
+                totalUpvotes: { $sum: '$upvotes' },
+            },
         },
         { $sort: { totalUpvotes: -1 } },
-        { $limit: limit }
+        { $limit: limit },
     ]);
 }

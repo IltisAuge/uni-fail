@@ -1,17 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+
 /* In src/styles.css */
-@import "tailwindcss";
+@import url('tailwindcss');
 
 [data-theme='light'] {
     --background-main: #F0F6FB;
-    --background-card: #FFFFFF;
-    --input-background: #FFFFFF;
+    --background-card: #FFF;
+    --input-background: #FFF;
     --border-color: #DCDFE3;
     --text-hover: #FCAA46;
 
     --text-primary: #2C3E50;
-    --text-secondary: #666666;
-    --placeholder-color: #999999;
+    --text-secondary: #666;
+    --placeholder-color: #999;
 
     --button-green: #27AE60;
     --button-green-hover: #219150;
@@ -23,9 +24,9 @@
     --button-blue-hover: #22565C;
     --button-blue-text: #FFF;
 
-    --nav-background: #FFFFFF;
+    --nav-background: #FFF;
     --nav-text: #2C3E50;
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 2px 8px rgb(0 0 0 / 0.05);
 }
 
 [data-theme='dark'] {
@@ -52,11 +53,11 @@
 
     --nav-background: #15151E;
     --nav-text: #DBE0EC;
-    --shadow-card: 0 2px 6px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 2px 6px rgb(0 0 0 / 0.4);
 }
 
 body {
-    font-family: 'Inter', sans-serif; /* 'sans-serif' ist ein Fallback */
+    font-family: Inter, sans-serif; /* 'sans-serif' ist ein Fallback */
     background-color: var(--background-main);
     color: var(--text-primary);
 }
@@ -83,7 +84,7 @@ html, body {
     color: var(--button-red-text);
 }
 
-form input:not([type="submit"]) {
+form input:not([type='submit']) {
     background: var(--input-background);
     border: 1px solid var(--border-color);
     padding: 0.5rem 1rem;

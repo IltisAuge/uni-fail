@@ -4,29 +4,36 @@
 	"description": "Backend System for uni-fail",
 	"license": "ISC",
 	"author": "Daniel Ziegler, Lisa Natterer, Leonie Reusch",
-	"type": "commonjs",
+	"type": "module",
 	"main": "src/express-app.ts",
 	"scripts": {
 		"test": "jest",
 		"dev": "ts-node-dev src/express-app.ts",
 		"build": "tsc",
-		"start": "node dist/index.js"
+		"start": "node dist/index.js",
+		"eslint:ts": "eslint src/**/*.ts",
+		"eslint:ts:fix": "eslint src/**/*.ts --fix"
 	},
 	"dependencies": {
+		"@eslint/js": "^9.30.0",
 		"@types/mongoose": "^5.11.97",
 		"aws-sdk": "^2.1692.0",
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"csurf": "^1.11.0",
 		"dotenv": "^16.5.0",
+		"eslint-plugin-import": "^2.32.0",
+		"eslint-plugin-promise": "^7.2.1",
 		"express": "^5.1.0",
 		"express-session": "^1.18.1",
+		"globals": "^16.2.0",
 		"google-auth-library": "^9.15.1",
 		"jwt-decode": "^4.0.0",
 		"mongodb": "^6.16.0",
 		"node-cache": "^5.1.2",
 		"node-fetch": "^3.3.2",
-		"ts-randomstring": "^1.0.8"
+		"ts-randomstring": "^1.0.8",
+		"typescript-eslint": "^8.35.0"
 	},
 	"devDependencies": {
 		"@types/cookie-parser": "^1.4.9",

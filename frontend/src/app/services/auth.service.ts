@@ -10,7 +10,7 @@ interface IUserState {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuthService {
 
@@ -30,14 +30,14 @@ export class AuthService {
 
     reloadUser(): Observable<IUserState> {
         return this.loadUser().pipe(
-            tap(state => {
-                console.log("Reloaded user:", state);
-            })
+            tap((state) => {
+                console.log('Reloaded user:', state);
+            }),
         );
     }
 
     setUser(success: boolean, user?: any) {
-        this.userSubject.next({success: success, user: user});
+        this.userSubject.next({success, user});
     }
 
     resetUser() {
@@ -46,21 +46,21 @@ export class AuthService {
 
     private loadUser(): Observable<IUserState> {
         return this.http.get<{user:IUser}>(`${environment.apiBaseUrl}/me`, {
-            withCredentials: true
+            withCredentials: true,
         }).pipe(
-            tap(resp => {
+            tap((resp) => {
                 this.userSubject.next({success: true, user: resp.user});
             }),
-            switchMap(resp => of({success: true, user: resp.user})),
-            catchError(err => {
+            switchMap((resp) => of({success: true, user: resp.user})),
+            catchError((err) => {
                 const state: IUserState = err.status === 401 ?
-                                        {success: true, user: undefined}:
-                                        {success: false, user: undefined};
+                    {success: true, user: undefined}:
+                    {success: false, user: undefined};
                 this.userSubject.next(state);
                 return of(state);
             }),
             // to not make multiple requests on multiple subscriptions
-            shareReplay(1)
+            shareReplay(1),
         );
     }
 }

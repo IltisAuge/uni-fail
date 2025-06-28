@@ -1,33 +1,33 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../services/auth.service';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {filter} from 'rxjs';
+import {environment} from '../../environments/environment';
+import {AuthService} from '../services/auth.service';
 import {TitleService} from '../services/title.service';
 import {IUser} from '../user.interface';
 
 @Component({
-  selector: 'app-about-user',
-  standalone: true,
+    selector: 'app-about-user',
+    standalone: true,
     imports: [
         FormsModule,
         ReactiveFormsModule,
         NgForOf,
         NgClass,
         NgOptimizedImage,
-        NgIf
+        NgIf,
     ],
-  templateUrl: './about-user.component.html',
-  styleUrl: './about-user.component.css'
+    templateUrl: './about-user.component.html',
+    styleUrl: './about-user.component.css',
 })
 export class AboutUserComponent implements OnInit {
-    name: string = "";
-    email: string = "";
-    provider: string = "";
-    displayName: string = "";
-    userId: string = "";
+    name: string = '';
+    email: string = '';
+    provider: string = '';
+    displayName: string = '';
+    userId: string = '';
     displayNameForm: FormGroup;
     avatarURL: string | undefined;
     isModalOpen: boolean = false;
@@ -43,17 +43,17 @@ export class AboutUserComponent implements OnInit {
                 private authService: AuthService,
                 private titleService: TitleService) {
         this.displayNameForm = this.fb.group({
-            displayName: ['', Validators.required]
+            displayName: ['', Validators.required],
         });
         this.titleService.setTitle('Dein Konto');
     }
 
     ngOnInit() {
         this.authService.getLoggedInUser().pipe(
-            filter(state => state.success)
-        ).subscribe(state => {
+            filter((state) => state.success),
+        ).subscribe((state) => {
             if (!state || !state.success) {
-                this.name = "Could not check authentication status! Make sure the API server is running correctly!";
+                this.name = 'Could not check authentication status! Make sure the API server is running correctly!';
                 return;
             }
             const user = state.user;
@@ -63,21 +63,21 @@ export class AboutUserComponent implements OnInit {
                 this.email = user.email;
                 this.provider = user.provider;
                 this.displayName = user.displayName;
-                this.avatarURL = environment.apiBaseUrl + '/avatar/' + user.avatarKey;
+                this.avatarURL = `${environment.apiBaseUrl  }/avatar/${  user.avatarKey}`;
             }
         });
         this.http.get(`${environment.apiBaseUrl}/avatars`, {
-            withCredentials: true
+            withCredentials: true,
         }).subscribe({
             next: (resp) => {
                 this.avatarIds = resp as string[];
                 for (const id in this.avatarIds) {
-                    this.avatarURLs.push(environment.apiBaseUrl + '/avatar/' + this.avatarIds[id]);
+                    this.avatarURLs.push(`${environment.apiBaseUrl  }/avatar/${  this.avatarIds[id]}`);
                 }
             },
             error: (error)=> {
-                console.error("An error occurred while loading avatars:", error);
-            }
+                console.error('An error occurred while loading avatars:', error);
+            },
         });
     }
 
@@ -87,7 +87,7 @@ export class AboutUserComponent implements OnInit {
         }
         const body = this.displayNameForm.value;
         this.http.post<{user:IUser}>(`${environment.apiBaseUrl}/user/set-display-name`, body, {
-            withCredentials: true
+            withCredentials: true,
         }).subscribe({
             next: (resp) => {
                 this.isDisplayNameAvailable = true;
@@ -98,8 +98,8 @@ export class AboutUserComponent implements OnInit {
                     this.isDisplayNameAvailable = false;
                     return;
                 }
-                console.error("An error occurred while setting user display name:", err);
-            }
+                console.error('An error occurred while setting user display name:', err);
+            },
         });
     }
 
@@ -115,18 +115,18 @@ export class AboutUserComponent implements OnInit {
 
     acceptAvatar() {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
-        this.http.post<{user: {}}>(environment.apiBaseUrl + '/user/set-avatar', {
-            avatarId: avatarId
+        this.http.post<{user: {}}>(`${environment.apiBaseUrl  }/user/set-avatar`, {
+            avatarId,
         },
         {
-            withCredentials: true
+            withCredentials: true,
         }).subscribe({
             next: (resp) => {
                 this.authService.setUser(true, resp.user);
             },
             error: (err) => {
-                console.error("An error occurred while setting user avatar:", err);
-            }
+                console.error('An error occurred while setting user avatar:', err);
+            },
         });
         this.closeAvatarModal();
         this.selectedAvatarIndex = -1;

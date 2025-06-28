@@ -27,7 +27,7 @@
 }
 
 .delete-button::before {
-    content: "";
+    content: '';
     z-index: 1;
     position: absolute;
     left: 0;
@@ -39,7 +39,7 @@
 }
 
 .delete-button::after {
-    content: "";
+    content: '';
     z-index: -2;
     position: absolute;
     left: 3px;
@@ -98,19 +98,22 @@
     }
 }
 
-/*Position & delay*/
+/* Position & delay */
 .delete-button__blob:nth-child(1) {
     left: 0%;
     transition-delay: 0s;
 }
+
 .delete-button__blob:nth-child(2) {
     left: 30%;
     transition-delay: 0.08s;
 }
+
 .delete-button__blob:nth-child(3) {
     left: 60%;
     transition-delay: 0.16s;
 }
+
 .delete-button__blob:nth-child(4) {
     left: 90%;
     transition-delay: 0.24s;

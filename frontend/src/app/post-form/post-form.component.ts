@@ -1,10 +1,10 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../services/auth.service';
-import {environment} from '../../environments/environment';
 import {filter} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {AuthService} from '../services/auth.service';
+import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
 
 interface ITag {
@@ -16,68 +16,68 @@ interface ITag {
     selector: 'app-post-form',
     standalone: true,
     imports: [
-        ReactiveFormsModule, CommonModule
+        ReactiveFormsModule, CommonModule,
     ],
     templateUrl: './post-form.component.html',
-    styleUrl: './post-form.component.css'
+    styleUrl: './post-form.component.css',
 })
 export class PostFormComponent {
 
     @ViewChild('tagsDialog') tagsDialogRef!: ElementRef<HTMLDialogElement>;
-	postForm: FormGroup;
+    postForm: FormGroup;
     isModalOpen: boolean = false;
     tags: ITag[] = [];
     displayedTags: ITag[] = [];
     selectedTags: ITag[] = [];
 
-	constructor(
+    constructor(
 		private fb: FormBuilder,
         private http: HttpClient,
         private titleSerivce: TitleService,
-	) {
+    ) {
         this.titleSerivce.setTitle('Post erstellen');
 
-		this.postForm = this.fb.group({
-			content: ['', Validators.required],
-            title: ['', Validators.required]
+        this.postForm = this.fb.group({
+            content: ['', Validators.required],
+            title: ['', Validators.required],
         });
 
         this.http.get<{tags: string[]}>(`${environment.apiBaseUrl}/tag/get/all`, {
-            withCredentials: true
+            withCredentials: true,
         }).subscribe({
             next: (resp) => {
                 this.tags = resp.tags.map((tag) => (
                     {
                         name: tag,
-                        displayName: tag.replace('uni:', '')
+                        displayName: tag.replace('uni:', ''),
                     }
                 ));
             },
             error: (error) => {
                 console.error('An error occurred while fetching tags:', error);
-            }
+            },
         });
-	}
+    }
 
-	createPost() {
-		if (this.postForm.valid) {
+    createPost() {
+        if (this.postForm.valid) {
             const payload = {
                 ...this.postForm.value,
-                tags: this.selectedTags.map(tag => tag.name)
+                tags: this.selectedTags.map((tag) => tag.name),
             };
-			this.http.post(`${environment.apiBaseUrl}/post/create`, payload,
-            {
-                withCredentials: true
-            }).subscribe({
+            this.http.post(`${environment.apiBaseUrl}/post/create`, payload,
+                {
+                    withCredentials: true,
+                }).subscribe({
                 next: () => {
                     // Redirect to post view
                 },
                 error: (error) => {
                     console.error('An error occurred while creating post:', error);
-                }
+                },
             });
-		}
-	}
+        }
+    }
 
     openTagsModal() {
         this.tagsDialogRef.nativeElement.showModal();
@@ -94,14 +94,14 @@ export class PostFormComponent {
         filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         let filtered: ITag[];
         if (filter.length === 0) {
-            const uniTags = this.tags.filter(tag => tag.name.startsWith('uni:') && !this.selectedTags.includes(tag));
-            const hashTags = this.tags.filter(tag => tag.name.startsWith('#') && !this.selectedTags.includes(tag));
+            const uniTags = this.tags.filter((tag) => tag.name.startsWith('uni:') && !this.selectedTags.includes(tag));
+            const hashTags = this.tags.filter((tag) => tag.name.startsWith('#') && !this.selectedTags.includes(tag));
             const shuffledUni = uniTags.sort(() => 0.5 - Math.random());
             const shuffledHash = hashTags.sort(() => 0.5 - Math.random());
             // Add 15 #tags, 5 "uni:" tags
             const additionalTags = [
                 ...shuffledHash.slice(0, 15),
-                ...shuffledUni.slice(0, 5)
+                ...shuffledUni.slice(0, 5),
             ];
             filtered = [...this.selectedTags, ...additionalTags.sort(() => 0.5 - Math.random())];
         } else {
