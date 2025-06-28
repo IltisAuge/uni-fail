@@ -6,20 +6,12 @@ header, nav {
     background-color: var(--nav-background);
 }
 
-nav > ul > li:first-child .nav-item {
-    border-top: 1px solid var(--border-color);
-}
-
-nav > ul > li {
-    width: 100%;
-}
-
 .nav-item {
     color: var(--nav-text);
     text-decoration: none;
     font-size: 1.25rem;
     transition: color .3s;
-    padding: 2rem 2rem;
+    padding: 2rem;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     gap: 1rem;
@@ -32,7 +24,15 @@ nav > ul > li {
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
+nav > ul > li:first-child .nav-item {
+    border-top: 1px solid var(--border-color);
+}
+
+nav > ul > li {
+    width: 100%;
+}
+
+@media (width <= 768px) {
     :host {
         min-height: auto;
         width: 100%;

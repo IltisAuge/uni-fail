@@ -6,10 +6,10 @@ import {TitleService} from '../services/title.service';
     selector: 'app-home',
     standalone: true,
     imports: [
-        PostPreviewComponent
+        PostPreviewComponent,
     ],
     templateUrl: './home.component.html',
-    styleUrl: './home.component.css'
+    styleUrl: './home.component.css',
 })
 export class HomeComponent {
     constructor(private titleService: TitleService) {

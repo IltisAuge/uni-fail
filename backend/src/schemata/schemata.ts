@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import {model, Schema} from 'mongoose';
 import {IUserDocument} from '../user.interface';
 import {IPostDocument} from '../post.interface';
 
@@ -15,7 +15,7 @@ const PostSchema = new Schema<IPostDocument>({
     content: String,
     userId: String,
     creationTime: String,
-    tags: [String]
+    tags: [String],
 });
 export const PostModel = model<IPostDocument>('Post', PostSchema);
 
@@ -38,8 +38,8 @@ const DisplayNamesSchema = new Schema({
     _id: Number,
     names: {
         type: [String],
-        default: []
-    }
+        default: [],
+    },
 });
 
 export const DisplayNamesModel = model('DisplayNames', DisplayNamesSchema);
@@ -48,8 +48,8 @@ const TagsSchema = new Schema({
     _id: Number,
     tags: {
         type: [String],
-        default: []
-    }
+        default: [],
+    },
 });
 
 export const TagsModel = model('Tags', TagsSchema);

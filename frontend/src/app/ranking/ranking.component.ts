@@ -1,17 +1,17 @@
 import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 import {isPlatformBrowser, NgIf} from '@angular/common';
+import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
 
 @Component({
     selector: 'app-ranking',
     standalone: true,
     imports: [
-        NgIf
+        NgIf,
     ],
     templateUrl: './ranking.component.html',
-    styleUrl: './ranking.component.css'
+    styleUrl: './ranking.component.css',
 })
 export class RankingComponent implements OnInit {
 
@@ -30,14 +30,14 @@ export class RankingComponent implements OnInit {
         ).subscribe({
             next: (resp) => {
                 this.rankedUnis = resp;
-                this.rankedUnis.forEach(uni => {
+                this.rankedUnis.forEach((uni) => {
                     uni._id = String(uni._id).replace('uni:', '');
-                })
+                });
                 this.rescalePodestals();
             },
             error: (error) => {
                 console.log('An error occurred while fetching ranking most votes:', error);
-            }
+            },
         });
     }
 
@@ -45,7 +45,7 @@ export class RankingComponent implements OnInit {
         setTimeout(() => {
             let maxWidth = 0;
 
-            this.itemRefs.forEach(el => {
+            this.itemRefs.forEach((el) => {
                 const width = el.nativeElement.scrollWidth;
                 console.log(width);
                 if (width > maxWidth) {
@@ -62,7 +62,7 @@ export class RankingComponent implements OnInit {
             const minWidth = 5 * parseFloat(fontSize);
             maxWidth = Math.max(maxWidth, minWidth);
 
-            this.itemRefs.forEach(el => {
+            this.itemRefs.forEach((el) => {
                 el.nativeElement.style.width = `${maxWidth}px`;
             });
         }, 100);

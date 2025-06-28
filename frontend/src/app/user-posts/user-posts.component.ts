@@ -6,7 +6,7 @@ import {TitleService} from '../services/title.service';
     standalone: true,
     imports: [],
     templateUrl: './user-posts.component.html',
-    styleUrl: './user-posts.component.css'
+    styleUrl: './user-posts.component.css',
 })
 export class UserPostsComponent {
     constructor(titleService: TitleService) {

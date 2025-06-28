@@ -1,7 +1,7 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
-import {AuthService} from './services/auth.service';
 import {filter, map} from 'rxjs';
+import {AuthService} from './services/auth.service';
 import {UserAdminViewComponent} from './user-admin-view/user-admin-view.component';
 import {AboutUserComponent} from './about-user/about-user.component';
 import {PostFormComponent} from './post-form/post-form.component';
@@ -10,9 +10,9 @@ export const accessGuard: CanActivateFn = (route, state) => {
     const authService = inject(AuthService);
     const router = inject(Router);
     return authService.reloadUser().pipe(
-        filter(state => state.success),
-        map(state => {
-            console.log("Access guard " + route.url + " state:", state);
+        filter((state) => state.success),
+        map((state) => {
+            console.log(`Access guard ${  route.url  } state:`, state);
             // Block admin routes for non-admins
             if (route.component === UserAdminViewComponent && (!state.user || !state.user.isAdmin)) {
                 return router.createUrlTree(['/login']);
@@ -27,6 +27,6 @@ export const accessGuard: CanActivateFn = (route, state) => {
             }
             // Allow all other components
             return true;
-        })
+        }),
     );
 };

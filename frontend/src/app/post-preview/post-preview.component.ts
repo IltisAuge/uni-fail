@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 import {RouterModule} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 export interface IPost {
     _id: string;
@@ -23,7 +23,7 @@ export interface IPost {
     standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './post-preview.component.html',
-    styleUrl: './post-preview.component.css'
+    styleUrl: './post-preview.component.css',
 })
 export class PostPreviewComponent implements OnInit {
 
@@ -35,7 +35,7 @@ export class PostPreviewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.http.get<IPost[]>(`${environment.apiBaseUrl}/post/get?filter=newest&max=10`
+        this.http.get<IPost[]>(`${environment.apiBaseUrl}/post/get?filter=newest&max=10`,
         ).subscribe({
             next: (posts) => {
                 this.posts = posts;
@@ -45,7 +45,7 @@ export class PostPreviewComponent implements OnInit {
                 this.error = 'Failed to load posts';
                 console.error('An error occurred while fetching posts for preview:', error);
                 this.loading = false;
-            }
+            },
         });
     }
 
@@ -55,7 +55,7 @@ export class PostPreviewComponent implements OnInit {
     getPreview(content: string): string {
         const maxLength = 150;
         return content.length > maxLength
-            ? content.slice(0, maxLength) + '...'
+            ? `${content.slice(0, maxLength)  }...`
             :content;
     }
 

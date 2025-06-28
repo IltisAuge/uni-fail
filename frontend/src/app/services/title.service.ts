@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class TitleService {
 
@@ -10,6 +10,6 @@ export class TitleService {
     }
 
     setTitle(title: string) {
-        this.titleService.setTitle(title + ' | Unifail');
+        this.titleService.setTitle(`${title  } | Unifail`);
     }
 }

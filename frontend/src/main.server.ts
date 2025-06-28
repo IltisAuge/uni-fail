@@ -1,24 +1,24 @@
 import 'zone.js/node';
 import {provideServerRendering} from '@angular/platform-server';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {AppComponent} from './app/app.component';
 import {provideHttpClient, withXsrfConfiguration} from '@angular/common/http';
 import {provideZoneChangeDetection} from '@angular/core';
-import {routes} from './app/app.routes';
 import {provideRouter} from '@angular/router';
 import {provideAnimations} from '@angular/platform-browser/animations';
+import {routes} from './app/app.routes';
+import {AppComponent} from './app/app.component';
 
 export default function bootstrap() {
-	return bootstrapApplication(AppComponent, {
-		providers: [
-			provideServerRendering(),
-			provideHttpClient(withXsrfConfiguration({
+    return bootstrapApplication(AppComponent, {
+        providers: [
+            provideServerRendering(),
+            provideHttpClient(withXsrfConfiguration({
                 cookieName: 'XSRF-TOKEN',
-                headerName: 'X-XSRF-TOKEN'
+                headerName: 'X-XSRF-TOKEN',
             })),
-			provideRouter(routes),
-			provideZoneChangeDetection({eventCoalescing: true}),
-            provideAnimations()
-		]
-	});
+            provideRouter(routes),
+            provideZoneChangeDetection({eventCoalescing: true}),
+            provideAnimations(),
+        ],
+    });
 }
