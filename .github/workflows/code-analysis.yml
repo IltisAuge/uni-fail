@@ -23,8 +23,14 @@ jobs:
             -   name: Install dependencies
                 run: npm install --force
 
-            -   name: Run ESLint
+            -   name: Run ESLint for TypeScript
                 run: npm run eslint:ts
+
+            -   name: Run ESLint for HTML
+                run: npm run eslint:html
+
+            -   name: Run StyleLint
+                run: npm run stylelint
 
     lint-backend:
         name: Lint Backend
