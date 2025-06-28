@@ -29,7 +29,7 @@ export default [
             semi: ['error', 'always'],
             quotes: ['error', 'single', { avoidEscape: true }],
             indent: ['error', 4],
-            'linebreak-style': ['error', 'windows'],
+            'linebreak-style': ['error', 'unix'],
             'no-trailing-spaces': 'error',
             'eol-last': ['error', 'always'],
             'comma-dangle': ['error', 'always-multiline'],
