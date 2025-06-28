@@ -1,5 +1,5 @@
 import {SessionData} from 'express-session';
-import {MicrosoftIdToken} from '../login-providers/microsoft-login';
+import {MicrosoftIdToken} from '@/login-providers/microsoft-login';
 
 export abstract class LoginController {
 	abstract getAuthURL(_session?: SessionData): string;
