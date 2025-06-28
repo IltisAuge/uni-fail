@@ -41,7 +41,7 @@
 		"mongodb-memory-server": "^10.1.4",
 		"supertest-session": "^5.0.1",
 		"ts-jest": "^29.3.4",
-		"tsx": "^4.19.4",
+		"tsx": "^4.20.3",
 		"typescript": "^5.8.3"
 	}
 }

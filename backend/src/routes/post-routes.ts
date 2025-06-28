@@ -1,17 +1,22 @@
-import {Router} from 'express';
+import {Router, Request, Response} from 'express';
 import {createPost, deletePost, getNewestPosts, getPost} from '../controller/post-controller';
 import {getUser} from '../controller/user-controller';
 
 const postRouter = Router();
 
 postRouter.use((req, res, next) => {
-    if (req.path !== '/get' && !req.session.userId) {
-		res.status(401).send();
-	}
-	next();
+    const isPublic = req.method === 'GET' &&
+        (req.path === '/get' || /^\/[^\/]+$/.test(req.path));
+
+    if (!isPublic && !req.session.userId) {
+        res.status(401).send("Unauthorized:Authentification required.");
+    }
+
+    next();
 });
 
-postRouter.use('/get', (req, res) => {
+
+postRouter.get('/get', (req, res) => {
     const filter = req.query.filter;
     const max = req.query.max as unknown as number;
     switch (filter) {
@@ -20,10 +25,38 @@ postRouter.use('/get', (req, res) => {
                 .then(result => res.status(200).json(result));
             break;
         default:
-            res.status(400).send("Unknown filter option '" + filter + "'");
+            res.status(400).json({error: "Unknown filter ...."});
             break;
     }
 });
+
+/*get*/
+postRouter.get('/:id', async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const post = await getPost(postId);
+
+        if (!post) {
+            res.status(404).json({message: "No post with id " + postId});
+            return;
+        }
+
+        const author = await getUser(post.userId);
+
+        const postWithUser = {
+            ...post,
+            userName: author?.displayName || 'unbekannt'
+        };
+
+        console.log('Fetching post with ID:', postId);
+        console.log('Author is:', author?.displayName);
+        res.status(200).json(postWithUser);
+    } catch (err) {
+        console.error('Error getting post with ID', err);
+        res.status(500).send({message: 'Servererror getting post'});
+    }
+});
+
 
 postRouter.post('/create', async (req, res) => {
     const title = req.body.title;

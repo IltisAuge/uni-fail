@@ -14,8 +14,9 @@ export async function getPost(postId: string): Promise<IPost | undefined> {
     }
     const post = await PostModel.findOne({ _id: postId }).exec();
     if (post) {
-        postCache.set(postId, post);
-        return post;
+        const plainPost = post.toObject() as IPost;
+        postCache.set(postId, plainPost);
+        return plainPost;
     }
     return undefined;
 }
@@ -43,6 +44,7 @@ export async function getNewestPosts(max: number) {
     return await PostModel.find({})
         .sort({ creationTime: -1 }) // Sort by creationTime descending (newest first)
         .limit(max)
+        .lean() //need to make sure object is consistent or else postcomponent does not work
         .exec();
 }
 

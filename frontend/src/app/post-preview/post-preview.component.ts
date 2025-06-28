@@ -2,18 +2,26 @@ import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+import {RouterModule} from '@angular/router';
 
-interface IPost {
+export interface IPost {
+    _id: string;
     title: string;
     content: string;
     tags: string[];
     userId: string;
+    createdAt?: Date;
+    author?: string;
+    userName?: string;
+    // for the evaluation, yet to be implemented
+    //upvotes?: number;
+    //downvote?: number;
 }
 
 @Component({
     selector: 'app-post-preview',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule],
     templateUrl: './post-preview.component.html',
     styleUrl: './post-preview.component.css'
 })
