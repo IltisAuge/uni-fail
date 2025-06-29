@@ -1,10 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {filter} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {AuthService} from '../services/auth.service';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
 import {Post} from '../post-preview/post-preview.component';

@@ -1,24 +1,35 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {filter} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {filter, firstValueFrom} from 'rxjs';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {faArrowLeft, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
 import {environment} from '../../environments/environment';
 import {Post} from '../post-preview/post-preview.component';
 import {TagComponent} from '../tag/tag.component';
 import {NotFoundComponent} from '../not-found/not-found.component';
 import {AuthService} from '../services/auth.service';
+import {User} from '../user.interface';
 
 @Component({
     selector: 'app-post',
     standalone: true,
-    imports: [CommonModule, TagComponent, NotFoundComponent, RouterLink],
+    imports: [CommonModule, TagComponent, NotFoundComponent, FaIconComponent, RouterLink],
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit {
 
+    protected readonly faArrowLeft = faArrowLeft;
+    protected readonly faThumbsUp = faThumbsUp;
+    @ViewChild('deleteDialog') avatarDialogRef!: ElementRef<HTMLDialogElement>;
+    isModalOpen = false;
+    user: User | undefined;
     isLoggedIn: boolean = false;
+    isAdmin: boolean = false;
+    canDeletePost: boolean = false;
+    hasVoted: boolean = false;
     post: Post | undefined;
     loading: boolean = true;
     error: string | undefined;
@@ -43,7 +54,10 @@ export class PostComponent implements OnInit {
         this.authService.getLoggedInUser().pipe(
             filter((state) => state.success),
         ).subscribe((state) => {
+            console.log('user', state.user);
             this.isLoggedIn = !!state.user;
+            this.user = state.user;
+            this.isAdmin = (state.user && state.user.isAdmin) || false;
         });
     }
 
@@ -57,7 +71,20 @@ export class PostComponent implements OnInit {
             next: (resp) => {
                 this.post = resp.post;
                 this.loading = false;
-                console.log('Post-Details erfolgreich abgerufen:', this.post);
+                this.canDeletePost = !!(
+                    this.user &&
+                    (
+                        this.user.isAdmin ||
+                        (this.post && this.post.userId === this.user._id)
+                    )
+                );
+                console.log(this.post?._id);
+                this.hasVoted = !!(
+                    this.user &&
+                    this.post &&
+                    this.user.votedPosts.includes(this.post._id)
+                );
+                //console.log('Post-Details erfolgreich abgerufen:', this.post);
             },
             error: (error) => {
                 if (error.status !== 404) {
@@ -82,62 +109,91 @@ export class PostComponent implements OnInit {
         // Call the backend to delete the post
         if (!this.post || !this.post._id) {
             console.error('Kein Post oder keine gültige ID zum Löschen verfügbar.');
-            alert('Error.');
             return;
         }
 
-        if (confirm('Bist du sicher, dass du diesen Post endgültig löschen möchtest?')) {
-            this.http.delete(`${environment.apiBaseUrl}/post/delete/${this.post._id}`, {
-                withCredentials: true,
-            }).subscribe({
-                next: async (response) => {
-                    console.log('Post erfolgreich gelöscht:', response);
-                    alert('Post deleted');
-                    await this.router.navigate(['/']);
-                },
-                error: (err) => {
-                    console.error('Fehler beim Löschen des Posts:', err);
-                    alert('Error deleting');
-                    this.error = 'Deleting did not work';
-                },
-            });
-        }
+        this.http.delete(`${environment.apiBaseUrl}/post/delete/${this.post._id}`, {
+            withCredentials: true,
+        }).subscribe({
+            next: async (response) => {
+                console.log('Post erfolgreich gelöscht:', response);
+                await this.goBack();
+            },
+            error: (err) => {
+                console.error('Fehler beim Löschen des Posts:', err);
+                this.error = 'Deleting did not work';
+            },
+        });
     }
 
-    //return button
     async goBack() {
         await this.router.navigate(['/']);
     }
 
-    addUpVote() {
-        if (!this.post) {
+    toggleUpVote() {
+        console.log('toggle');
+        if (this.hasVoted) {
+            this.removeUpVote();
             return;
         }
-        const token = document.cookie.split('; ')
-            .find((row) => row.startsWith('XSRF-TOKEN='))
-            ?.split('=')[1];
+        this.addUpVote();
+    }
 
-        const headers = new HttpHeaders({
-            'X-XSRF-TOKEN': token ?? '',
-        });
-        this.http.post<{post: Post}>(`${environment.apiBaseUrl}/vote/add`, {
-            postId: this.post._id,
-        }, {
-            headers,
-            withCredentials: true,
-        }).subscribe({
-            next: (resp) => {
-                this.post = resp.post;
-            },
-            error: (error) => {
-                console.error('An error occurred while adding up-vote to post:', error);
-            },
-        });
+    removeUpVote() {
+        if (this.post) {
+            this.postVoteChange('remove').then(() => {
+                console.log(`set hasVoted from ${  this.hasVoted}`);
+                this.hasVoted = false;
+                console.log(`set hasVoted to ${  this.hasVoted}`);
+                return false;
+            }).catch((error) => {
+                console.log('An error occurred while posting vote change:', error);
+            });
+        }
+    }
+
+    addUpVote() {
+        if (this.post) {
+            this.postVoteChange('add').then(() => {
+                console.log(`set hasVoted from ${  this.hasVoted}`);
+                this.hasVoted = true;
+                console.log(`set hasVoted to ${  this.hasVoted}`);
+                return true;
+            }).catch((error) => {
+                console.log('An error occurred while posting vote change:', error);
+            });
+        }
+    }
+
+    async postVoteChange(endpoint: string) {
+        const resp = await firstValueFrom(
+            this.http.post<{ post: Post; user: User }>(
+                `${environment.apiBaseUrl}/vote/${endpoint}`,
+                { postId: this.post!._id },
+                { withCredentials: true },
+            ),
+        );
+
+        if (this.post) {
+            this.post.upVotes = resp.post.upVotes;
+            console.log('vote resp user: ', resp.user);
+            this.authService.setUser(!!resp.user, resp.user);
+        }
     }
 
     async routeToLogin() {
         await this.router.navigate(['/login'], {
             state: { from: this.router.url },
         });
+    }
+
+    openDeleteModal() {
+        this.avatarDialogRef.nativeElement.showModal();
+        this.isModalOpen = true;
+    }
+
+    closeDeleteModal() {
+        this.avatarDialogRef.nativeElement.close();
+        this.isModalOpen = false;
     }
 }

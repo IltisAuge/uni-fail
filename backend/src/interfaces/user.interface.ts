@@ -7,7 +7,7 @@ export interface User {
     displayName: string;
     avatarKey: string;
     isBlocked: boolean;
-    postVotes: string[];
+    votedPosts: string[];
     [key: string]: any;
 }
 export type UserDocument = User & Document;

@@ -20,8 +20,7 @@
 .delete-button {
     z-index: 1;
     position: relative;
-    padding: 20px 46px;
-    margin-bottom: 30px;
+    padding: 0.75rem 1rem;
     text-align: center;
     text-transform: uppercase;
     color: var(--button-red-hover);
@@ -109,7 +108,7 @@
 
 /* Position & delay */
 .delete-button__blob:nth-child(1) {
-    left: 0%;
+    left: 0;
     transition-delay: 0s;
 }
 

@@ -6,7 +6,7 @@ import {filter} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {AuthService} from '../services/auth.service';
 import {TitleService} from '../services/title.service';
-import {IUser} from '../user.interface';
+import {User} from '../user.interface';
 
 @Component({
     selector: 'app-about-user',
@@ -23,6 +23,7 @@ import {IUser} from '../user.interface';
     styleUrl: './about-user.component.css',
 })
 export class AboutUserComponent implements OnInit {
+
     name: string = '';
     email: string = '';
     provider: string = '';
@@ -86,7 +87,7 @@ export class AboutUserComponent implements OnInit {
             return;
         }
         const body = this.displayNameForm.value;
-        this.http.post<{user:IUser}>(`${environment.apiBaseUrl}/user/set-display-name`, body, {
+        this.http.post<{user:User}>(`${environment.apiBaseUrl}/user/set-display-name`, body, {
             withCredentials: true,
         }).subscribe({
             next: (resp) => {
@@ -115,7 +116,7 @@ export class AboutUserComponent implements OnInit {
 
     acceptAvatar() {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
-        this.http.post<{user: {}}>(`${environment.apiBaseUrl  }/user/set-avatar`, {
+        this.http.post<{user: User}>(`${environment.apiBaseUrl  }/user/set-avatar`, {
             avatarId,
         },
         {

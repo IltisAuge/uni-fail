@@ -1,6 +1,6 @@
 <div class="flex flex-col justify-center">
 
-    <h1 class="text-3xl mb-10 text-center">Dein Konto</h1>
+    <h1 class="page-headline">Dein Konto</h1>
     <p>Hallo <strong>{{name}}</strong>, du bist über {{provider}} angemeldet.</p>
     <p>E-Mail: {{email}}</p>
 
@@ -26,7 +26,7 @@
     <!-- Dialog header -->
     <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
         <h3 class="text-xl font-semibold">Wähle ein Avatar aus</h3>
-        <button (click)="openAvatarModal()" class="hover:text-gray-400 hover:cursor-pointer">✕</button>
+        <button (click)="closeAvatarModal()" class="hover:text-gray-400 hover:cursor-pointer">✕</button>
     </div>
 
     <!-- Dialog body -->

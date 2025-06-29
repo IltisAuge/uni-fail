@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, catchError, Observable, of, shareReplay, switchMap, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {IUser} from '../user.interface';
+import {User} from '../user.interface';
 
-interface IUserState {
+interface UserState {
     success: boolean;
-    user: IUser | undefined;
+    user: User | undefined;
 }
 
 @Injectable({
@@ -14,13 +14,13 @@ interface IUserState {
 })
 export class AuthService {
 
-    private userSubject = new BehaviorSubject<IUserState>({success: false, user: undefined});
+    private userSubject = new BehaviorSubject<UserState>({success: false, user: undefined});
     private userObservable = this.userSubject.asObservable();
 
     constructor(private http: HttpClient) {
     }
 
-    getLoggedInUser(): Observable<IUserState> {
+    getLoggedInUser(): Observable<UserState> {
         const currentState = this.userSubject.value;
         if (!currentState.success) {
             this.loadUser().subscribe();
@@ -28,7 +28,7 @@ export class AuthService {
         return this.userObservable;
     }
 
-    reloadUser(): Observable<IUserState> {
+    reloadUser(): Observable<UserState> {
         return this.loadUser().pipe(
             tap((state) => {
                 console.log('Reloaded user:', state);
@@ -36,7 +36,7 @@ export class AuthService {
         );
     }
 
-    setUser(success: boolean, user?: any) {
+    setUser(success: boolean, user?: User | undefined) {
         this.userSubject.next({success, user});
     }
 
@@ -44,8 +44,8 @@ export class AuthService {
         this.userSubject.next({success: true, user: undefined});
     }
 
-    private loadUser(): Observable<IUserState> {
-        return this.http.get<{user:IUser}>(`${environment.apiBaseUrl}/me`, {
+    private loadUser(): Observable<UserState> {
+        return this.http.get<{user:User}>(`${environment.apiBaseUrl}/me`, {
             withCredentials: true,
         }).pipe(
             tap((resp) => {
@@ -53,7 +53,7 @@ export class AuthService {
             }),
             switchMap((resp) => of({success: true, user: resp.user})),
             catchError((err) => {
-                const state: IUserState = err.status === 401 ?
+                const state: UserState = err.status === 401 ?
                     {success: true, user: undefined}:
                     {success: false, user: undefined};
                 this.userSubject.next(state);

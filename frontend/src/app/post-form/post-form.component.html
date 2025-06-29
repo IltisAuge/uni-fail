@@ -1,14 +1,17 @@
 <div class="container xl:max-w-[60%]">
     <form [formGroup]="postForm"
           (ngSubmit)="createPost()"
-          class="bg-[var(--background-card)] post-form flex flex-col gap-2 mx-auto p-8
+          class="bg-[var(--background-card)] border-1 border-[var(--border-color)]
+                post-form flex flex-col gap-4 mx-auto p-8
                 rounded-xl shadow-lg text-[var(text-primary)] mt-2">
-        <h2 class="text-3xl font-bold text-center border-b-2 border-[var(--border-color)] pb-2">
-            Erstelle einen neuen Post
-        </h2>
-        <p class="text-center">
-            Teile <strong>KEINE</strong> Namen oder sensible Informationen <br>
-        </p>
+        <div class="flex flex-col gap-3">
+            <h2 class="page-headline border-b-1 border-[var(--border-color)] pb-3" style="margin-bottom: 0">
+                Erstelle einen neuen Post
+            </h2>
+            <p class="text-center">
+                Teile <strong>KEINE</strong> Namen oder sensible Informationen <br>
+            </p>
+        </div>
 
         <label for="content"
                class="font-semibold text-lg">
@@ -16,13 +19,12 @@
         </label>
 
         <input type="text" formControlName="title" placeholder="Titel"
-               class=" border-2 focus:outline-none focus:ring-2 focus:ring-[#FFA500]">
+               class="border-2">
 
         <textarea id="content"
                   formControlName="content"
                   placeholder="Erzähle dein Uni-fail..."
-                  class="p-3 border-2 border-[var(--border-color)] rounded-md text-base bg-[var(--input-background)] resize-y min-h-[120px]
-                        focus:outline-none focus:ring-2 focus:ring-[#FFA500] ">
+                  class="p-3 border-2 text-base resize-y min-h-[8rem]">
         </textarea>
 
         <div *ngIf="selectedTags.length > 0" class="my-4">
@@ -38,7 +40,7 @@
         <div class="flex gap-5 flex-wrap">
             <button type="button"
                    (click)="openTagsModal()"
-                   class="button-green w-fit">Tags hinzufügen</button>
+                   class="button-blue w-fit">Tags hinzufügen</button>
 
             <button type="submit"
                     [disabled]="postForm.invalid"
@@ -46,7 +48,7 @@
                         'cursor-not-allowed opacity-50': postForm.invalid,
                         'hover:text-[#333333] hover:border-[#FFD700]': postForm.valid
                       }"
-                    class="button-green flex-1">
+                    class="button-yellow flex-1">
                 Veröffentlichen
             </button>
         </div>
@@ -64,7 +66,7 @@
             <form class="flex-1">
                 <input #tagFilter type="text" placeholder="Suche nach Tags" class="w-full min-w-fit" (input)="filterTags(tagFilter.value)">
             </form>
-            <button class="button-green" (click)="closeTagsModal()">Auswahl bestätigen</button>
+            <button class="button-yellow" (click)="closeTagsModal()">Auswahl bestätigen</button>
         </div>
     </div>
 

@@ -6,7 +6,7 @@ import {filter} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {AuthService} from '../services/auth.service';
 import {TitleService} from '../services/title.service';
-import {IUser} from '../user.interface';
+import {User} from '../user.interface';
 
 @Component({
     selector: 'app-user-admin-view',
@@ -47,7 +47,7 @@ export class UserAdminViewComponent implements OnInit {
                 }
                 this.userId = params['id'];
                 console.log('userId=', this.userId);
-                this.http.get<{ user: IUser }>(`${environment.apiBaseUrl}/admin/user/${this.userId}`, {
+                this.http.get<{ user: User }>(`${environment.apiBaseUrl}/admin/user/${this.userId}`, {
                     withCredentials: true,
                 }).subscribe({
                     next: (resp) => {
@@ -72,7 +72,7 @@ export class UserAdminViewComponent implements OnInit {
     }
 
     resetDisplayName() {
-        this.http.post<{ user: IUser }>(`${environment.apiBaseUrl}/admin/reset-display-name`, {
+        this.http.post<{ user: User }>(`${environment.apiBaseUrl}/admin/reset-display-name`, {
             userId: this.userId,
         }, {
             withCredentials: true,
@@ -87,7 +87,7 @@ export class UserAdminViewComponent implements OnInit {
     }
 
     setBlocked(status: boolean) {
-        this.http.post<{ user: IUser }>(`${environment.apiBaseUrl}/admin/block-user`, {
+        this.http.post<{ user: User }>(`${environment.apiBaseUrl}/admin/block-user`, {
             userId: this.userId,
             status,
         }, {
@@ -103,7 +103,7 @@ export class UserAdminViewComponent implements OnInit {
     }
 
     setAdmin(status: boolean) {
-        this.http.post<{ user: IUser }>(`${environment.apiBaseUrl}/admin/set-admin`, {
+        this.http.post<{ user: User }>(`${environment.apiBaseUrl}/admin/set-admin`, {
             userId: this.userId,
             status,
         }, {

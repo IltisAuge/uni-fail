@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
     _id: string;
     name: string;
     displayName: string;
@@ -7,4 +7,5 @@ export interface IUser {
     avatarKey: string;
     isAdmin: boolean;
     isBlocked: boolean;
+    votedPosts: string[];
 }

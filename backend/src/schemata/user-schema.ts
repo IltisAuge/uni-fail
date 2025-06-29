@@ -10,7 +10,7 @@ const UserSchema = new Schema<UserDocument>({
     displayName: String,
     avatarKey: String,
     isBlocked: Boolean,
-    postVotes: [String],
+    votedPosts: [String],
 }, {
     timestamps: true,
 });

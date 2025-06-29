@@ -14,12 +14,18 @@
     --text-secondary: #666;
     --placeholder-color: #999;
 
+    --button-yellow: #F3A900;
+    --button-yellow-hover: #EFB80B;
+    --button-yellow-text: #FFF;
+
     --button-green: #27AE60;
     --button-green-hover: #219150;
     --button-green-text: #FFF;
+
     --button-red: #E74C3C;
     --button-red-hover: #C0392B;
     --button-red-text: #FFF;
+
     --button-blue: #2B6D74;
     --button-blue-hover: #22565C;
     --button-blue-text: #FFF;
@@ -40,16 +46,21 @@
     --text-secondary: #A0A3B1;
     --placeholder-color: #7A7A8B;
 
+    --button-yellow: #DC9A00;
+    --button-yellow-hover: #D6A300;
+    --button-yellow-text: #FFF;
+
     --button-green: #27AE60;
     --button-green-hover: #219150;
     --button-green-text: #FFF;
+
     --button-red: #E74C3C;
     --button-red-hover: #C0392B;
     --button-red-text: #FFF;
+
     --button-blue: #2B6D74;
     --button-blue-hover: #22565C;
     --button-blue-text: #FFF;
-
 
     --nav-background: #15151E;
     --nav-text: #DBE0EC;
@@ -67,11 +78,30 @@ html, body {
     margin: 0;
 }
 
-.button-green, .button-red {
+.button-blue, .button-green, .button-red, .button-yellow {
     padding: 0.5rem 1rem;
     border: 1px solid var(--border-color);
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s;
+}
+
+.button-blue {
+    background-color: var(--button-blue);
+    color: var(--button-blue-text);
+}
+
+.button-blue:hover {
+    background-color: var(--button-blue-hover);
+}
+
+.button-yellow {
+    background-color: var(--button-yellow);
+    color: var(--button-yellow-text);
+}
+
+.button-yellow:hover {
+    background-color: var(--button-yellow-hover);
 }
 
 .button-green {
@@ -79,16 +109,40 @@ html, body {
     color: var(--button-green-text);
 }
 
+.button-green:hover {
+    background-color: var(--button-green-hover);
+}
+
 .button-red {
     background-color: var(--button-red);
     color: var(--button-red-text);
 }
 
-form input:not([type='submit']) {
+.button-red-hover {
+    background-color: var(--button-red-hover);
+}
+
+.button-blue:hover, .button-red:hover, .button-green:hover, .button-yellow:hover {
+    transform: scale(1.03);
+}
+
+textarea, input:not([type='submit']) {
     background: var(--input-background);
     border: 1px solid var(--border-color);
     padding: 0.5rem 1rem;
     border-radius: 5px;
 }
 
+textarea:focus-visible, input:not([type='submit']):focus-visible {
+    border-color: #FFA500;
+    outline: none;
+}
+
+.page-headline {
+    font-size: var(--text-3xl);
+    color: var(--text-primary);
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+}
 

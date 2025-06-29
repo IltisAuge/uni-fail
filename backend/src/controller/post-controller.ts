@@ -88,8 +88,22 @@ export async function addVote(postId: string) {
     } else {
         post.upVotes += 1;
     }
+    return await updatePostVotes(postId, post);
+}
+
+export async function removeVote(postId: string) {
+    const post = await getPost(postId);
+    if (!post) {
+        return undefined;
+    }
+    if (!isNaN(post.upVotes)) {
+        post.upVotes -= 1;
+    }
+    return await updatePostVotes(postId, post);
+}
+
+async function updatePostVotes(postId: string, post: Post) {
     postCache.set(postId, post);
-    console.log('add vote post:', post);
     return PostModel.findOneAndUpdate(
         {_id: postId},
         {$set: {upVotes: post.upVotes}},

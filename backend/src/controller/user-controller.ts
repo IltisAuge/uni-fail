@@ -80,11 +80,27 @@ async function updateUserField(userId: string, field: string, value: any) {
 }
 
 export async function addVotedPost(_id: string, postId: string) {
+    console.log(`addVotedPost: _id=${  _id  } postId=${  postId}`);
     const user = await getUser(_id);
+    console.log(user);
     if (!user) {
         return;
     }
-    return await updateUserField(_id, 'votedPosts', [...user.postVotes, postId]);
+    const s = [...user.votedPosts, postId];
+    console.log(s);
+    return await updateUserField(_id, 'votedPosts', s);
+}
+
+export async function removeVotedPost(_id: string, postId: string) {
+    console.log(`removeVotedPost: _id=${  _id  } postId=${  postId}`);
+    const user = await getUser(_id);
+    console.log(user);
+    if (!user) {
+        return;
+    }
+    const s = user.votedPosts.filter((id) => id !== postId);
+    console.log(s);
+    return await updateUserField(_id, 'votedPosts', s);
 }
 
 export async function setDisplayName( _id: string, displayName: string) {

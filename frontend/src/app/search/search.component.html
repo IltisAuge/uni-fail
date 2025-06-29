@@ -2,8 +2,9 @@
     'justify-center': posts.length === 0,
     }">
     <div class="flex flex-col items-center gap-4 w-full">
-        <h5 class="font-bold break-words">Durchsuche Posts nach Universitäten, Hochschulen, Titel oder Tags</h5>
-        <form class="w-full md:w-[50%]">
+        <h1 class="page-headline">Suche</h1>
+        <h5 class="break-words">Durchsuche Posts nach Universitäten, Hochschulen, Titel oder Tags</h5>
+        <form class="w-full md:w-[70%] lg:w-[50%]">
             <input type="text" #searchInput
                    placeholder="Suche"
                    (input)="runSearch(searchInput.value)"
@@ -12,5 +13,5 @@
         <p *ngIf="posts.length > 0">{{posts.length}} Suchergebnisse:</p>
     </div>
 
-    <app-post-preview [posts]=posts [loading]=loading class="w-full md:w-[70%]"></app-post-preview>
+    <app-post-preview [posts]=posts [loading]=loading class="w-full md:w-[90%] lg:w-[70%]"></app-post-preview>
 </div>
