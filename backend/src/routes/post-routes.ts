@@ -75,17 +75,17 @@ postRouter.get('/:id', async (req, res) => {
     try {
         const postId = req.params.id;
         const post = await getPost(postId);
+        console.log('get post:', post);
         if (!post) {
             res.status(404).json({message: `No post with id ${postId}`});
             return;
         }
-
         const author = await getUser(post.userId);
         const postWithUser = {
             ...post,
             userName: author?.displayName || undefined,
         };
-
+        console.log('postWUser:', postWithUser);
         console.log('Fetching post with ID:', postId);
         console.log('Author is:', author?.displayName);
         res.status(200).json({post: postWithUser});

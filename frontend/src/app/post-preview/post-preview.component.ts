@@ -10,8 +10,8 @@ export interface Post {
     content: string;
     tags: string[];
     userId: string;
-    userName?: string;
-    createdAt?: Date;
+    userName: string;
+    createdAt: string;
     upVotes: number;
     //downvote?: number;
 }

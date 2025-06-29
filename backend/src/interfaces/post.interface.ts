@@ -3,8 +3,8 @@ export interface Post {
     title: string;
     content: string;
     userId: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
     tags: string[];
     upVotes: number;
 }

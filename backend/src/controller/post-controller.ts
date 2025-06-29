@@ -12,11 +12,10 @@ export async function getPost(postId: string): Promise<Post | undefined> {
     if (cachedPost) {
         return cachedPost;
     }
-    const post = await PostModel.findOne({ _id: postId }).exec();
+    const post = await PostModel.findOne({ _id: postId }).lean().exec();
     if (post) {
-        const plainPost = post.toObject() as Post;
-        postCache.set(postId, plainPost);
-        return plainPost;
+        postCache.set(postId, post);
+        return post;
     }
     return undefined;
 }
@@ -24,10 +23,11 @@ export async function getPost(postId: string): Promise<Post | undefined> {
 export async function createPost(userId: string, title: string, content: string, tags: string[]): Promise<Post> {
     const postId = crypto.randomUUID().toString();
     const postObject = {_id: postId, userId, title, content, tags, upVotes: 0};
-    postCache.set(postId, postObject);
     const model = new PostModel(postObject);
     try {
-        return await model.save();
+        const userDoc = await model.save();
+        postCache.set(postId, userDoc.toObject());
+        return userDoc.toObject();
     } catch (error) {
         console.error('Could not save post:', error);
         return Promise.reject(error);
@@ -43,7 +43,7 @@ export async function getNewestPosts(max: number) {
     return await PostModel.find({})
         .sort({ createdAt: -1 }) // Sort by creationTime descending (newest first)
         .limit(max)
-        .lean() //need to make sure object is consistent or else postcomponent does not work
+        .lean() // Convert to plain JavaScript objects
         .exec();
 }
 
@@ -51,7 +51,7 @@ export async function getUserPosts(userId: string, max: number) {
     return await PostModel.find({userId})
         .sort({ createdAt: -1 }) // Sort by creationTime descending (newest first)
         .limit(max)
-        .lean() //need to make sure object is consistent or else postcomponent does not work
+        .lean() // Convert to plain JavaScript objects
         .exec();
 }
 
