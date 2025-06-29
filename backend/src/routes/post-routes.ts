@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {createPost, deletePost, getNewestPosts, getPost} from '@/controller/post-controller';
+import {createPost, deletePost, getNewestPosts, getPost, getUserPosts} from '@/controller/post-controller';
 import {getUser} from '@/controller/user-controller';
 import {PostModel} from '@/schemata/post-schema';
 
@@ -19,6 +19,7 @@ postRouter.use((req, res, next) => {
 postRouter.get('/get', (req, res) => {
     const filter = req.query.filter;
     const max = req.query.max as unknown as number;
+    let userId: string;
     switch (filter) {
     case 'newest':
         getNewestPosts(max)
@@ -28,6 +29,21 @@ postRouter.get('/get', (req, res) => {
             })
             .catch((error) => {
                 console.error('An error occurred while getting newest posts:', error);
+            });
+        break;
+    case 'user':
+        userId = req.session.userId as unknown as string;
+        if (!userId) {
+            res.status(401).send();
+            return;
+        }
+        getUserPosts(userId, max)
+            .then((posts) => {
+                res.status(200).json(posts);
+                return posts;
+            })
+            .catch((error) => {
+                console.error('An error occurred while getting user posts:', error);
             });
         break;
     default:
@@ -59,14 +75,12 @@ postRouter.get('/:id', async (req, res) => {
     try {
         const postId = req.params.id;
         const post = await getPost(postId);
-
         if (!post) {
-            res.status(404).json({message: `No post with id ${  postId}`});
+            res.status(404).json({message: `No post with id ${postId}`});
             return;
         }
 
         const author = await getUser(post.userId);
-
         const postWithUser = {
             ...post,
             userName: author?.displayName || undefined,
@@ -74,7 +88,7 @@ postRouter.get('/:id', async (req, res) => {
 
         console.log('Fetching post with ID:', postId);
         console.log('Author is:', author?.displayName);
-        res.status(200).json(postWithUser);
+        res.status(200).json({post: postWithUser});
     } catch (error) {
         res.status(500).json({error:'An error occurred while trying to get post'});
         console.error('An error occurred while trying to get post:', error);
@@ -93,7 +107,7 @@ postRouter.post('/create', async (req, res) => {
         return;
     }
     createPost(userId, title, content, tags).then((post) => {
-        res.status(200).json(post);
+        res.status(200).json({post});
         return post;
     }).catch((error) => {
         res.status(500).json({error:'An error occurred while trying to create post'});

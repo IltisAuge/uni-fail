@@ -1,4 +1,18 @@
 <div class="container mx-auto p-4 max-w-3xl">
+    <!--"getting back" button-->
+    <div class="mb-4">
+        <button
+            (click)="goBack()"
+            class="cursor-pointer px-4 py-2 rounded bg-[var(--button-blue)]
+                    font-semibold text-[var(--button-blue-text)]
+                    hover:bg-[var(--button-blue-hover)] transition-all duration-200
+                    transform hover:scale-105 focus:outline-none focus:ring-2
+                    focus:ring-offset-2 focus:ring-[var(--button-green)]
+                    active:scale-95 shadow-sm hover:shadow-md">
+            ← Zurück zur Übersicht
+        </button>
+    </div>
+
     <div *ngIf="loading" class="text-center text-[var(--text-secondary)]">
         Post-Details werden geladen...
     </div>
@@ -6,17 +20,6 @@
     <div *ngIf="error" class="text-center text-[var(--button-red)]">
         {{ error }}
     </div>
-
-    <!--"getting back" button-->
-    <div class="mb-4">
-        <button
-            (click)="goBack()"
-            class="px-4 py-2 rounded bg-[var(--button-blue)] font-semibold text-[var(--button-blue-text)] hover:bg-[var(--button-blue-hover)] transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--button-green)] active:scale-95 shadow-sm hover:shadow-md"
-        >
-            ← Zurück zur Übersicht
-        </button>
-    </div>
-
 
     <div *ngIf="post && !loading" class="bg-[var(--background-card)] text-[var(--text-primary)] rounded-lg shadow-[var(--shadow-card)] p-10 mt-8">
         <div class="flex items-center mb-4">
@@ -69,13 +72,15 @@
             </svg>
         </div>
 
-        <div *ngIf="post">
+        <div *ngIf="post && isLoggedIn; else loginToVote">
             <p>Upvotes: {{post.upVotes}}</p>
             <button (click)="addUpVote()">UpVote</button>
         </div>
-
-        <div *ngIf="!loading && !post && !error" class="text-center text-[var(--text-secondary)] mt-8">
-            Dieser Post konnte nicht gefunden werden.
-        </div>
     </div>
 </div>
+
+<ng-template #loginToVote>
+    <a (click)="routeToLogin()" class="cursor-pointer">Melde dich an, um abzustimmen</a>
+</ng-template>
+
+<app-not-found *ngIf="!loading && !post && !error"></app-not-found>

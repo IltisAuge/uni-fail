@@ -1,8 +1,8 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import {GoogleLoginController} from '../login-providers/google-login';
-import {MicrosoftLoginController} from '../login-providers/microsoft-login';
 import {getRandomDisplayName, getUser, saveUser} from '../controller/user-controller';
+import {GoogleLoginController} from '@/login-providers/google-login';
+import {MicrosoftLoginController} from '@/login-providers/microsoft-login';
 
 dotenv.config();
 
@@ -23,6 +23,8 @@ loginRouter.get('/', (req, res) => {
         res.status(400).send('Invalid login provider');
         return;
     }
+    const loginReturnUrl = (req.query.returnUrl ?? '/') as string;
+    console.log(`loginReturnUrl=${loginReturnUrl}`);
     let url = loginController.getAuthURL();
     const state = crypto.randomUUID().toString();
     const nonce = crypto.randomUUID().toString();
@@ -30,6 +32,7 @@ loginRouter.get('/', (req, res) => {
     url = url.replace('{state}', state).replace('{nonce}', nonce);
     req.session.oAuthState = state;
     req.session.oAuthNonce = nonce;
+    req.session.loginReturnUrl = loginReturnUrl;
     res.redirect(url);
 });
 
@@ -125,7 +128,7 @@ async function completeAuthentication(userData: any, req: any, res: any) {
             isAdmin: false,
             displayName: randomDisplayName,
             avatarKey: avatarId,
-            postVotes: ['testpost'],
+            postVotes: [],
             isBlocked: false,
         };
         if (!await saveUser(user)) {
@@ -134,7 +137,10 @@ async function completeAuthentication(userData: any, req: any, res: any) {
         }
     }
     req.session.userId = user._id;
-    res.redirect(process.env.AUTH_RETURN_URL as string);
+    console.log(req.session.loginReturnUrl);
+    const returnUrl = (req.session.loginReturnUrl ?? '/') as string;
+    console.log(`returnUrl=${returnUrl}`);
+    res.redirect(process.env.AUTH_RETURN_URL + returnUrl);
 }
 
 export default loginRouter;

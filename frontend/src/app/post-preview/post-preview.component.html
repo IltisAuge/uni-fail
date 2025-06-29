@@ -1,7 +1,3 @@
-<!--If no posts are available-->
-<div *ngIf="!loading && posts.length === 0" class="text-center text-[var(--text-primary)] mt-6">
-    Es wurden keine Posts gefunden.
-</div>
 <!-- Loop over posts -->
 <div *ngFor="let post of posts" class="bg-[var(--background-card)] rounded-2xl shadow-md p-4 mt-2 mb-3 border-2 border-[var(--border-color)] mx-auto flex items-start gap-4 cursor-pointer hover:opacity-80 transition-opacity duration-200"
      [routerLink]="['/post', post._id]">

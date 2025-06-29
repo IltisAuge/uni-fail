@@ -5,6 +5,7 @@ import {AuthService} from './services/auth.service';
 import {UserAdminViewComponent} from './user-admin-view/user-admin-view.component';
 import {AboutUserComponent} from './about-user/about-user.component';
 import {PostFormComponent} from './post-form/post-form.component';
+import {UserPostsComponent} from './user-posts/user-posts.component';
 
 export const accessGuard: CanActivateFn = (route, state) => {
     const authService = inject(AuthService);
@@ -18,7 +19,10 @@ export const accessGuard: CanActivateFn = (route, state) => {
                 return router.createUrlTree(['/login']);
             }
             // Block routes that require login for non-logged in users
-            if ((route.component === AboutUserComponent || route.component === PostFormComponent) && !state.user) {
+            if ((route.component === AboutUserComponent
+                || route.component === PostFormComponent
+                || route.component === UserPostsComponent
+            ) && !state.user) {
                 return router.createUrlTree(['/login']);
             }
             // Block all components for blocked users

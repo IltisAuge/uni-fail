@@ -22,9 +22,8 @@ export async function getPost(postId: string): Promise<Post | undefined> {
 }
 
 export async function createPost(userId: string, title: string, content: string, tags: string[]): Promise<Post> {
-    const date = new Date();
     const postId = crypto.randomUUID().toString();
-    const postObject = {_id: postId, creationTime: date.toISOString(), userId, title, content, tags};
+    const postObject = {_id: postId, userId, title, content, tags, upVotes: 0};
     postCache.set(postId, postObject);
     const model = new PostModel(postObject);
     try {
@@ -42,7 +41,15 @@ export async function deletePost(postId: string) {
 
 export async function getNewestPosts(max: number) {
     return await PostModel.find({})
-        .sort({ creationTime: -1 }) // Sort by creationTime descending (newest first)
+        .sort({ createdAt: -1 }) // Sort by creationTime descending (newest first)
+        .limit(max)
+        .lean() //need to make sure object is consistent or else postcomponent does not work
+        .exec();
+}
+
+export async function getUserPosts(userId: string, max: number) {
+    return await PostModel.find({userId})
+        .sort({ createdAt: -1 }) // Sort by creationTime descending (newest first)
         .limit(max)
         .lean() //need to make sure object is consistent or else postcomponent does not work
         .exec();

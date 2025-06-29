@@ -3,9 +3,11 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {filter} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
+import {Post} from '../post-preview/post-preview.component';
 
 interface ITag {
     name: string;
@@ -34,6 +36,7 @@ export class PostFormComponent {
 		private fb: FormBuilder,
         private http: HttpClient,
         private titleSerivce: TitleService,
+        private router: Router,
     ) {
         this.titleSerivce.setTitle('Post erstellen');
 
@@ -65,12 +68,13 @@ export class PostFormComponent {
                 ...this.postForm.value,
                 tags: this.selectedTags.map((tag) => tag.name),
             };
-            this.http.post(`${environment.apiBaseUrl}/post/create`, payload,
+            this.http.post<{post: Post}>(`${environment.apiBaseUrl}/post/create`, payload,
                 {
                     withCredentials: true,
                 }).subscribe({
-                next: () => {
+                next: async (resp) => {
                     // Redirect to post view
+                    await this.router.navigate([`/post/${resp.post._id}`]);
                 },
                 error: (error) => {
                     console.error('An error occurred while creating post:', error);

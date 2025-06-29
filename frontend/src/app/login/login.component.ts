@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
 
@@ -15,11 +16,16 @@ import {TitleService} from '../services/title.service';
 })
 export class LoginComponent {
 
-    constructor(private titleService: TitleService) {
+    previousUrl: string = '/';
+
+    constructor(private titleService: TitleService,
+                private router: Router) {
         this.titleService.setTitle('Anmelden');
+        this.previousUrl = this.router.getCurrentNavigation()?.extras.state?.['from'] ?? '/';
+        console.log(`previousUrl: ${this.previousUrl}`);
     }
 
     openLoginPage(provider: string) {
-        window.location.href = `${environment.apiBaseUrl}/login?provider=${provider}`;
+        window.location.href = `${environment.apiBaseUrl}/login?provider=${provider}&returnUrl=${this.previousUrl}`;
     }
 }

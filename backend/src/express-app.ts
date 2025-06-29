@@ -23,6 +23,7 @@ declare module 'express-session' {
         userId: string,
 		oAuthState: string;
 		oAuthNonce: string;
+        loginReturnUrl: string;
 	}
 }
 
@@ -47,7 +48,7 @@ server.use(cors({
     origin: process.env.HOST,
     credentials: true,
 }));
-server.use(csrf({ cookie: true }));
+server.use(csrf({ cookie: { httpOnly: false} }));
 server.use('/login', loginRouter);
 server.use('/post', postRouter);
 server.use('/user', userRouter);
@@ -61,7 +62,7 @@ server.get('/csrf-token', (req, res) => {
         httpOnly: false,
         secure: process.env.PRODUCTION === 'true',
         sameSite: process.env.PRODUCTION === 'true' ? 'none' : 'lax',
-        domain: process.env.PRODUCTION === 'true' ? `.${  process.env.DOMAIN}` : undefined,
+        domain: process.env.PRODUCTION === 'true' ? `.${process.env.DOMAIN}` : undefined,
     });
     res.json({token: csrfToken});
 });
