@@ -1,6 +1,5 @@
-<div class="w-full h-full flex flex-col" [ngClass]="{
+<div class="w-full h-full flex flex-col items-center" [ngClass]="{
     'justify-center': posts.length === 0,
-    'items-center': posts.length === 0
     }">
     <div class="flex flex-col items-center gap-4 w-full">
         <h5 class="font-bold break-words">Durchsuche Posts nach Universitäten, Hochschulen, Titel oder Tags</h5>
@@ -13,14 +12,5 @@
         <p *ngIf="posts.length > 0">{{posts.length}} Suchergebnisse:</p>
     </div>
 
-    <div>
-        <a *ngFor="let post of posts"
-           routerLink="/post/{{post._id}}"
-           class="block my-5 border-1 border-white break-all">
-            <p>Autor: {{post.userId}}</p>
-            <p>Titel: {{post.title}}</p>
-            <p>Tags: {{post.tags}}</p>
-            <p>Content: {{post.content}}</p>
-        </a>
-    </div>
+    <app-post-preview [posts]=posts [loading]=loading class="w-full md:w-[70%]"></app-post-preview>
 </div>

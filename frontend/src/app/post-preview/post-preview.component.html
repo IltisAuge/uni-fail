@@ -1,10 +1,10 @@
 <!--If no posts are available-->
-<div *ngIf="!loading && posts.length === 0 && !error" class="text-center text-[var(--text-primary)] mt-6">
-    Es sind noch keine Posts online
+<div *ngIf="!loading && posts.length === 0" class="text-center text-[var(--text-primary)] mt-6">
+    Es wurden keine Posts gefunden.
 </div>
 <!-- Loop over posts -->
 <div *ngFor="let post of posts" class="bg-[var(--background-card)] rounded-2xl shadow-md p-4 mt-2 mb-3 border-2 border-[var(--border-color)] mx-auto flex items-start gap-4 cursor-pointer hover:opacity-80 transition-opacity duration-200"
-     [routerLink]="['/post', post._id]"> <div class="flex flex-col gap-5"> <!-- router link for the post-->
+     [routerLink]="['/post', post._id]">
     <!-- For small and medium screen sizes -->
     <div class="flex flex-col gap-5">
         <!-- Image and title in one line -->
@@ -16,9 +16,8 @@
         </div>
         <!-- Tags aligned horizontally -->
         <div *ngIf="post.tags.length > 0" class="flex flex-wrap gap-2 items-end">
-            <span *ngFor="let tag of getFirstThreeTags(post.tags)" class="bg-[var(--input-background)] border-1 border-[var(--border-color)] text-[var(--text-primary)] text-sm px-3 py-1 rounded-full w-fit">
-                {{ tag }}
-            </span>
+            <app-tag *ngFor="let tag of getFirstThreeTags(post.tags)" tag="{{tag}}">
+            </app-tag>
         </div>
         <!-- Content preview -->
         <p class="text-[var(--text-secondary)] mb-4 break-all">
@@ -26,9 +25,3 @@
         </p>
     </div>
 </div>
-
-
-
-
-
-

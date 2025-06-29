@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {TitleService} from '../services/title.service';
 import {environment} from '../../environments/environment';
-import {IPost} from '../post-preview/post-preview.component';
+import {Post, PostPreviewComponent} from '../post-preview/post-preview.component';
 
 @Component({
     selector: 'app-search',
@@ -14,17 +14,29 @@ import {IPost} from '../post-preview/post-preview.component';
         NgIf,
         NgClass,
         RouterLink,
+        PostPreviewComponent,
     ],
     templateUrl: './search.component.html',
     styleUrl: './search.component.css',
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
 
-    posts: IPost[] = [];
+    posts: Post[] = [];
+    loading = false;
 
     constructor(private titleService: TitleService,
-                private http: HttpClient) {
+                private http: HttpClient,
+                private route: ActivatedRoute) {
         this.titleService.setTitle('Suche');
+    }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe((params) => {
+            const query = params['q'];
+            if (query) {
+                this.runSearch(query);
+            }
+        });
     }
 
     runSearch(search: string) {
@@ -32,11 +44,13 @@ export class SearchComponent {
         if (search.length === 0) {
             return;
         }
-        this.http.get<{items: IPost[]}>(`${environment.apiBaseUrl}/post/search?q=${search}`, {
+        this.loading = true;
+        this.http.get<{items: Post[]}>(`${environment.apiBaseUrl}/post/search?q=${search}`, {
             withCredentials: true,
         }).subscribe({
             next: (resp) => {
                 this.posts = resp.items;
+                this.loading = false;
             },
             error: (error) => {
                 console.log('An error occurred while searching:', error);

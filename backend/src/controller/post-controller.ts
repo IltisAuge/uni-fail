@@ -1,27 +1,27 @@
 import dotenv from 'dotenv';
 import NodeCache from 'node-cache';
-import {PostModel} from '../schemata/schemata';
-import {IPost} from '../post.interface';
+import {PostModel} from '@/schemata/post-schema';
+import {Post} from '@/interfaces/post.interface';
 
 dotenv.config();
 
 const postCache = new NodeCache();
 
-export async function getPost(postId: string): Promise<IPost | undefined> {
-    const cachedPost = postCache.get(postId) as IPost | undefined;
+export async function getPost(postId: string): Promise<Post | undefined> {
+    const cachedPost = postCache.get(postId) as Post | undefined;
     if (cachedPost) {
         return cachedPost;
     }
     const post = await PostModel.findOne({ _id: postId }).exec();
     if (post) {
-        const plainPost = post.toObject() as IPost;
+        const plainPost = post.toObject() as Post;
         postCache.set(postId, plainPost);
         return plainPost;
     }
     return undefined;
 }
 
-export async function createPost(userId: string, title: string, content: string, tags: string[]): Promise<IPost> {
+export async function createPost(userId: string, title: string, content: string, tags: string[]): Promise<Post> {
     const date = new Date();
     const postId = crypto.randomUUID().toString();
     const postObject = {_id: postId, creationTime: date.toISOString(), userId, title, content, tags};
@@ -63,10 +63,33 @@ export async function getUniRankingMostVotes(limit: number): Promise<{_id: strin
         {
             $group: {
                 _id: '$tags',
-                totalUpvotes: { $sum: '$upvotes' },
+                totalUpvotes: { $sum: '$upVotes' },
             },
         },
         { $sort: { totalUpvotes: -1 } },
         { $limit: limit },
     ]);
+}
+
+export async function addVote(postId: string) {
+    const post = await getPost(postId);
+    if (!post) {
+        return undefined;
+    }
+    if (isNaN(post.upVotes)) {
+        post.upVotes = 1;
+    } else {
+        post.upVotes += 1;
+    }
+    postCache.set(postId, post);
+    console.log('add vote post:', post);
+    return PostModel.findOneAndUpdate(
+        {_id: postId},
+        {$set: {upVotes: post.upVotes}},
+        {
+            upsert: true,
+            new: true,  // return new/updated document
+            setDefaultsOnInsert: true,
+        },
+    ).exec();
 }

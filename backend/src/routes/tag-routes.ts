@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {TagsModel} from '../schemata/schemata';
+import {TagsModel} from '@/schemata/tags-schema';
 
 const tagRouter = Router();
 

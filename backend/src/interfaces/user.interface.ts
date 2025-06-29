@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
     _id: string;
     provider: string;
     email: string;
@@ -7,6 +7,7 @@ export interface IUser {
     displayName: string;
     avatarKey: string;
     isBlocked: boolean;
+    postVotes: string[];
     [key: string]: any;
 }
-export type IUserDocument = IUser & Document;
+export type UserDocument = User & Document;

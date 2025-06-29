@@ -8,7 +8,7 @@ export class GoogleLoginController extends LoginController {
 
     dirname = path.dirname(fileURLToPath(import.meta.url));
     keys = JSON.parse(
-        fs.readFileSync(path.resolve(this.dirname, '../google_client.json'), 'utf-8'),
+        fs.readFileSync(path.resolve(this.dirname, '../../google_client.json'), 'utf-8'),
     );
 
     getAuthURL() {

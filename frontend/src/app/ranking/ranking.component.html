@@ -1,9 +1,10 @@
-<div class="flex flex-col justify-center items-center">
+<div class="flex flex-col justify-center items-center w-full md:w-[80%] 3xl:w-[60%]">
     <h1 class="text-3xl mb-5 text-center">Rangliste</h1>
     <h3 class="text-xl mb-10 text-center text-wrap">Universitäten und Hochschulen mit den meisten Up-Votes</h3>
-    <div class="flex">
+    <div class="flex w-full">
         <div class="pedestal" #itemRef>
-            <div *ngIf="rankedUnis.length >= 2" class="pedestal-head">
+            <div *ngIf="rankedUnis.length >= 2" class="pedestal-head"
+                 routerLink="/search" [queryParams]="{ q: rankedUnis[1]._id }">
                 <p>{{ rankedUnis[1]._id }}</p>
                 <p>{{ rankedUnis[1].totalUpvotes }} Votes</p>
             </div>
@@ -12,7 +13,8 @@
             </div>
         </div>
         <div class="pedestal" #itemRef>
-            <div *ngIf="rankedUnis.length >= 1" class="pedestal-head">
+            <div *ngIf="rankedUnis.length >= 1" class="pedestal-head"
+                 routerLink="/search" [queryParams]="{ q: rankedUnis[0]._id }">
                 <p>{{ rankedUnis[0]._id }}</p>
                 <p>{{ rankedUnis[0].totalUpvotes }} Votes</p>
             </div>
@@ -21,7 +23,8 @@
             </div>
         </div>
         <div class="pedestal" #itemRef>
-            <div *ngIf="rankedUnis.length >= 3" class="pedestal-head">
+            <div *ngIf="rankedUnis.length >= 3" class="pedestal-head"
+                 routerLink="/search" [queryParams]="{ q: rankedUnis[2]._id }">
                 <p>{{ rankedUnis[2]._id }}</p>
                 <p>{{ rankedUnis[2].totalUpvotes }} Votes</p>
             </div>

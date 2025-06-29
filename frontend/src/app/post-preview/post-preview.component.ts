@@ -1,53 +1,32 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HttpClient} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {environment} from '../../environments/environment';
+import {TagComponent} from '../tag/tag.component';
 
-export interface IPost {
+export interface Post {
     _id: string;
     title: string;
     content: string;
     tags: string[];
     userId: string;
-    createdAt?: Date;
-    author?: string;
     userName?: string;
-    // for the evaluation, yet to be implemented
-    //upvotes?: number;
+    createdAt?: Date;
+    upVotes: number;
     //downvote?: number;
 }
 
 @Component({
     selector: 'app-post-preview',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, TagComponent],
     templateUrl: './post-preview.component.html',
     styleUrl: './post-preview.component.css',
 })
-export class PostPreviewComponent implements OnInit {
+export class PostPreviewComponent {
 
-    posts: IPost[] = [];
-    loading = true;
-    error = '';
-
-    constructor(private http: HttpClient) {
-    }
-
-    ngOnInit(): void {
-        this.http.get<IPost[]>(`${environment.apiBaseUrl}/post/get?filter=newest&max=10`,
-        ).subscribe({
-            next: (posts) => {
-                this.posts = posts;
-                this.loading = false;
-            },
-            error: (error) => {
-                this.error = 'Failed to load posts';
-                console.error('An error occurred while fetching posts for preview:', error);
-                this.loading = false;
-            },
-        });
-    }
+    @Input() loading = true;
+    @Input() posts: Post[] = [];
 
     /**
      * @return a shortened version of the post's content limited to 150 chars
@@ -61,11 +40,10 @@ export class PostPreviewComponent implements OnInit {
 
     getFirstThreeTags(tags: string[]): string[] {
         return tags ? tags.slice(0, 3)
-            .map((tag) => tag.replace('uni:', ''))
-            .sort((a, b) => b.length - a.length):[];
+            .sort((a, b) => b.length - a.length) : [];
     }
 
-    getPostImage(post: IPost): string {
+    getPostImage(post: Post): string {
         return `${environment.apiBaseUrl}/user/${post.userId}/avatar`;
     }
 }
