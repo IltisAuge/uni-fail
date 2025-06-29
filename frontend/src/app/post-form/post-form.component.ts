@@ -29,6 +29,7 @@ export class PostFormComponent {
     tags: ITag[] = [];
     displayedTags: ITag[] = [];
     selectedTags: ITag[] = [];
+    toManyRequests: boolean = false;
 
     constructor(
 		private fb: FormBuilder,
@@ -75,6 +76,9 @@ export class PostFormComponent {
                     await this.router.navigate([`/post/${resp.post._id}`]);
                 },
                 error: (error) => {
+                    if (error.status === 429) {
+                        this.toManyRequests = true;
+                    }
                     console.error('An error occurred while creating post:', error);
                 },
             });

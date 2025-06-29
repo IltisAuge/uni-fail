@@ -12,9 +12,9 @@
 		"start": "vite",
 		"eslint:ts": "eslint src/**/*.ts",
 		"eslint:ts:fix": "eslint src/**/*.ts --fix",
-        "analyse": "npm run eslint:ts",
-        "analyse:fix": "npm run eslint:ts:fix"
-    },
+		"analyse": "npm run eslint:ts",
+		"analyse:fix": "npm run eslint:ts:fix"
+	},
 	"dependencies": {
 		"aws-sdk": "^2.1692.0",
 		"cookie-parser": "^1.4.7",
@@ -22,6 +22,7 @@
 		"csurf": "^1.11.0",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
+		"express-rate-limit": "^7.5.1",
 		"express-session": "^1.18.1",
 		"google-auth-library": "^9.15.1",
 		"jwt-decode": "^4.0.0",

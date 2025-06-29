@@ -1,4 +1,5 @@
 import {Router} from 'express';
+import rateLimit from 'express-rate-limit';
 import {createPost, deletePost, getNewestPosts, getPost, getUserPosts} from '@/controller/post-controller';
 import {getUser} from '@/controller/user-controller';
 import {PostModel} from '@/schemata/post-schema';
@@ -14,6 +15,14 @@ postRouter.use((req, res, next) => {
     }
 
     next();
+});
+
+const requestLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 3,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests. Please try again later.',
 });
 
 postRouter.get('/get', (req, res) => {
@@ -96,7 +105,7 @@ postRouter.get('/:id', async (req, res) => {
 });
 
 
-postRouter.post('/create', async (req, res) => {
+postRouter.post('/create', requestLimiter, async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const tags = req.body.tags;
