@@ -47,7 +47,7 @@ userRouter.get('/:id/avatar', async (req, res) => {
         res.status(404).json({error: `User not found with id ${  userId}`});
         return;
     }
-    const avatarFilePath = `${path.resolve('./avatars')  }/${  user?.avatarKey}`;
+    const avatarFilePath = `${path.resolve('./avatars')  }/${user.avatarKey}`;
     res.status(200).sendFile(avatarFilePath);
 });
 

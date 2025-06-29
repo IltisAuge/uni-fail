@@ -136,7 +136,7 @@ async function completeAuthentication(userData: any, req: any, res: any) {
             isAdmin: false,
             displayName: randomDisplayName,
             avatarKey: avatarId,
-            postVotes: [],
+            votedPosts: [],
             isBlocked: false,
         };
         if (!await saveUser(user)) {

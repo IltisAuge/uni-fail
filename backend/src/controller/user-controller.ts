@@ -54,7 +54,7 @@ export async function getUser(userId: string): Promise<User | undefined> {
     if (cachedUser) {
         return cachedUser;
     }
-    const user = await UserModel.findOne({ _id: userId }).exec();
+    const user = await UserModel.findOne({ _id: userId }).lean().exec();
     if (user) {
         userCache.set(userId, user);
         return user;

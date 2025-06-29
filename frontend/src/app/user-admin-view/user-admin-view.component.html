@@ -4,7 +4,7 @@
     <p>E-Mail: {{email}}</p>
     <button class="button-red mt-5 w-fit" (click)="resetDisplayName()">Anzeigename zurücksetzen</button>
     <button *ngIf="!isBlocked; else unblockUserBtn" class="button-red mt-5 w-fit" (click)="setBlocked(true)">Benutzer sperren</button>
-    <button *ngIf="!isAdmin; else removeAdminBtn" class="button-red mt-5 w-fit" (click)="setAdmin(false)">Adminrechte hinzufügen</button>
+    <button *ngIf="!isAdmin; else removeAdminBtn" class="button-red mt-5 w-fit" (click)="setAdmin(true)">Adminrechte hinzufügen</button>
 </div>
 
 <ng-template #unblockUserBtn>
