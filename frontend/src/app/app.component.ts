@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
-            withCredentials: true
+            withCredentials: true,
         }).subscribe((res) => {
             console.log(res);
         });
