@@ -104,7 +104,7 @@ if (process.env.PRODUCTION === 'false') {
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as string;
         req.session.userId = '000000000';
-        res.status(302).send(`Mocked session with admin=${  isAdmin}`);
+        res.status(302).json({message: `Mocked session with admin=${  isAdmin}`});
     });
 } else {
     console.log('Not enabled /login/mock endpoint');
@@ -125,10 +125,11 @@ async function completeAuthentication(userData: any, req: any, res: any) {
             isAdmin: false,
             displayName: randomDisplayName,
             avatarKey: avatarId,
+            postVotes: ['testpost'],
             isBlocked: false,
         };
         if (!await saveUser(user)) {
-            res.status(500).send('Saving user failed!');
+            res.status(500).json({error: 'Saving user failed!'});
             return;
         }
     }

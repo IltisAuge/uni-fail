@@ -37,26 +37,24 @@
 
         <!--Tags-->
         <div *ngIf="post.tags.length > 0; else noTags" class="flex flex-wrap gap-2 mb-6">
-      <span *ngFor="let tag of post.tags"
-            class="bg-[var(--button-green)] text-[var(--button-green-text)] text-xs font-semibold px-2 py-1 rounded-full">
-        {{ tag }}
-      </span>
+            <div *ngIf="post.tags.length > 0" class="flex flex-wrap gap-2 items-end">
+                <app-tag *ngFor="let tag of post.tags" tag="{{tag}}">
+                </app-tag>
+            </div>
         </div>
         <ng-template #noTags>
             <p class="text-sm text-[var(--text-secondary)]">Keine Tags vorhanden.</p>
         </ng-template>
-
-
 
         <div class="flex justify-between items-center text-sm mt-6 pt-4">
             <button (click)="deletePost()" class="delete-button font-bold py-2 px-4 rounded">
                 Post löschen
                 <span class="delete-button__inner">
                     <span class="delete-button__blobs">
-                      <span class="delete-button__blob"></span>
-                      <span class="delete-button__blob"></span>
-                      <span class="delete-button__blob"></span>
-                      <span class="delete-button__blob"></span>
+                        <span class="delete-button__blob"></span>
+                        <span class="delete-button__blob"></span>
+                        <span class="delete-button__blob"></span>
+                        <span class="delete-button__blob"></span>
                     </span>
                 </span>
             </button>
@@ -71,8 +69,13 @@
             </svg>
         </div>
 
-    <div *ngIf="!loading && !post && !error" class="text-center text-[var(--text-secondary)] mt-8">
-        Dieser Post konnte nicht gefunden werden.
-    </div>
+        <div *ngIf="post">
+            <p>Upvotes: {{post.upVotes}}</p>
+            <button (click)="addUpVote()">UpVote</button>
+        </div>
+
+        <div *ngIf="!loading && !post && !error" class="text-center text-[var(--text-secondary)] mt-8">
+            Dieser Post konnte nicht gefunden werden.
+        </div>
     </div>
 </div>

@@ -3,6 +3,7 @@ import path from 'node:path';
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
+import csrf from 'csurf';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import loginRouter from './routes/login-routes';
@@ -13,6 +14,7 @@ import {downloadAllAvatars} from './s3';
 import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
 import rankingRouter from './routes/ranking-routes';
 import tagRouter from './routes/tag-routes';
+import votingRouter from '@/routes/voting-routes';
 
 dotenv.config();
 
@@ -45,13 +47,14 @@ server.use(cors({
     origin: process.env.HOST,
     credentials: true,
 }));
-//server.use(csrf({ cookie: true }));
+server.use(csrf({ cookie: true }));
 server.use('/login', loginRouter);
 server.use('/post', postRouter);
 server.use('/user', userRouter);
 server.use('/admin', adminRouter);
 server.use('/ranking', rankingRouter);
 server.use('/tag', tagRouter);
+server.use('/vote', votingRouter);
 server.get('/csrf-token', (req, res) => {
     const csrfToken = req.csrfToken();
     res.cookie('XSRF-TOKEN', csrfToken, {

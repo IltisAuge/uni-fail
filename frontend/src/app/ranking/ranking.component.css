@@ -3,6 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    width: 100%;
 }
 
 .pedestal {
@@ -15,10 +16,17 @@
     font-weight: bold;
     padding: 0 1rem;
     width: 100%;
+    cursor: pointer;
+    transition: color 300ms;
+}
+
+.pedestal-head:hover {
+    color: var(--text-hover);
 }
 
 .pedestal-head p {
     width: 100%;
+    white-space: wrap;
 }
 
 .pedestal-body {

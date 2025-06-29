@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import { HttpClient } from '@angular/common/http'; // we use HTTP CLient directly
-import { environment } from '../../environments/environment';
-import { IPost } from '../post-preview/post-preview.component';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {Post} from '../post-preview/post-preview.component';
+import {TagComponent} from '../tag/tag.component';
 
 @Component({
     selector: 'app-post',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TagComponent],
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit {
 
-    post: IPost | undefined;
+    post: Post | undefined;
     loading: boolean = true;
     error: string | null = null;
 
@@ -42,7 +43,7 @@ export class PostComponent implements OnInit {
 
 
         //get Backend end point
-        this.http.get<IPost>(`${environment.apiBaseUrl}/post/${id}`, {withCredentials:true}).subscribe({
+        this.http.get<Post>(`${environment.apiBaseUrl}/post/${id}`, {withCredentials:true}).subscribe({
             next: (data) => {
                 this.post = data;
                 this.loading = false;
@@ -56,7 +57,7 @@ export class PostComponent implements OnInit {
         });
     }
 
-    getPostImage(post: IPost): string {
+    getPostImage(post: Post): string {
         return `${environment.apiBaseUrl}/user/${post.userId}/avatar`;
     }
 
@@ -88,5 +89,23 @@ export class PostComponent implements OnInit {
     //return button
     goBack(): void {
         this.router.navigate(['/']);
+    }
+
+    addUpVote() {
+        if (!this.post) {
+            return;
+        }
+        this.http.post<{post: Post}>(`${environment.apiBaseUrl}/vote/add`, {
+            postId: this.post._id,
+        }, {
+            withCredentials: true,
+        }).subscribe({
+            next: (resp) => {
+                this.post = resp.post;
+            },
+            error: (error) => {
+                console.error('An error occurred while adding up-vote to post:', error);
+            },
+        });
     }
 }

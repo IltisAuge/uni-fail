@@ -1,6 +1,7 @@
 import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {isPlatformBrowser, NgIf} from '@angular/common';
+import {RouterLink} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../services/title.service';
 
@@ -9,6 +10,7 @@ import {TitleService} from '../services/title.service';
     standalone: true,
     imports: [
         NgIf,
+        RouterLink,
     ],
     templateUrl: './ranking.component.html',
     styleUrl: './ranking.component.css',

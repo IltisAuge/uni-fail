@@ -1,7 +1,7 @@
 import {Router} from 'express';
-import {createPost, deletePost, getNewestPosts, getPost} from '../controller/post-controller';
-import {getUser} from '../controller/user-controller';
-import {PostModel} from '../schemata/schemata';
+import {createPost, deletePost, getNewestPosts, getPost} from '@/controller/post-controller';
+import {getUser} from '@/controller/user-controller';
+import {PostModel} from '@/schemata/post-schema';
 
 const postRouter = Router();
 
@@ -44,7 +44,7 @@ postRouter.get('/search', async (req, res) => {
     }
     const posts = await PostModel.find({
         $or: [
-            // Titel contains the search query (case-insensitive)
+            // Title contains the search query (case-insensitive)
             { title: { $regex: query, $options: 'i' } },
             // A tag contains the search query (case-insensitive)
             { tags: { $elemMatch: { $regex: query, $options: 'i' } } },
