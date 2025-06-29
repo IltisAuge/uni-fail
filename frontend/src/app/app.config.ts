@@ -16,8 +16,11 @@ export const appConfig: ApplicationConfig = {
         provideZoneChangeDetection({eventCoalescing: true}),
         provideRouter(routes),
         provideClientHydration(),
-        provideHttpClient(
-            withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN' }),
+        provideHttpClient(withXsrfConfiguration({
+                cookieName: 'XSRF-TOKEN',
+                headerName: 'X-XSRF-TOKEN',
+                crossOrigin: true,
+            } as any),
             withInterceptors([logCsrfInterceptor]),
         ),
         provideAnimations(),

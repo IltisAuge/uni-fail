@@ -15,7 +15,8 @@ export default function bootstrap() {
             provideHttpClient(withXsrfConfiguration({
                 cookieName: 'XSRF-TOKEN',
                 headerName: 'X-XSRF-TOKEN',
-            })),
+                crossOrigin: true,
+            } as any)),
             provideRouter(routes),
             provideZoneChangeDetection({eventCoalescing: true}),
             provideAnimations(),
