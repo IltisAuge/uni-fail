@@ -80,7 +80,7 @@ async function updateUserField(userId: string, field: string, value: any) {
 }
 
 export async function addVotedPost(_id: string, postId: string) {
-    console.log(`addVotedPost: _id=${  _id  } postId=${  postId}`);
+    console.log(`addVotedPost: _id=${_id} postId=${postId}`);
     const user = await getUser(_id);
     console.log(user);
     if (!user) {
@@ -92,7 +92,7 @@ export async function addVotedPost(_id: string, postId: string) {
 }
 
 export async function removeVotedPost(_id: string, postId: string) {
-    console.log(`removeVotedPost: _id=${  _id  } postId=${  postId}`);
+    console.log(`removeVotedPost: _id=${_id} postId=${postId}`);
     const user = await getUser(_id);
     console.log(user);
     if (!user) {

@@ -1,12 +1,12 @@
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgIf} from '@angular/common';
-import {filter} from 'rxjs';
+import {filter, Subject, Subscription, takeUntil} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {AuthService} from '../services/auth.service';
-import {TitleService} from '../services/title.service';
-import {User} from '../user.interface';
+import {AuthService} from '../../services/auth.service';
+import {TitleService} from '../../services/title.service';
+import {User} from '../../interfaces/user.interface';
 
 @Component({
     selector: 'app-user-admin-view',
@@ -17,8 +17,9 @@ import {User} from '../user.interface';
     templateUrl: './user-admin-view.component.html',
     styleUrl: './user-admin-view.component.css',
 })
-export class UserAdminViewComponent implements OnInit {
+export class UserAdminViewComponent implements OnInit, OnDestroy {
 
+    private destroy$ = new Subject<void>();
     userId: string | undefined;
     displayName: string = '';
     provider: string = '';
@@ -35,31 +36,36 @@ export class UserAdminViewComponent implements OnInit {
     ngOnInit() {
         this.authService.getLoggedInUser().pipe(
             filter((state) => state.success),
+            takeUntil(this.destroy$),
         ).subscribe((state) => {
             const user = state.user;
             if (!user || !user.isAdmin) {
                 return;
             }
-            this.route.params.subscribe((params) => {
-                console.log(params);
-                if (!params['id']) {
-                    return;
-                }
-                this.userId = params['id'];
-                console.log('userId=', this.userId);
-                this.http.get<{ user: User }>(`${environment.apiBaseUrl}/admin/user/${this.userId}`, {
-                    withCredentials: true,
-                }).subscribe({
-                    next: (resp) => {
-                        console.log('Set userdata to: ', resp.user);
-                        this.setUserData(resp.user);
-                    },
-                    error: (error) => {
-                        console.error('An error occurred while fetching user information:', error);
-                    },
+            this.route.params
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((params) => {
+                    if (!params['id']) {
+                        return;
+                    }
+                    this.userId = params['id'];
+                    this.http.get<{ user: User }>(`${environment.apiBaseUrl}/admin/user/${this.userId}`, {
+                        withCredentials: true,
+                    }).pipe(takeUntil(this.destroy$)).subscribe({
+                        next: (resp) => {
+                            this.setUserData(resp.user);
+                        },
+                        error: (error) => {
+                            console.error('An error occurred while fetching user information:', error);
+                        },
+                    });
                 });
-            });
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     setUserData(userData: any) {
@@ -68,7 +74,7 @@ export class UserAdminViewComponent implements OnInit {
         this.email = userData.email;
         this.isBlocked = userData.isBlocked;
         this.isAdmin = userData.isAdmin;
-        this.titleService.setTitle(`Benutzer ${  this.displayName}`);
+        this.titleService.setTitle(`Benutzer ${this.displayName}`);
     }
 
     resetDisplayName() {

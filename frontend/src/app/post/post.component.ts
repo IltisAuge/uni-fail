@@ -1,16 +1,16 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {filter, firstValueFrom} from 'rxjs';
+import {filter, firstValueFrom, Subject, takeUntil} from 'rxjs';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faArrowLeft, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
 import {environment} from '../../environments/environment';
 import {Post} from '../post-preview/post-preview.component';
 import {TagComponent} from '../tag/tag.component';
 import {NotFoundComponent} from '../not-found/not-found.component';
-import {AuthService} from '../services/auth.service';
-import {User} from '../user.interface';
+import {AuthService} from '../../services/auth.service';
+import {User} from '../../interfaces/user.interface';
 
 @Component({
     selector: 'app-post',
@@ -19,11 +19,12 @@ import {User} from '../user.interface';
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.css'],
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnDestroy {
 
     protected readonly faArrowLeft = faArrowLeft;
     protected readonly faThumbsUp = faThumbsUp;
     @ViewChild('deleteDialog') avatarDialogRef!: ElementRef<HTMLDialogElement>;
+    private destroy$ = new Subject<void>();
     isModalOpen = false;
     user: User | undefined;
     isLoggedIn: boolean = false;
@@ -42,23 +43,30 @@ export class PostComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.route.paramMap.subscribe((params) => {
-            const postId = params.get('id');
-            if (postId) {
-                this.fetchPostDetails(postId);
-            } else {
-                this.error = 'Post-ID in der URL fehlt.';
-                this.loading = false;
-            }
-        });
+        this.route.paramMap
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((params) => {
+                const postId = params.get('id');
+                if (postId) {
+                    this.fetchPostDetails(postId);
+                } else {
+                    this.error = 'Post-ID in der URL fehlt.';
+                    this.loading = false;
+                }
+            });
         this.authService.getLoggedInUser().pipe(
             filter((state) => state.success),
+            takeUntil(this.destroy$),
         ).subscribe((state) => {
-            console.log('user', state.user);
             this.isLoggedIn = !!state.user;
             this.user = state.user;
             this.isAdmin = (state.user && state.user.isAdmin) || false;
         });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     fetchPostDetails(id: string): void {
@@ -142,9 +150,9 @@ export class PostComponent implements OnInit {
     removeUpVote() {
         if (this.post) {
             this.postVoteChange('remove').then(() => {
-                console.log(`set hasVoted from ${  this.hasVoted}`);
+                console.log(`set hasVoted from ${this.hasVoted}`);
                 this.hasVoted = false;
-                console.log(`set hasVoted to ${  this.hasVoted}`);
+                console.log(`set hasVoted to ${this.hasVoted}`);
                 return false;
             }).catch((error) => {
                 console.log('An error occurred while posting vote change:', error);
@@ -155,9 +163,9 @@ export class PostComponent implements OnInit {
     addUpVote() {
         if (this.post) {
             this.postVoteChange('add').then(() => {
-                console.log(`set hasVoted from ${  this.hasVoted}`);
+                console.log(`set hasVoted from ${this.hasVoted}`);
                 this.hasVoted = true;
-                console.log(`set hasVoted to ${  this.hasVoted}`);
+                console.log(`set hasVoted to ${this.hasVoted}`);
                 return true;
             }).catch((error) => {
                 console.log('An error occurred while posting vote change:', error);

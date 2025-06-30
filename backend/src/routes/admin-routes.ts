@@ -11,7 +11,7 @@ adminRouter.get('/user/:id', async (req, res) => {
     }
     const user = await getUser(req.params.id);
     if (!user) {
-        res.status(404).json({error:`No user found with id ${  req.params.id}`});
+        res.status(404).json({error:`No user found with id ${req.params.id}`});
         return;
     }
     res.json({user});

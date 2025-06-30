@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {isPlatformBrowser, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {environment} from '../../environments/environment';
-import {TitleService} from '../services/title.service';
+import {TitleService} from '../../services/title.service';
 
 @Component({
     selector: 'app-ranking',
@@ -49,7 +49,6 @@ export class RankingComponent implements OnInit {
 
             this.itemRefs.forEach((el) => {
                 const width = el.nativeElement.scrollWidth;
-                console.log(width);
                 if (width > maxWidth) {
                     maxWidth = width;
                 }

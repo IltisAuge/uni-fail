@@ -41,7 +41,7 @@ server.use(session({
         secure: process.env.PRODUCTION == 'true',
         httpOnly: true,
         sameSite: process.env.PRODUCTION == 'true' ? 'none' : undefined,
-        domain: process.env.PRODUCTION == 'true' ? `.${  process.env.DOMAIN}` : undefined,
+        domain: process.env.PRODUCTION == 'true' ? `.${process.env.DOMAIN}` : undefined,
     },
 }));
 server.use(cors({
@@ -76,7 +76,7 @@ server.get('/me', async (req, res) => {
         res.json({user});
         return;
     }
-    res.status(404).json({error:`User not found. Id=${  req.session.userId}`});
+    res.status(404).json({error:`User not found. Id=${req.session.userId}`});
 });
 server.get('/avatars', (req, res) => {
     if (!fs.existsSync('./avatars')) {

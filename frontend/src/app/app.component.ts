@@ -18,21 +18,17 @@ export class AppComponent implements OnInit {
 
     protected readonly faCircleInfo = faCircleInfo;
 
-    title = 'frontend';
     theme: string = 'light';
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         private http: HttpClient) {
-        console.log(`ENVIRONMENT: production=${  environment.production  } apiBaseUrl=${  environment.apiBaseUrl}`);
     }
 
     ngOnInit() {
         this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
             withCredentials: true,
-        }).subscribe((res) => {
-            console.log(res);
-        });
+        }).subscribe();
         if (isPlatformBrowser(this.platformId)) {
             const storedTheme = localStorage.getItem('theme');
             if (storedTheme) {

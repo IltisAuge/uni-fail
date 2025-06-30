@@ -134,7 +134,7 @@ postRouter.delete('/delete/:id', async (req, res) => {
     }
     const post = await getPost(postId);
     if (!post) {
-        res.status(404).json({error:`Post with id '${  postId  }' not found`});
+        res.status(404).json({error:`Post with id '${postId}' not found`});
         return;
     }
     if (post.userId !== userId && !user.isAdmin) {

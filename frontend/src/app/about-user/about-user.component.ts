@@ -1,12 +1,12 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
-import {filter} from 'rxjs';
+import {filter, Subject, takeUntil} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {AuthService} from '../services/auth.service';
-import {TitleService} from '../services/title.service';
-import {User} from '../user.interface';
+import {AuthService} from '../../services/auth.service';
+import {TitleService} from '../../services/title.service';
+import {User} from '../../interfaces/user.interface';
 
 @Component({
     selector: 'app-about-user',
@@ -22,8 +22,9 @@ import {User} from '../user.interface';
     templateUrl: './about-user.component.html',
     styleUrl: './about-user.component.css',
 })
-export class AboutUserComponent implements OnInit {
+export class AboutUserComponent implements OnInit, OnDestroy {
 
+    private destroy$ = new Subject<void>();
     name: string = '';
     email: string = '';
     provider: string = '';
@@ -38,8 +39,7 @@ export class AboutUserComponent implements OnInit {
     isDisplayNameAvailable: boolean = true;
     @ViewChild('avatarDialog') avatarDialogRef!: ElementRef<HTMLDialogElement>;
 
-    constructor(
-                private fb: FormBuilder,
+    constructor(private fb: FormBuilder,
                 private http: HttpClient,
                 private authService: AuthService,
                 private titleService: TitleService) {
@@ -52,6 +52,7 @@ export class AboutUserComponent implements OnInit {
     ngOnInit() {
         this.authService.getLoggedInUser().pipe(
             filter((state) => state.success),
+            takeUntil(this.destroy$),
         ).subscribe((state) => {
             if (!state || !state.success) {
                 this.name = 'Could not check authentication status! Make sure the API server is running correctly!';
@@ -64,7 +65,7 @@ export class AboutUserComponent implements OnInit {
                 this.email = user.email;
                 this.provider = user.provider;
                 this.displayName = user.displayName;
-                this.avatarURL = `${environment.apiBaseUrl  }/avatar/${  user.avatarKey}`;
+                this.avatarURL = `${environment.apiBaseUrl}/avatar/${user.avatarKey}`;
             }
         });
         this.http.get(`${environment.apiBaseUrl}/avatars`, {
@@ -73,13 +74,18 @@ export class AboutUserComponent implements OnInit {
             next: (resp) => {
                 this.avatarIds = resp as string[];
                 for (const id in this.avatarIds) {
-                    this.avatarURLs.push(`${environment.apiBaseUrl  }/avatar/${  this.avatarIds[id]}`);
+                    this.avatarURLs.push(`${environment.apiBaseUrl}/avatar/${this.avatarIds[id]}`);
                 }
             },
             error: (error)=> {
                 console.error('An error occurred while loading avatars:', error);
             },
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     setDisplayName() {
@@ -116,7 +122,7 @@ export class AboutUserComponent implements OnInit {
 
     acceptAvatar() {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
-        this.http.post<{user: User}>(`${environment.apiBaseUrl  }/user/set-avatar`, {
+        this.http.post<{user: User}>(`${environment.apiBaseUrl}/user/set-avatar`, {
             avatarId,
         },
         {

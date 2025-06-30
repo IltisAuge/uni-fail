@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, catchError, Observable, of, shareReplay, switchMap, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {User} from '../user.interface';
+import {environment} from '../environments/environment';
+import {User} from '../interfaces/user.interface';
 
 interface UserState {
     success: boolean;

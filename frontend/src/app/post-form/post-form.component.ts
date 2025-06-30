@@ -4,13 +4,9 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
-import {TitleService} from '../services/title.service';
-import {Post} from '../post-preview/post-preview.component';
-
-interface ITag {
-    name: string;
-    displayName: string;
-}
+import {TitleService} from '../../services/title.service';
+import {Post} from '../../interfaces/post.interface';
+import {Tag} from '../../interfaces/tag.interface';
 
 @Component({
     selector: 'app-post-form',
@@ -26,9 +22,9 @@ export class PostFormComponent {
     @ViewChild('tagsDialog') tagsDialogRef!: ElementRef<HTMLDialogElement>;
     postForm: FormGroup;
     isModalOpen: boolean = false;
-    tags: ITag[] = [];
-    displayedTags: ITag[] = [];
-    selectedTags: ITag[] = [];
+    tags: Tag[] = [];
+    displayedTags: Tag[] = [];
+    selectedTags: Tag[] = [];
     toManyRequests: boolean = false;
 
     constructor(
@@ -72,7 +68,6 @@ export class PostFormComponent {
                     withCredentials: true,
                 }).subscribe({
                 next: async (resp) => {
-                    // Redirect to post view
                     await this.router.navigate([`/post/${resp.post._id}`]);
                 },
                 error: (error) => {
@@ -98,7 +93,7 @@ export class PostFormComponent {
 
     filterTags(filter: string) {
         filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        let filtered: ITag[];
+        let filtered: Tag[];
         if (filter.length === 0) {
             const uniTags = this.tags.filter((tag) => tag.name.startsWith('uni:') && !this.selectedTags.includes(tag));
             const hashTags = this.tags.filter((tag) => tag.name.startsWith('#') && !this.selectedTags.includes(tag));
@@ -117,7 +112,7 @@ export class PostFormComponent {
         this.displayedTags = filtered;
     }
 
-    toggleTagSelection(tag: ITag) {
+    toggleTagSelection(tag: Tag) {
         if (this.selectedTags.includes(tag)) {
             this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
             return;

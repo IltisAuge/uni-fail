@@ -3,18 +3,7 @@ import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TagComponent} from '../tag/tag.component';
-
-export interface Post {
-    _id: string;
-    title: string;
-    content: string;
-    tags: string[];
-    userId: string;
-    userName: string;
-    createdAt: string;
-    upVotes: number;
-    //downvote?: number;
-}
+import {Post} from '../../interfaces/post.interface';
 
 @Component({
     selector: 'app-post-preview',
@@ -34,7 +23,7 @@ export class PostPreviewComponent {
     getPreview(content: string): string {
         const maxLength = 150;
         return content.length > maxLength
-            ? `${content.slice(0, maxLength)  }...`
+            ? `${content.slice(0, maxLength)}...`
             :content;
     }
 

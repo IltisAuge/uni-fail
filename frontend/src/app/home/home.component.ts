@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Post, PostPreviewComponent} from '../post-preview/post-preview.component';
-import {TitleService} from '../services/title.service';
+import {PostPreviewComponent} from '../post-preview/post-preview.component';
+import {TitleService} from '../../services/title.service';
 import {environment} from '../../environments/environment';
+import {Post} from '../../interfaces/post.interface';
 
 @Component({
     selector: 'app-home',

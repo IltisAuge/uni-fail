@@ -35,7 +35,7 @@ loginRouter.get('/', (req, res) => {
     req.session.loginReturnUrl = loginReturnUrl;
     const sid = req.cookies['connect.sid'].split('.')[0].replace('s%3A', '');
     console.log(`start login process: session=${JSON.stringify(req.session)}`);
-    console.log(`sid=${  sid}`);
+    console.log(`sid=${sid}`);
     res.redirect(url);
 });
 
@@ -63,7 +63,7 @@ loginRouter.get('/google-auth-return', (req, res) => {
 loginRouter.get('/microsoft-auth-return', (req, res) => {
     const authCode = req.query.code as string;
     const sid = req.cookies['connect.sid'].split('.')[0].replace('s%3A', '');
-    console.log(`microsoft auth return sid=${  sid}`);
+    console.log(`microsoft auth return sid=${sid}`);
     console.log(`microsoft auth return: session=${JSON.stringify(req.session)}`);
     if (authCode == undefined) {
         res.send('No authCode');
@@ -115,7 +115,7 @@ if (process.env.PRODUCTION === 'false') {
     loginRouter.get('/mock', (req, res) => {
         const isAdmin = req.query.admin as string;
         req.session.userId = '000000000';
-        res.status(302).json({message: `Mocked session with admin=${  isAdmin}`});
+        res.status(302).json({message: `Mocked session with admin=${isAdmin}`});
     });
 } else {
     console.log('Not enabled /login/mock endpoint');

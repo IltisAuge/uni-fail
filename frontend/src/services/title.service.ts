@@ -10,6 +10,6 @@ export class TitleService {
     }
 
     setTitle(title: string) {
-        this.titleService.setTitle(`${title  } | Unifail`);
+        this.titleService.setTitle(`${title} | Unifail`);
     }
 }

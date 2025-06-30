@@ -25,6 +25,6 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'user/:id', component: UserAdminViewComponent, canActivate: [accessGuard] },
     { path: 'access-denied', component:  AccessDeniedComponent },
-    { path: 'post/:id', component: PostComponent },
+    { path: 'post/:id', component: PostComponent, canActivate: [accessGuard] },
     { path: '**', component: NotFoundComponent },
 ];

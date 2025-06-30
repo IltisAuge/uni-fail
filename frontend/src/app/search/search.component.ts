@@ -1,26 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {TitleService} from '../services/title.service';
+import {NgClass, NgIf} from '@angular/common';
+import {ActivatedRoute} from '@angular/router';
+import {Subject, takeUntil} from 'rxjs';
+import {TitleService} from '../../services/title.service';
 import {environment} from '../../environments/environment';
-import {Post, PostPreviewComponent} from '../post-preview/post-preview.component';
+import {PostPreviewComponent} from '../post-preview/post-preview.component';
+import {Post} from '../../interfaces/post.interface';
 
 @Component({
     selector: 'app-search',
     standalone: true,
     imports: [
-        NgForOf,
         NgIf,
         NgClass,
-        RouterLink,
         PostPreviewComponent,
     ],
     templateUrl: './search.component.html',
     styleUrl: './search.component.css',
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
 
+    private destroy$ = new Subject<void>();
     posts: Post[] = [];
     loading = false;
 
@@ -31,12 +32,17 @@ export class SearchComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe((params) => {
+        this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
             const query = params['q'];
             if (query) {
                 this.runSearch(query);
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     runSearch(search: string) {

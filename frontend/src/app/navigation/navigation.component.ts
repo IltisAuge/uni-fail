@@ -2,7 +2,7 @@ import {Component, HostListener, Inject, OnInit, PLATFORM_ID} from '@angular/cor
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {filter} from 'rxjs';
+import {filter, Subject, takeUntil} from 'rxjs';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {
     faBars,
@@ -17,7 +17,7 @@ import {
 import {HttpClient} from '@angular/common/http';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {environment} from '../../environments/environment';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
     selector: 'app-navigation',
@@ -54,6 +54,8 @@ export class NavigationComponent implements OnInit {
     protected readonly faBars = faBars;
     protected readonly faFolder = faFolder;
 
+    private destroy$ = new Subject<void>();
+
     isLoggedIn: boolean = false;
     menuOpen = false;
     isMobile = false;
@@ -68,6 +70,7 @@ export class NavigationComponent implements OnInit {
     ngOnInit(): void {
         this.authService.getLoggedInUser().pipe(
             filter((state) => state.success),
+            takeUntil(this.destroy$),
         ).subscribe((state) => {
             this.isLoggedIn = !!state.user;
         });
@@ -77,6 +80,11 @@ export class NavigationComponent implements OnInit {
                 this.menuOpen = false;
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     @HostListener('window:resize', [])
@@ -98,7 +106,7 @@ export class NavigationComponent implements OnInit {
         if (this.isMobile) {
             this.menuOpen = false;
         }
-        this.http.post(`${environment.apiBaseUrl  }/logout`, { },
+        this.http.post(`${environment.apiBaseUrl}/logout`, { },
             {
                 observe: 'response', withCredentials: true,
             }).subscribe({

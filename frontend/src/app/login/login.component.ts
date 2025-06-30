@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
-import {TitleService} from '../services/title.service';
+import {TitleService} from '../../services/title.service';
 
 @Component({
     selector: 'app-login',
@@ -22,7 +22,6 @@ export class LoginComponent {
                 private router: Router) {
         this.titleService.setTitle('Anmelden');
         this.previousUrl = this.router.getCurrentNavigation()?.extras.state?.['from'] ?? '/';
-        console.log(`previousUrl: ${this.previousUrl}`);
     }
 
     openLoginPage(provider: string) {

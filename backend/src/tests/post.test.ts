@@ -70,7 +70,7 @@ describe('Test /post/* endpoints', () => {
         await testSession
             .get('/login/mock?admin=false')
             .expect(302);
-        await testSession.delete(`/post/delete/${  testPostId}`)
+        await testSession.delete(`/post/delete/${testPostId}`)
             .send().expect(200);
     });
 

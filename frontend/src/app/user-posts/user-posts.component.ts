@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {filter} from 'rxjs';
-import {TitleService} from '../services/title.service';
-import {Post, PostPreviewComponent} from '../post-preview/post-preview.component';
+import {filter, Subject, takeUntil} from 'rxjs';
+import {TitleService} from '../../services/title.service';
+import {PostPreviewComponent} from '../post-preview/post-preview.component';
 import {environment} from '../../environments/environment';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../../services/auth.service';
+import {Post} from '../../interfaces/post.interface';
 
 @Component({
     selector: 'app-user-posts',
@@ -15,25 +16,32 @@ import {AuthService} from '../services/auth.service';
     templateUrl: './user-posts.component.html',
     styleUrl: './user-posts.component.css',
 })
-export class UserPostsComponent implements OnInit {
+export class UserPostsComponent implements OnInit, OnDestroy {
 
+    private destroy$ = new Subject<void>();
     posts: Post[] = [];
     loading: boolean = false;
 
     constructor(private titleService: TitleService,
                 private http: HttpClient,
                 private authService: AuthService) {
-        titleService.setTitle('Deine Posts');
+        this.titleService.setTitle('Deine Posts');
     }
 
     ngOnInit() {
         this.authService.getLoggedInUser().pipe(
             filter((state) => state.success),
+            takeUntil(this.destroy$),
         ).subscribe((state) => {
             if (state.user) {
                 this.loadPosts();
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     loadPosts() {

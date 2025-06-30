@@ -26,6 +26,7 @@ export default [
             promise: promisePlugin,
         },
         rules: {
+            'template-curly-spacing': ['error', 'never'],
             semi: ['error', 'always'],
             quotes: ['error', 'single', { avoidEscape: true }],
             indent: ['error', 4],
