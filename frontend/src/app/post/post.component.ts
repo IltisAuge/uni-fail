@@ -6,7 +6,7 @@ import {filter, firstValueFrom, Subject, takeUntil} from 'rxjs';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faArrowLeft, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
 import {environment} from '../../environments/environment';
-import {Post} from '../post-preview/post-preview.component';
+import {Post} from '../../interfaces/post.interface';
 import {TagComponent} from '../tag/tag.component';
 import {NotFoundComponent} from '../not-found/not-found.component';
 import {AuthService} from '../../services/auth.service';
