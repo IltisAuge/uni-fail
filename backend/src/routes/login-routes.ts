@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import {getRandomDisplayName, getUser, saveUser} from '../controller/user-controller';
+import {getRandomDisplayName, getUser, saveUser} from '@/controller/user-controller';
 import {GoogleLoginController} from '@/login-providers/google-login';
 import {MicrosoftLoginController} from '@/login-providers/microsoft-login';
 
@@ -24,7 +24,6 @@ loginRouter.get('/', (req, res) => {
         return;
     }
     const loginReturnUrl = (req.query.returnUrl ?? '/') as string;
-    console.log(`loginReturnUrl=${loginReturnUrl}`);
     let url = loginController.getAuthURL();
     const state = crypto.randomUUID().toString();
     const nonce = crypto.randomUUID().toString();
@@ -33,9 +32,6 @@ loginRouter.get('/', (req, res) => {
     req.session.oAuthState = state;
     req.session.oAuthNonce = nonce;
     req.session.loginReturnUrl = loginReturnUrl;
-    const sid = req.cookies['connect.sid'].split('.')[0].replace('s%3A', '');
-    console.log(`start login process: session=${JSON.stringify(req.session)}`);
-    console.log(`sid=${sid}`);
     res.redirect(url);
 });
 
@@ -145,9 +141,7 @@ async function completeAuthentication(userData: any, req: any, res: any) {
         }
     }
     req.session.userId = user._id;
-    console.log(req.session.loginReturnUrl);
     const returnUrl = (req.session.loginReturnUrl ?? '/') as string;
-    console.log(`returnUrl=${returnUrl}`);
     res.redirect(process.env.AUTH_RETURN_URL + returnUrl);
 }
 

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import {getUser, isDisplayNameAvailable, setAvatarKey, setDisplayName} from '../controller/user-controller';
+import {getUser, isDisplayNameAvailable, setAvatarKey, setDisplayName} from '@/controller/user-controller';
 
 dotenv.config();
 
@@ -70,7 +70,7 @@ userRouter.post('/set-avatar', async (req, res) => {
         if (!user) {
             throw Error('User object is undefined');
         }
-        res.status(200).json({user});
+        res.status(200).json({user: user});
         return user;
     }).catch((error) => {
         res.status(500).send();

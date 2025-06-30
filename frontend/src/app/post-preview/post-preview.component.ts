@@ -33,6 +33,6 @@ export class PostPreviewComponent {
     }
 
     getPostImage(post: Post): string {
-        return `${environment.apiBaseUrl}/user/${post.userId}/avatar`;
+        return `${environment.apiBaseUrl}/user/${post.userId}/avatar?ts=${Date.now()}`;
     }
 }
