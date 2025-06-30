@@ -70,7 +70,7 @@ userRouter.post('/set-avatar', async (req, res) => {
         if (!user) {
             throw Error('User object is undefined');
         }
-        res.status(200).json({user: user});
+        res.status(200).json({user});
         return user;
     }).catch((error) => {
         res.status(500).send();
