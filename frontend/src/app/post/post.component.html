@@ -46,7 +46,7 @@
                 </div>
 
                 <ng-template #userNameLink>
-                    <a class="text-blue-500" routerLink="/user/{{post.userId}}">{{ post.userName || 'Unbekannt' }}</a>
+                    <a class="text-blue-500" routerLink="/user/{{post.userId}}" tabindex="0">{{ post.userName || 'Unbekannt' }}</a>
                 </ng-template>
 
                 <div class="mb-[1rem]">
@@ -132,7 +132,7 @@
 </dialog>
 
 <ng-template #loginToVote>
-    <a (click)="routeToLogin()" class="cursor-pointer">Melde dich an, um abzustimmen</a>
+    <a (click)="routeToLogin()" class="cursor-pointer" tabindex="0">Melde dich an, um abzustimmen</a>
 </ng-template>
 
 <app-not-found *ngIf="!loading && !post && !error"></app-not-found>

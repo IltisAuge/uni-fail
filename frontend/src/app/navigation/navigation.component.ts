@@ -102,6 +102,13 @@ export class NavigationComponent implements OnInit {
         this.menuOpen = !this.menuOpen;
     }
 
+    onLogoutKeydown(event: KeyboardEvent) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.logout();
+        }
+    }
+
     logout() {
         if (this.isMobile) {
             this.menuOpen = false;

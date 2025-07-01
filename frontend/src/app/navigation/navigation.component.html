@@ -3,7 +3,7 @@
         <button
             *ngIf="isMobile"
             (click)="toggleMenu()"
-            class="focus:outline-none cursor-pointer">
+            class="cursor-pointer">
             <fa-icon [icon]="faBars" size="2x"></fa-icon>
         </button>
         <img src="assets/logo-unifail.jpg"
@@ -62,7 +62,8 @@
                 </a>
             </li>
             <li *ngIf="isLoggedIn">
-                <a (click)="logout()" class="nav-item">
+                <a (click)="logout()" class="nav-item" tabindex="0"
+                   (keydown)="onLogoutKeydown($event)">
                     <fa-icon [icon]="faRightFromBracket"></fa-icon>
                     <span>Abmelden</span>
                 </a>
@@ -70,6 +71,7 @@
             <ng-template #login>
                 <li>
                     <a class="nav-item"
+                       tabindex="0"
                        routerLink="/login">
                         <fa-icon [icon]="faUser"></fa-icon>
                         Anmelden

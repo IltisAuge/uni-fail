@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TagComponent} from '../tag/tag.component';
 import {Post} from '../../interfaces/post.interface';
@@ -16,6 +16,9 @@ export class PostPreviewComponent {
 
     @Input() loading = true;
     @Input() posts: Post[] = [];
+
+    constructor(private router: Router,) {
+    }
 
     /**
      * @return a shortened version of the post's content limited to 150 chars
@@ -34,5 +37,16 @@ export class PostPreviewComponent {
 
     getPostImage(post: Post): string {
         return `${environment.apiBaseUrl}/user/${post.userId}/avatar?ts=${Date.now()}`;
+    }
+
+    async goToPost(post: Post) {
+        await this.router.navigate(['/post', post._id]);
+    }
+
+    async onPostKeydown(event: KeyboardEvent, post: Post) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            await this.goToPost(post);
+        }
     }
 }

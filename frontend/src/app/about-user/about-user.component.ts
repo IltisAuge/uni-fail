@@ -110,9 +110,22 @@ export class AboutUserComponent implements OnInit, OnDestroy {
         });
     }
 
+    handleAvatarKeydown(event: KeyboardEvent): void {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.acceptAvatar();
+        }
+    }
+
     openAvatarModal() {
         this.avatarDialogRef.nativeElement.showModal();
         this.isModalOpen = true;
+        if (this.avatarURL) {
+            const avatarIndex = this.avatarURLs.indexOf(this.avatarURL);
+            if (avatarIndex >= 0) {
+                this.selectedAvatarIndex = avatarIndex;
+            }
+        }
     }
 
     closeAvatarModal() {
@@ -122,6 +135,12 @@ export class AboutUserComponent implements OnInit, OnDestroy {
 
     acceptAvatar() {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
+        const avatarURL = this.avatarURLs[this.selectedAvatarIndex];
+        if (this.avatarURL === avatarURL) {
+            console.log("Not changing avatar. Already set");
+            this.closeAvatarModal();
+            return;
+        }
         this.http.post<{user: User}>(`${environment.apiBaseUrl}/user/set-avatar`, {
             avatarId,
         },

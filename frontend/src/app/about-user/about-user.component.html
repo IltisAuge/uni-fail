@@ -34,6 +34,11 @@
         <div *ngFor="let imgSrc of avatarURLs; let i = index" class="image-wrapper m-3 h-[128px] w-[128px] relative">
             <img [ngSrc]="imgSrc"
                  (click)="selectAvatar(i)"
+                 (focus)="selectAvatar(i)"
+                 (keydown)="handleAvatarKeydown($event)"
+                 role="button"
+                 aria-label="Avatar"
+                 tabindex="0"
                  [ngClass]="{
                   'border-4 border-blue-400': selectedAvatarIndex === i,
                   'cursor-pointer': true
@@ -45,6 +50,7 @@
 
     <!-- Dialog footer -->
     <div class="flex justify-end space-x-2 border-t border-[var(--border-color)] pt-4">
-        <button (click)="acceptAvatar()" class="button-green">Auswählen</button>
+        <button (click)="acceptAvatar()"
+                class="button-green">Auswählen</button>
     </div>
 </dialog>
