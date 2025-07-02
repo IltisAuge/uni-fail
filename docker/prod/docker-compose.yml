@@ -7,7 +7,7 @@ services:
         ports:
             - 4000:4000
         volumes:
-            - ./frontend/dist/:/app/dist/
+            - ./frontend/dist/:/uni-fail/app/dist/
         networks:
             - uni-fail
             - nginx_shared
@@ -21,10 +21,10 @@ services:
         ports:
             - 5010:5010
         volumes:
-            - ./backend/dist/:/app/dist/
-            - ./backend/.env:/app/.env
-            - ./backend/google_client.json:/app/google_client.json
-            - ./backend/uploads/:/app/uploads/
+            - ./backend/dist/:/uni-fail/app/dist/
+            - ./backend/.env:/uni-fail/app/.env
+            - ./backend/google_client.json:/uni-fail/google_client.json
+            - ./backend/uploads/:/uni-fail/app/uploads/
         networks:
             - uni-fail
             - nginx_shared
