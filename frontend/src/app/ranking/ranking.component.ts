@@ -25,11 +25,6 @@ export class RankingComponent implements OnInit {
         this.titleService.setTitle('Rangliste');
     }
 
-    @HostListener('window:resize', ['$event'])
-    onResize(event: UIEvent) {
-        this.rescalePodestals();
-    }
-
     ngOnInit() {
         this.http.get<{_id: string, totalUpvotes: number}[]>(
             `${environment.apiBaseUrl}/ranking/most-votes?limit=3`,
@@ -39,36 +34,10 @@ export class RankingComponent implements OnInit {
                 this.rankedUnis.forEach((uni) => {
                     uni._id = String(uni._id).replace('uni:', '');
                 });
-                this.rescalePodestals();
             },
             error: (error) => {
                 console.log('An error occurred while fetching ranking most votes:', error);
             },
         });
     }
-
-    rescalePodestals() {
-        setTimeout(() => {
-            if (!this.pedestalRefs || this.pedestalRefs.length === 0) return;
-
-            // Set all element's width to "auto" und whitSpace "normal", to reapply text wrapping
-            this.pedestalRefs.forEach(ref => {
-                ref.nativeElement.style.width = 'auto';
-                ref.nativeElement.style.whiteSpace = 'normal';
-            });
-
-            // Select width of the widest element (=maxWidth)
-            let maxWidth = 0;
-            this.pedestalRefs.forEach(ref => {
-                const width = ref.nativeElement.offsetWidth;
-                if (width > maxWidth) maxWidth = width;
-            });
-
-            // Set the same width for all elements
-            this.pedestalRefs.forEach(ref => {
-                ref.nativeElement.style.width = `${maxWidth}px`;
-            });
-        }, 50); // Delay for DOM-Stability
-    }
-
 }

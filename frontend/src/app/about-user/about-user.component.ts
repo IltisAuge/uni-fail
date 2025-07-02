@@ -137,7 +137,6 @@ export class AboutUserComponent implements OnInit, OnDestroy {
         const avatarId = this.avatarIds[this.selectedAvatarIndex];
         const avatarURL = this.avatarURLs[this.selectedAvatarIndex];
         if (this.avatarURL === avatarURL) {
-            console.log("Not changing avatar. Already set");
             this.closeAvatarModal();
             return;
         }
