@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser, NgClass, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faArrowLeft, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faCircleInfo, faMoon, faLightbulb} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
 
     protected readonly faCircleInfo = faCircleInfo;
     protected readonly faArrowLeft = faArrowLeft;
+    protected readonly faMoon  = faMoon;
+    protected readonly faLightbulb = faLightbulb;
 
     theme: string = 'light';
 
