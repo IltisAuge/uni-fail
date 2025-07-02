@@ -1,5 +1,6 @@
 :host {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: scroll;
 }
 
 header, nav {
@@ -36,9 +37,17 @@ nav > ul > li {
     :host {
         min-height: auto;
         width: 100%;
+        height: fit-content;
+        overflow-y: visible;
     }
 
     .nav-item {
         justify-content: center;
+    }
+}
+
+@media (height <= 768px) {
+    .nav-item {
+        padding: 1.25rem;
     }
 }
