@@ -1,6 +1,6 @@
-import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {isPlatformBrowser, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../../services/title.service';
@@ -18,10 +18,9 @@ import {TitleService} from '../../services/title.service';
 export class RankingComponent implements OnInit {
 
     rankedUnis: {_id: string, totalUpvotes: number}[] = [];
-    @ViewChildren('itemRef') itemRefs!: QueryList<ElementRef<HTMLElement>>;
+    @ViewChildren('pedestalRef') pedestalRefs!: QueryList<ElementRef<HTMLElement>>;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object,
-                private http: HttpClient,
+    constructor(private http: HttpClient,
                 private titleService: TitleService) {
         this.titleService.setTitle('Rangliste');
     }
@@ -35,37 +34,10 @@ export class RankingComponent implements OnInit {
                 this.rankedUnis.forEach((uni) => {
                     uni._id = String(uni._id).replace('uni:', '');
                 });
-                this.rescalePodestals();
             },
             error: (error) => {
                 console.log('An error occurred while fetching ranking most votes:', error);
             },
         });
-    }
-
-    rescalePodestals() {
-        setTimeout(() => {
-            let maxWidth = 0;
-
-            this.itemRefs.forEach((el) => {
-                const width = el.nativeElement.scrollWidth;
-                if (width > maxWidth) {
-                    maxWidth = width;
-                }
-            });
-
-            let fontSize;
-            if (isPlatformBrowser(this.platformId)) {
-                fontSize = getComputedStyle(document.documentElement).fontSize;
-            } else {
-                fontSize = '16';
-            }
-            const minWidth = 5 * parseFloat(fontSize);
-            maxWidth = Math.max(maxWidth, minWidth);
-
-            this.itemRefs.forEach((el) => {
-                el.nativeElement.style.width = `${maxWidth}px`;
-            });
-        }, 100);
     }
 }

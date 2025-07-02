@@ -10,7 +10,8 @@
     margin-top: auto;
     text-align: center;
     white-space: wrap;
-    overflow-wrap: anywhere
+    overflow-wrap: anywhere;
+    flex: 1;
 }
 
 .pedestal-head {

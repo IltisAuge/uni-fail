@@ -17,7 +17,7 @@ export class PostPreviewComponent {
     @Input() loading = true;
     @Input() posts: Post[] = [];
 
-    constructor(private router: Router,) {
+    constructor(private router: Router) {
     }
 
     /**
