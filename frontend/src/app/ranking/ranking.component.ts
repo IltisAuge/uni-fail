@@ -1,6 +1,6 @@
-import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {isPlatformBrowser, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../../services/title.service';
@@ -18,12 +18,16 @@ import {TitleService} from '../../services/title.service';
 export class RankingComponent implements OnInit {
 
     rankedUnis: {_id: string, totalUpvotes: number}[] = [];
-    @ViewChildren('itemRef') itemRefs!: QueryList<ElementRef<HTMLElement>>;
+    @ViewChildren('pedestalRef') pedestalRefs!: QueryList<ElementRef<HTMLElement>>;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object,
-                private http: HttpClient,
+    constructor(private http: HttpClient,
                 private titleService: TitleService) {
         this.titleService.setTitle('Rangliste');
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: UIEvent) {
+        this.rescalePodestals();
     }
 
     ngOnInit() {
@@ -45,27 +49,26 @@ export class RankingComponent implements OnInit {
 
     rescalePodestals() {
         setTimeout(() => {
+            if (!this.pedestalRefs || this.pedestalRefs.length === 0) return;
+
+            // Set all element's width to "auto" und whitSpace "normal", to reapply text wrapping
+            this.pedestalRefs.forEach(ref => {
+                ref.nativeElement.style.width = 'auto';
+                ref.nativeElement.style.whiteSpace = 'normal';
+            });
+
+            // Select width of the widest element (=maxWidth)
             let maxWidth = 0;
-
-            this.itemRefs.forEach((el) => {
-                const width = el.nativeElement.scrollWidth;
-                if (width > maxWidth) {
-                    maxWidth = width;
-                }
+            this.pedestalRefs.forEach(ref => {
+                const width = ref.nativeElement.offsetWidth;
+                if (width > maxWidth) maxWidth = width;
             });
 
-            let fontSize;
-            if (isPlatformBrowser(this.platformId)) {
-                fontSize = getComputedStyle(document.documentElement).fontSize;
-            } else {
-                fontSize = '16';
-            }
-            const minWidth = 5 * parseFloat(fontSize);
-            maxWidth = Math.max(maxWidth, minWidth);
-
-            this.itemRefs.forEach((el) => {
-                el.nativeElement.style.width = `${maxWidth}px`;
+            // Set the same width for all elements
+            this.pedestalRefs.forEach(ref => {
+                ref.nativeElement.style.width = `${maxWidth}px`;
             });
-        }, 100);
+        }, 50); // Delay for DOM-Stability
     }
+
 }
