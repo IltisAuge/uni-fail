@@ -45,3 +45,9 @@ nav > ul > li {
         justify-content: center;
     }
 }
+
+@media (height <= 768px) {
+    .nav-item {
+        padding: 1.25rem;
+    }
+}
