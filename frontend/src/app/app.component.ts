@@ -1,15 +1,15 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
-import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
+import {isPlatformBrowser, NgClass, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
 
 @Component({
     selector: 'app-root',
-    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
+    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet, NgClass],
     templateUrl: './app.component.html',
     standalone: true,
     styleUrl: './app.component.css',
@@ -17,6 +17,7 @@ import {NavigationComponent} from './navigation/navigation.component';
 export class AppComponent implements OnInit {
 
     protected readonly faCircleInfo = faCircleInfo;
+    protected readonly faArrowLeft = faArrowLeft;
 
     theme: string = 'light';
 
@@ -36,6 +37,10 @@ export class AppComponent implements OnInit {
             }
             document.documentElement.setAttribute('data-theme', this.theme);
         }
+    }
+
+    getThemeName() {
+        return !this.theme ? '' : (this.theme === 'light' ? 'Hell' : 'Dunkel');
     }
 
     toggleTheme() {
