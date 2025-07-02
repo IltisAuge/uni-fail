@@ -1,18 +1,28 @@
 <div class="flex h-screen w-screen relative flex-col md:flex-row">
     <app-navigation></app-navigation>
-    <!-- About us icon for medium and large screens -->
-    <div class="hidden md:block absolute right-[2rem] top-[2rem] z-50">
+
+    <!-- Mobile: Toggle links, ABout Us rechts oben -->
+    <div class="absolute top-[2rem] left-[2rem] z-50 md:hidden">
+        <button (click)="toggleTheme()" class="button-blue">
+            <fa-icon [icon]="theme === 'dark' ? faMoon : faLightbulb"></fa-icon>
+            {{ theme }}
+        </button>
+    </div>
+    <div class="absolute top-[2rem] right-[2rem] z-50 md:hidden">
         <ng-container *ngTemplateOutlet="about_us"></ng-container>
     </div>
+
+    <!-- Desktop: Toggle + About Us rechts oben nebeneinander -->
+    <div class="hidden md:flex absolute top-[2rem] right-[2rem] z-50 items-center gap-4">
+        <button (click)="toggleTheme()" class="button-blue">
+            <fa-icon [icon]="theme === 'dark' ? faMoon : faLightbulb"></fa-icon>
+            {{ getThemeName() }}
+        </button>
+        <ng-container *ngTemplateOutlet="about_us"></ng-container>
+    </div>
+
     <main class="relative flex-1 overflow-y-auto p-[0.5rem] md:p-[2rem] flex flex-col items-center">
-        <!-- About us icon for small screens -->
-        <span class="md:hidden w-full flex justify-end p-2 z-50">
-            <ng-container *ngTemplateOutlet="about_us"></ng-container>
-        </span>
         <router-outlet></router-outlet>
-        <div class="mt-auto flex gap-10">
-            <button (click)="toggleTheme()" class="hover:cursor-pointer">Toggle theme (Current: {{theme}})</button>
-        </div>
     </main>
 </div>
 
