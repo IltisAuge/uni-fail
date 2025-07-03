@@ -3,7 +3,7 @@ import {Router, NavigationEnd, Event as RouterEvent} from '@angular/router';
 import {filter} from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class NavigationService {
     private history: string[] = [];

@@ -139,14 +139,10 @@ export class PostComponent implements OnInit, OnDestroy {
 
     goBack(): void {
         if (this.navigationService.hasPreviousUrl()) {
-            const previousUrl = this.navigationService.getPreviousUrl();
-            if (previousUrl) {
-                this.router.navigateByUrl(previousUrl);
-            } else {
-                this.router.navigateByUrl('/');
-            }
+            const previousUrl = this.navigationService.getPreviousUrl()!;
+            this.router.navigateByUrl(previousUrl);
         } else {
-            this.router.navigateByUrl('/');
+            this.router.navigateByUrl('/'); // Fallback
         }
     }
 

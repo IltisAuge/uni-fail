@@ -5,8 +5,8 @@ import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faArrowLeft, faCircleInfo, faMoon, faLightbulb} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
-import {NavigationComponent} from './navigation/navigation.component';
 import {NavigationService} from '../services/navigation.service';
+import {NavigationComponent} from './navigation/navigation.component';
 
 
 @Component({
