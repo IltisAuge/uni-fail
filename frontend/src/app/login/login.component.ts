@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../../services/title.service';
+import {NavigationService} from '../../services/navigation.service';
 
 @Component({
     selector: 'app-login',
@@ -16,15 +17,16 @@ import {TitleService} from '../../services/title.service';
 })
 export class LoginComponent {
 
-    previousUrl: string = '/';
-
     constructor(private titleService: TitleService,
-                private router: Router) {
+                private navigationService: NavigationService) {
         this.titleService.setTitle('Anmelden');
-        this.previousUrl = this.router.getCurrentNavigation()?.extras.state?.['from'] ?? '/';
     }
 
     openLoginPage(provider: string) {
-        window.location.href = `${environment.apiBaseUrl}/login?provider=${provider}&returnUrl=${this.previousUrl}`;
+        const previousUrl =
+                this.navigationService.hasPreviousUrl() ?
+                    this.navigationService.getPreviousUrl() :
+                    '';
+        window.location.href = `${environment.apiBaseUrl}/login?provider=${provider}&returnUrl=${previousUrl}`;
     }
 }

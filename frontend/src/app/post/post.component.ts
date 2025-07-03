@@ -198,9 +198,7 @@ export class PostComponent implements OnInit, OnDestroy {
     }
 
     async routeToLogin() {
-        await this.router.navigate(['/login'], {
-            state: { from: this.router.url },
-        });
+        await this.router.navigate(['/login']);
     }
 
     openDeleteModal() {
