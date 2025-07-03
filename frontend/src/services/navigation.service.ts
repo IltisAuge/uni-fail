@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router'; // RouterEvent importieren, um Namenskonflikte zu vermeiden
-import { filter, tap } from 'rxjs/operators'; // tap hinzufügen
+import {Injectable} from '@angular/core';
+import {Router, NavigationEnd, Event as RouterEvent} from '@angular/router';
+import {filter} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'

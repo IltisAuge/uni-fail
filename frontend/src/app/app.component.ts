@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {RouterLink, RouterOutlet, Router, NavigationEnd} from '@angular/router';
-import {isPlatformBrowser, NgClass, NgTemplateOutlet} from '@angular/common';
+import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faArrowLeft, faCircleInfo, faMoon, faLightbulb} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
@@ -11,7 +11,7 @@ import {NavigationService} from '../services/navigation.service';
 
 @Component({
     selector: 'app-root',
-    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet, NgClass],
+    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
     templateUrl: './app.component.html',
     standalone: true,
     styleUrl: './app.component.css',
