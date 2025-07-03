@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, Location} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {filter, firstValueFrom, Subject, takeUntil} from 'rxjs';
@@ -11,6 +11,7 @@ import {TagComponent} from '../tag/tag.component';
 import {NotFoundComponent} from '../not-found/not-found.component';
 import {AuthService} from '../../services/auth.service';
 import {User} from '../../interfaces/user.interface';
+import {NavigationService} from '../../services/navigation.service';
 
 @Component({
     selector: 'app-post',
@@ -40,6 +41,8 @@ export class PostComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private router: Router,
         private authService: AuthService,
+        private location: Location,
+        private navigationService: NavigationService,
     ) { }
 
     ngOnInit(): void {
@@ -101,7 +104,7 @@ export class PostComponent implements OnInit, OnDestroy {
                     this.loading = false;
                     return;
                 }
-                // Post not found
+                //Post not found
                 this.loading = false;
                 this.post = undefined;
                 this.error = undefined;
@@ -125,7 +128,7 @@ export class PostComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: async (response) => {
                 console.log('Post erfolgreich gelöscht:', response);
-                await this.goBack();
+                await this.goBack(); //go to previous page after deleting
             },
             error: (err) => {
                 console.error('Fehler beim Löschen des Posts:', err);
@@ -134,8 +137,13 @@ export class PostComponent implements OnInit, OnDestroy {
         });
     }
 
-    async goBack() {
-        await this.router.navigate(['/']);
+    goBack(): void {
+        if (this.navigationService.hasPreviousUrl()) {
+            const previousUrl = this.navigationService.getPreviousUrl()!;
+            this.router.navigateByUrl(previousUrl);
+        } else {
+            this.router.navigateByUrl('/'); // Fallback
+        }
     }
 
     toggleUpVote() {

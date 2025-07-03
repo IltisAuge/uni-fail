@@ -1,15 +1,17 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
-import {isPlatformBrowser, NgClass, NgTemplateOutlet} from '@angular/common';
+import {RouterLink, RouterOutlet, Router, NavigationEnd} from '@angular/router';
+import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faArrowLeft, faCircleInfo, faMoon, faLightbulb} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
+import {NavigationService} from '../services/navigation.service';
 import {NavigationComponent} from './navigation/navigation.component';
+
 
 @Component({
     selector: 'app-root',
-    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet, NgClass],
+    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
     templateUrl: './app.component.html',
     standalone: true,
     styleUrl: './app.component.css',
@@ -25,7 +27,9 @@ export class AppComponent implements OnInit {
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
-        private http: HttpClient) {
+        private http: HttpClient,
+        private router: Router,
+        private navigationService: NavigationService) {
     }
 
     ngOnInit() {
