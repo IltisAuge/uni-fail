@@ -5,6 +5,7 @@ import {RouterLink} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {TitleService} from '../../services/title.service';
 import {Meta} from '@angular/platform-browser';
+import confetti from 'canvas-confetti';
 
 @Component({
     selector: 'app-ranking',
@@ -52,10 +53,33 @@ export class RankingComponent implements OnInit {
                 this.rankedUnis.forEach((uni) => {
                     uni._id = String(uni._id).replace('uni:', '');
                 });
+                this.shootConfetti();
             },
             error: (error) => {
                 console.log('An error occurred while fetching ranking most votes:', error);
             },
         });
     }
+
+    shootConfetti(): void {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#bb0000', '#ffffff', '#00ff00', '#0000bb'],
+            shapes: ['square', 'circle'],
+            scalar: 1.2
+        });
+        setTimeout(() => {
+            confetti({
+                particleCount: 80,
+                spread: 80,
+                origin: { x: 0.8, y: 0.7 }, //start right
+                colors: ['#FFA500', '#FFD700', '#FF4500'],
+                scalar: 1
+            });
+        }, 250);
+    }
 }
+
+

@@ -7,7 +7,7 @@
     font-family: Lato, sans-serif;
     font-size: 40px;
     line-height: 40px;
-    color: #A1C181;
+    color: var(--text-primary);
     text-align: left;
     margin-bottom: 0.625rem;
 }
@@ -15,7 +15,7 @@
 .content__container {
     font-weight: 600;
     overflow: hidden;
-    height: 50px;
+    height: 40px;
     padding: 0 40px;
     position: relative;
 }
@@ -27,7 +27,7 @@
     top: 0;
     color: #FCAA46;
     font-size: 42px;
-    line-height: 40px;
+    line-height: 25px;
 
     animation-name: opacity;
     animation-duration: 2s;

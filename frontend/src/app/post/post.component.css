@@ -6,6 +6,13 @@
     align-items: center;
     justify-content: center;
 }
+.thumb-fa-icon {
+    transition: transform 0.3s ease-out;
+}
+
+.thumb-fa-icon:hover {
+    transform: scale(1.3);
+}
 
 *, *::before, *::after {
     box-sizing: border-box;
