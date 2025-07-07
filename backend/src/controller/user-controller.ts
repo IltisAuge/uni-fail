@@ -50,6 +50,19 @@ export async function saveUser(userData: User) {
 }
 
 export async function getUser(userId: string): Promise<User | undefined> {
+    if (userId === '000000000') {
+        return {
+                _id: '000000000',
+                provider: 'Mock Provider',
+                email: 'mock@mail.com',
+                name: 'Mock Name',
+                isAdmin: false,
+                displayName: 'Mock Displayname',
+                avatarKey: '2289_SkVNQSBGQU1PIDEwMjgtMTIy.jpg',
+                votedPosts: [],
+                isBlocked: false,
+            };
+    }
     const cachedUser = userCache.get(userId) as unknown as User;
     if (cachedUser) {
         return cachedUser;
