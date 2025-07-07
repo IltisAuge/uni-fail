@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .thumb-fa-icon {
     transition: transform 0.3s ease-out;
 }

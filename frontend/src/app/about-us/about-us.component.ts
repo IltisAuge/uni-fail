@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {TitleService} from '../../services/title.service';
 import {Meta} from '@angular/platform-browser';
+import {TitleService} from '../../services/title.service';
 
 @Component({
     selector: 'app-about-us',
@@ -16,19 +16,19 @@ export class AboutUsComponent {
         this.titleService.setTitle('Über uns');
         this.metaService.updateTag({
             name: 'description',
-            content: 'Über die Macher von Unifail'
+            content: 'Über die Macher von Unifail',
         });
         this.metaService.updateTag({
             name: 'keywords',
-            content: 'Uni, Bewertung, Geschichten'
+            content: 'Uni, Bewertung, Geschichten',
         });
         this.metaService.updateTag({
             property: 'og:title',
-            content: 'Unifail - Über die Macher von Unifail'
+            content: 'Unifail - Über die Macher von Unifail',
         });
         this.metaService.updateTag({
             property: 'og:description',
-            content: 'Über die Macher von Unifail'
+            content: 'Über die Macher von Unifail',
         });
     }
 }

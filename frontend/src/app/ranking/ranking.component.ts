@@ -2,10 +2,10 @@ import {Component, ElementRef, HostListener, OnInit, QueryList, ViewChildren} fr
 import {HttpClient} from '@angular/common/http';
 import {NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {environment} from '../../environments/environment';
-import {TitleService} from '../../services/title.service';
 import {Meta} from '@angular/platform-browser';
 import confetti from 'canvas-confetti';
+import {environment} from '../../environments/environment';
+import {TitleService} from '../../services/title.service';
 
 @Component({
     selector: 'app-ranking',
@@ -28,19 +28,19 @@ export class RankingComponent implements OnInit {
         this.titleService.setTitle('Rangliste');
         this.metaService.updateTag({
             name: 'description',
-            content: 'Rangliste von Unifail'
+            content: 'Rangliste von Unifail',
         });
         this.metaService.updateTag({
             name: 'keywords',
-            content: 'Uni, Bewertung, Geschichten'
+            content: 'Uni, Bewertung, Geschichten',
         });
         this.metaService.updateTag({
             property: 'og:title',
-            content: 'Unifail - Rangliste'
+            content: 'Unifail - Rangliste',
         });
         this.metaService.updateTag({
             property: 'og:description',
-            content: 'Die Unis und Hochschulen mit den meisten Votes'
+            content: 'Die Unis und Hochschulen mit den meisten Votes',
         });
     }
 
@@ -68,7 +68,7 @@ export class RankingComponent implements OnInit {
             origin: { y: 0.6 },
             colors: ['#bb0000', '#ffffff', '#00ff00', '#0000bb'],
             shapes: ['square', 'circle'],
-            scalar: 1.2
+            scalar: 1.2,
         });
         setTimeout(() => {
             confetti({
@@ -76,7 +76,7 @@ export class RankingComponent implements OnInit {
                 spread: 80,
                 origin: { x: 0.8, y: 0.7 }, //start right
                 colors: ['#FFA500', '#FFD700', '#FF4500'],
-                scalar: 1
+                scalar: 1,
             });
         }, 250);
     }
