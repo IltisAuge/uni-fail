@@ -28,8 +28,10 @@
 
 <ng-template #about_us>
     <a title="Über uns"
-        routerLink="/about-us"
-        class="cursor-pointer hover:text-[var(--text-hover)] transition-colors duration-300">
-        <fa-icon [icon]="faCircleInfo"></fa-icon>
+       routerLink="/about-us"
+       class="cursor-pointer hover:text-[var(--text-hover)] transition-colors duration-300 about-us-icon">
+        <fa-icon class="about-us-fa-icon" [icon]="faCircleInfo"></fa-icon>
     </a>
 </ng-template>
+
+

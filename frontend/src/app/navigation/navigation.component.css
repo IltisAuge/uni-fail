@@ -20,6 +20,16 @@ header, nav {
     width: 100%;
 }
 
+.logo-link img {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+}
+
+.logo-link img:hover {
+    transform: scale(1.1); /* scale */
+    box-shadow: 0 8px 15px rgb(0 0 0 / 0.4);
+}
+
 .nav-item:hover {
     color: var(--text-hover);
     cursor: pointer;

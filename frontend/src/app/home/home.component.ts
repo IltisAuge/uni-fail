@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Meta} from '@angular/platform-browser';
 import {PostPreviewComponent} from '../post-preview/post-preview.component';
 import {TitleService} from '../../services/title.service';
 import {environment} from '../../environments/environment';
 import {Post} from '../../interfaces/post.interface';
-import {Meta} from '@angular/platform-browser';
 
 @Component({
     selector: 'app-home',
@@ -26,19 +26,19 @@ export class HomeComponent implements OnInit {
         this.titleService.setTitle('Home');
         this.metaService.updateTag({
             name: 'description',
-            content: 'Teile deine Geschichten auf Unifail'
+            content: 'Teile deine Geschichten auf Unifail',
         });
         this.metaService.updateTag({
             name: 'keywords',
-            content: 'Uni, Bewertung, Geschichten'
+            content: 'Uni, Bewertung, Geschichten',
         });
         this.metaService.updateTag({
             property: 'og:title',
-            content: 'Unifail - Teile deine Geschichten'
+            content: 'Unifail - Teile deine Geschichten',
         });
         this.metaService.updateTag({
             property: 'og:description',
-            content: 'Teile deine Geschichten auf Unifail'
+            content: 'Teile deine Geschichten auf Unifail',
         });
     }
 

@@ -9,6 +9,13 @@
     position: relative;
     background: #eee;
     overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.image-wrapper:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgb(0 0 0 / 0.4);
 }
 
 /* Spinner or Shimmer as placeholder */
@@ -41,3 +48,4 @@
         background-position: 200% 0;
     }
 }
+
