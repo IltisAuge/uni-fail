@@ -26,7 +26,6 @@
 .pedestal-head:hover {
     color: var(--text-hover);
     transform: scale(1.05);
-    box-shadow: 0 8px 15px rgb(0 0 0 / 0.4);
     z-index: 10;
 }
 
