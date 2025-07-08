@@ -1,6 +1,6 @@
-import {Component, ElementRef, HostListener, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, PLATFORM_ID, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {NgIf} from '@angular/common';
+import {isPlatformBrowser, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {Meta} from '@angular/platform-browser';
 import confetti from 'canvas-confetti';
@@ -22,7 +22,8 @@ export class RankingComponent implements OnInit {
     rankedUnis: {_id: string, totalUpvotes: number}[] = [];
     @ViewChildren('pedestalRef') pedestalRefs!: QueryList<ElementRef<HTMLElement>>;
 
-    constructor(private http: HttpClient,
+    constructor(@Inject(PLATFORM_ID) private platformId: Object,
+                private http: HttpClient,
                 private metaService: Meta,
                 private titleService: TitleService) {
         this.titleService.setTitle('Rangliste');
@@ -53,7 +54,9 @@ export class RankingComponent implements OnInit {
                 this.rankedUnis.forEach((uni) => {
                     uni._id = String(uni._id).replace('uni:', '');
                 });
-                this.shootConfetti();
+                if (isPlatformBrowser(this.platformId)) {
+                    this.shootConfetti();
+                }
             },
             error: (error) => {
                 console.log('An error occurred while fetching ranking most votes:', error);
