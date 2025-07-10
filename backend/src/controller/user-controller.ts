@@ -49,6 +49,11 @@ export async function saveUser(userData: User) {
     );
 }
 
+export async function deleteUser(userId: string) {
+    userCache.del(userId);
+    return UserModel.deleteOne({_id: userId}).exec();
+}
+
 export async function getUser(userId: string): Promise<User | undefined> {
     if (userId === '000000000') {
         return {

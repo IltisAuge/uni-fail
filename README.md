@@ -3,7 +3,7 @@
 # Techstack
 This software uses ``Angular 18``, ``TypeScript``, ``TailwindCSS``, ``FontAwesome`` for the frontend.
 The backend is built using ``NodeJS``. The ``express`` library is being used for the API-Server.
-To test backend features, ``supertest`` and ``jest`` are used. Data is stored in ``MongoDB`` via ``mongoose``, image (avatar) files are uploaded to an `AWS S3 Bucket`.
+To test backend features, ``supertest`` and ``vitest`` are used. Data is stored in ``MongoDB`` via ``mongoose``, image (avatar) files are uploaded to an `AWS S3 Bucket`.
 
 # Documentation for Developers
 
@@ -31,7 +31,7 @@ DB_USER=
 DB_PASSWORD=
 DB_NAME=
 DB_AUTH_SOURCE=
-AUTH_RETURN_URL=http://localhost:4200/
+AUTH_RETURN_URL=http://localhost:4200
 HOST=http://localhost:5010
 DOMAIN=localhost
 API_BASE=http://localhost:5010
@@ -95,7 +95,7 @@ All compiled backend files will be placed in ``/backend/dist``.
 You have to upload a copy of the ``.env`` file to your production environment and make a few changes to this file.<br>
 1. PRODUCTION=true
 2. Adjust your MongoDB connection credentials
-3. Change AUTH_RETURN_URL to point to your frontend Angular application
+3. Change AUTH_RETURN_URL to point to your frontend Angular application (Important: No tailing "/"!)
 4. Change HOST, DOMAIN to reflect your domain name 
 5. Change API_BASE to point to your backend API service (Important: No tailing "/"!)
 
@@ -119,24 +119,20 @@ If you are using the provided Docker configuration, you have to pay attention to
 ```text
 /unifail
 │
-├── backend
-│   ├── dist
-│   │   ├── controller
-│   │   ├── login-providers
-│   │   ├── ...
+├── /backend
+│   ├── /dist
 │   │   ├── server.js
-│   │   └── express-app.js
-│   ├── uploads
+│   ├── /uploads
 │   ├── Dockerfile
 │   ├── .env
 │   ├── google_client.json
 │   └── package.json
 │
-├── frontend
-│   ├── dist
-│   │   └── frontend
-│   │       ├── browser
-│   │       └── server
+├── /frontend
+│   ├── /dist
+│   │   └── /frontend
+│   │       ├── /browser
+│   │       └── /server
 │   ├── Dockerfile
 │   └── package.json
 │
@@ -148,7 +144,7 @@ Upload the ``.env`` and ``google_client.json`` files in the backend directory.<b
 Upload the ``docker-compose.yml`` to the ``/unifail`` directory.<br>
 
 Now you can navigate to the ``/unifail`` directory in your production server and run ``docker compose up -d`` to start all services.<br>
-Docker will build the frontend and backend Docker Images on the first compose execution. If you want to rebuild these Images, run ``docker compose up --build -d``.
+Docker will build the frontend and backend Docker Images on the first compose-execution. If you want to rebuild these Images, run ``docker compose up --build -d``.
 
 If you are using NGINX, start this service as well.
 
@@ -160,134 +156,10 @@ Run ``docker ps`` in your production server's terminal and your should see 4 con
 
 ### Github Action for building and deployment
 
-You can find a workflow for Github Actions in ``.github/workflows/blank.yml``:
-````text
-name: Build and deploy Frontend & Backend services
+You can find a workflow for Github Actions in ``.github/workflows/code-analysis-build-deploy.yml``:
 
-on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Clean install dependencies
-        run: |
-          cd frontend
-          rm -rf node_modules package-lock.json
-
-      - name: Install dependencies
-        run: |
-          cd frontend
-          npm install --force
-
-      - name: Build Angular (Browser + Server)
-        run: |
-          cd frontend
-          npm run build:prod
-
-      - name: Copy package.json to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          source: "frontend/package.json"
-          target: "/root/uni-fail/frontend"
-          strip_components: 1
-
-      - name: Clean old frontend build on server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          script: |
-            rm -rf /root/uni-fail/frontend/dist/frontend/browser
-            rm -rf /root/uni-fail/frontend/dist/frontend/server
-
-      - name: Prepare deploy folder
-        run: |
-          mkdir -p frontend_deploy
-          cp -r frontend/dist/frontend/browser frontend_deploy/
-          cp -r frontend/dist/frontend/server frontend_deploy/
-
-      - name: Copy built Angular app (dist/) to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          source: "frontend_deploy"
-          target: "/root/uni-fail/frontend/dist/frontend"
-          strip_components: 1
-
-      # --- BACKEND BUILD & DEPLOY ---
-
-      - name: Install backend dependencies
-        run: |
-          cd backend
-          npm ci
-
-      - name: Build backend (e.g. NestJS, TS → JS)
-        run: |
-          cd backend
-          npm run build
-
-      - name: Copy backend package.json to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          source: "backend/package.json"
-          target: "/root/uni-fail/backend"
-          strip_components: 1
-
-      - name: Clean old backend build on server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          script: |
-            rm -rf /root/uni-fail/backend/dist
-
-      - name: Copy backend dist/ to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          source: "backend/dist/**"
-          target: "/root/uni-fail/backend/"
-          strip_components: 1
-
-      - name: Restart frontend and backend Docker container
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 91.99.109.27
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          script: |
-            cd /root/uni-fail/
-            docker compose down
-            docker compose up -d --build
-````
-
-This Action script is triggered by any push to the ``master`` branch.<br>
+This Action script is triggered by any push or pull request to any branch.<br>
+The first job is to run code analysis for TypeScript, HTML and CSS files. If the target branch is "master" and if code analysis completes successfully, the build and deploy job is triggered.<br>
 It automatically builds the frontend and backend services for production, deploys all required files to the production server and restarts the Docker containers.<br>
-To access the production server via SSH (Secure Shell) you have to add a Secret in ``Repository settings`` > ``Secrets and variables`` > ``Actions``.<br>
+To access the production server via SSH (Secure Shell) via Github you have to add a Secret in ``Repository settings`` > ``Secrets and variables`` > ``Actions``.<br>
 This secret contains a private SSH key in .pem format. The corresponding public key is stored on your production server.

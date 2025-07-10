@@ -26,7 +26,7 @@ header, nav {
 }
 
 .logo-link img:hover {
-    transform: scale(1.1); /* scale */
+    transform: scale(1.03); /* scale */
     box-shadow: 0 8px 15px rgb(0 0 0 / 0.4);
 }
 

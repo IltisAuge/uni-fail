@@ -1,8 +1,9 @@
-import { defineConfig, UserConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePluginNode } from 'vite-plugin-node';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {UserConfig} from 'vite';
 
 export default defineConfig(({ command }) => {
     const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -24,6 +25,13 @@ export default defineConfig(({ command }) => {
                     entryFileNames: 'server.js',
                 },
             },
+        },
+        test: {
+            globals: true,
+            environment: 'node',
+            alias: {
+                '@': path.resolve(__dirname, './src')
+            }
         },
         plugins: [
             tsconfigPaths(),

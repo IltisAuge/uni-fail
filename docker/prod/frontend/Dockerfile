@@ -1,6 +1,6 @@
 FROM node:22
 
-WORKDIR /app
+WORKDIR /uni-fail/app
 
 COPY package.json ./
 RUN npm install --omit=dev --force

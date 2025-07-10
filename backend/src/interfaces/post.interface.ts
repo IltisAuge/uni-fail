@@ -6,9 +6,6 @@ export interface Post {
     createdAt: Date;
     updatedAt: Date;
     tags: string[];
-    upVotes: {
-        type: number,
-        default: 0,
-    },
+    upVotes: number;
 }
 export type PostDocument = Post & Document;

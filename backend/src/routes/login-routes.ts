@@ -108,10 +108,24 @@ loginRouter.get('/microsoft-auth-return', (req, res) => {
 // Only enable this endpoint in development
 if (process.env.PRODUCTION === 'false') {
     console.log('Enabled /login/mock endpoint');
-    loginRouter.get('/mock', (req, res) => {
-        const isAdmin = req.query.admin as string;
-        req.session.userId = '000000000';
-        res.status(302).json({message: `Mocked session with admin=${isAdmin}`});
+    loginRouter.get('/mock', async (req, res) => {
+        const username = req.query.username as string;
+        const isAdmin = req.query.isAdmin as string;
+        const isBlocked = req.query.isBlocked as string;
+        const userData = {
+            _id: crypto.randomUUID().toString(),
+            provider: 'Mock Provider',
+            email: `${username}@mail.com`,
+            name: username,
+            isAdmin: isAdmin === 'true',
+            displayName: `${username} Displayname`,
+            avatarKey: '2289_SkVNQSBGQU1PIDEwMjgtMTIy.jpg',
+            votedPosts: [],
+            isBlocked: isBlocked === 'true',
+        };
+        const user = await saveUser(userData);
+        req.session.userId = userData._id;
+        res.status(200).json({user});
     });
 } else {
     console.log('Not enabled /login/mock endpoint');

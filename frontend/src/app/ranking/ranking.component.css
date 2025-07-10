@@ -19,7 +19,7 @@
     padding: 0 1rem;
     width: 100%;
     cursor: pointer;
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    transition: all 0.3s ease-out;
     position: relative;
 }
 
@@ -46,7 +46,6 @@
     align-items: center;
 
     /* text shadow with 8 for sharpness    */
-
     text-shadow:
         0.2px 0.2px 0 #4B0082,
         0.4px 0.4px 0 #4B0082,

@@ -18,7 +18,7 @@ postRouter.use((req, res, next) => {
 });
 
 const requestLimiter = rateLimit({
-    windowMs: 60 * 1000,
+    windowMs: process.env.PRODUCTION === 'true' ? 60 * 1000 : 0,
     limit: 3,
     standardHeaders: true,
     legacyHeaders: false,
@@ -94,9 +94,6 @@ postRouter.get('/:id', async (req, res) => {
             ...post,
             userName: author?.displayName || undefined,
         };
-        console.log('postWUser:', postWithUser);
-        console.log('Fetching post with ID:', postId);
-        console.log('Author is:', author?.displayName);
         res.status(200).json({post: postWithUser});
     } catch (error) {
         res.status(500).json({error:'An error occurred while trying to get post'});
@@ -106,13 +103,21 @@ postRouter.get('/:id', async (req, res) => {
 
 
 postRouter.post('/create', requestLimiter, async (req, res) => {
-    const title = req.body.title;
-    const content = req.body.content;
-    const tags = req.body.tags;
+    const title = req.body.title as string || '';
+    const content = req.body.content as string || '';
+    const tags = req.body.tags as [string];
     const userId = req.session.userId!;
     const user = await getUser(userId);
     if (!user) {
         res.status(404).json({error: 'User not found!'});
+        return;
+    }
+    if (user.isBlocked) {
+        res.status(403).json({error: 'No permission to create a post'});
+        return;
+    }
+    if (title.length === 0 || content.length === 0) {
+        res.status(400).json({error: 'No title or content given'});
         return;
     }
     createPost(userId, title, content, tags).then((post) => {
@@ -137,8 +142,10 @@ postRouter.delete('/delete/:id', async (req, res) => {
         res.status(404).json({error:`Post with id '${postId}' not found`});
         return;
     }
+    console.error(`post.userId=${post.userId}, userId=${userId} username=${user.name} isAdmin=${user.isAdmin}`);
     if (post.userId !== userId && !user.isAdmin) {
         res.status(403).json({error:'No permission to delete this post'});
+        return;
     }
     deletePost(postId).then((result) => {
         if (!result.acknowledged) {

@@ -7,7 +7,7 @@ const PostSchema = new Schema<PostDocument>({
     content: String,
     userId: String,
     tags: [String],
-    upVotes: Number,
+    upVotes: { type: Number, default: 0 },
 }, {
     timestamps: true,
 });
