@@ -25,7 +25,6 @@ export async function downloadAllAvatars() {
         const avatarDir = path.resolve('./avatars');
         const avatarFile = path.join(avatarDir, key);
         fs.mkdirSync(avatarDir, { recursive: true });
-        console.log(avatarFile);
 
         const fileStream = fs.createWriteStream(avatarFile);
         const s3Stream = s3.getObject({

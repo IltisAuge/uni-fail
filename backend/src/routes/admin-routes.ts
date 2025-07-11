@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getRandomDisplayName, getUser, setAdmin, setBlocked, setDisplayName} from '@/controller/user-controller';
+import {getRandomDisplayName, getUser, setAdmin, setBlocked, setDisplayName} from '@/controllers/user-controller';
 
 const adminRouter = Router();
 

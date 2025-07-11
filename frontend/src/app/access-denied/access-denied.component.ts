@@ -9,6 +9,7 @@ import {TitleService} from '../../services/title.service';
     styleUrl: './access-denied.component.css',
 })
 export class AccessDeniedComponent {
+
     constructor(private titleService: TitleService) {
         this.titleService.setTitle('Kein Zugriff');
     }

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import {getUser, isDisplayNameAvailable, setAvatarKey, setDisplayName} from '@/controller/user-controller';
+import {getUser, isDisplayNameAvailable, setAvatarKey, setDisplayName} from '@/controllers/user-controller';
 
 dotenv.config();
 

@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import rateLimit from 'express-rate-limit';
-import {createPost, deletePost, getNewestPosts, getPost, getUserPosts} from '@/controller/post-controller';
-import {getUser} from '@/controller/user-controller';
+import {createPost, deletePost, getNewestPosts, getPost, getUserPosts} from '@/controllers/post-controller';
+import {getUser} from '@/controllers/user-controller';
 import {PostModel} from '@/schemata/post-schema';
 
 const postRouter = Router();
@@ -84,7 +84,6 @@ postRouter.get('/:id', async (req, res) => {
     try {
         const postId = req.params.id;
         const post = await getPost(postId);
-        console.log('get post:', post);
         if (!post) {
             res.status(404).json({message: `No post with id ${postId}`});
             return;

@@ -1,6 +1,6 @@
 import {Router} from 'express';
-import {addVotedPost, getUser, removeVotedPost} from '@/controller/user-controller';
-import {addVote, removeVote} from '@/controller/post-controller';
+import {addVotedPost, getUser, removeVotedPost} from '@/controllers/user-controller';
+import {addVote, removeVote} from '@/controllers/post-controller';
 
 const votingRouter = Router();
 
@@ -29,7 +29,6 @@ votingRouter.post('/add', async (req, res) => {
         return;
     }
     addVote(postId).then(async (post) => {
-        console.log('addVote.then post=',post);
         if (post) {
             const user = await addVotedPost(userId, postId);
             res.status(200).json({post, user: (user?.toJSON())});

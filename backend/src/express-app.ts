@@ -11,9 +11,9 @@ import postRouter from './routes/post-routes';
 import userRouter from './routes/user-routes';
 import adminRouter from './routes/admin-routes';
 import {downloadAllAvatars} from './s3';
-import {getUser, loadAvailableDisplayNames} from './controller/user-controller';
 import rankingRouter from './routes/ranking-routes';
 import tagRouter from './routes/tag-routes';
+import {getUser, loadAvailableDisplayNames} from '@/controllers/user-controller';
 import votingRouter from '@/routes/voting-routes';
 
 dotenv.config();
@@ -107,16 +107,16 @@ server.get('/', (req, res) => {
 });
 
 downloadAllAvatars().then(() => {
-    console.log('Downloaded all files');
+    console.info('Downloaded all avatar files');
     return;
 }).catch((error) => {
-    console.log('An error occurred while downloading avatars:', error);
+    console.error('An error occurred while downloading avatars:', error);
 });
 loadAvailableDisplayNames().then((displayNames) => {
-    console.log('Loaded available display names');
+    console.info('Loaded all available display names');
     return displayNames;
 }).catch((error) => {
-    console.log('An error occurred while loading available display names:', error);
+    console.error('An error occurred while loading available display names:', error);
 });
 
 export default server;

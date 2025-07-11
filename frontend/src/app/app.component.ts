@@ -1,13 +1,11 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {RouterLink, RouterOutlet, Router, NavigationEnd} from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faArrowLeft, faCircleInfo, faMoon, faLightbulb} from '@fortawesome/free-solid-svg-icons';
+import {faCircleInfo, faLightbulb, faMoon} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
-import {NavigationService} from '../services/navigation.service';
 import {NavigationComponent} from './navigation/navigation.component';
-
 
 @Component({
     selector: 'app-root',
@@ -19,7 +17,6 @@ import {NavigationComponent} from './navigation/navigation.component';
 export class AppComponent implements OnInit {
 
     protected readonly faCircleInfo = faCircleInfo;
-    protected readonly faArrowLeft = faArrowLeft;
     protected readonly faMoon  = faMoon;
     protected readonly faLightbulb = faLightbulb;
 
@@ -27,9 +24,7 @@ export class AppComponent implements OnInit {
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
-        private http: HttpClient,
-        private router: Router,
-        private navigationService: NavigationService) {
+        private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -54,5 +49,12 @@ export class AppComponent implements OnInit {
         localStorage.setItem('theme', nextTheme);
         this.theme = nextTheme;
         document.documentElement.setAttribute('data-theme', nextTheme);
+    }
+
+    skipToMain() {
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.focus();
+        }
     }
 }

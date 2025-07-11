@@ -59,7 +59,7 @@ export class RankingComponent implements OnInit {
                 }
             },
             error: (error) => {
-                console.log('An error occurred while fetching ranking most votes:', error);
+                console.error('An error occurred while fetching ranking most votes:', error);
             },
         });
     }

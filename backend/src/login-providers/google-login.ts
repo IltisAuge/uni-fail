@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {OAuth2Client} from 'google-auth-library';
-import {LoginController} from '@/controller/login-controller';
+import {LoginController} from '@/controllers/login-controller';
 
 export class GoogleLoginController extends LoginController {
 

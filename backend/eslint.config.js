@@ -34,7 +34,7 @@ export default [
             'no-trailing-spaces': 'error',
             'eol-last': ['error', 'always'],
             'comma-dangle': ['error', 'always-multiline'],
-            'no-console': 'warn',
+            'no-console': ['warn', { allow: ['error', 'info'] }],
             'no-debugger': 'error',
             'prefer-const': 'error',
             'arrow-parens': ['error', 'always'],

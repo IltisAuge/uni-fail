@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -43,7 +43,7 @@ import {AuthService} from '../../services/auth.service';
     templateUrl: './navigation.component.html',
     styleUrl: './navigation.component.css',
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
 
     protected readonly faHome = faHome;
     protected readonly faSearch = faSearch;

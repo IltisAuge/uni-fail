@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {NgIf} from '@angular/common';
-import {filter, Subject, Subscription, takeUntil} from 'rxjs';
+import {filter, Subject, takeUntil} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {AuthService} from '../../services/auth.service';
 import {TitleService} from '../../services/title.service';
@@ -87,7 +87,7 @@ export class UserAdminViewComponent implements OnInit, OnDestroy {
                 this.setUserData(resp.user);
             },
             error: (error) => {
-                console.log('An error occurred while resetting display name:', error);
+                console.error('An error occurred while resetting display name:', error);
             },
         });
     }
@@ -103,7 +103,7 @@ export class UserAdminViewComponent implements OnInit, OnDestroy {
                 this.setUserData(resp.user);
             },
             error: (error) => {
-                console.log('An error occurred while setting blocked status of user:', error);
+                console.error('An error occurred while setting blocked status of user:', error);
             },
         });
     }
@@ -119,7 +119,7 @@ export class UserAdminViewComponent implements OnInit, OnDestroy {
                 this.setUserData(resp.user);
             },
             error: (error) => {
-                console.log('An error occurred while setting admin:', error);
+                console.error('An error occurred while setting admin:', error);
             },
         });
     }

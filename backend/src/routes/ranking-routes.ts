@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getUniRankingMostVotes} from '../controller/post-controller';
+import {getUniRankingMostVotes} from '@/controllers/post-controller';
 
 const rankingRouter = Router();
 

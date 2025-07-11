@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {CommonModule, Location} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {filter, firstValueFrom, Subject, takeUntil} from 'rxjs';
@@ -41,7 +41,6 @@ export class PostComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private router: Router,
         private authService: AuthService,
-        private location: Location,
         private navigationService: NavigationService,
     ) { }
 
@@ -86,16 +85,14 @@ export class PostComponent implements OnInit, OnDestroy {
                     this.user &&
                     (
                         this.user.isAdmin ||
-                        (this.post && this.post.userId === this.user._id)
+                        this.post && this.post.userId === this.user._id
                     )
                 );
-                console.log(this.post?._id);
                 this.hasVoted = !!(
                     this.user &&
                     this.post &&
                     this.user.votedPosts.includes(this.post._id)
                 );
-                //console.log('Post-Details erfolgreich abgerufen:', this.post);
             },
             error: (error) => {
                 if (error.status !== 404) {
@@ -104,7 +101,7 @@ export class PostComponent implements OnInit, OnDestroy {
                     this.loading = false;
                     return;
                 }
-                //Post not found
+                // Post was not found
                 this.loading = false;
                 this.post = undefined;
                 this.error = undefined;
@@ -126,28 +123,26 @@ export class PostComponent implements OnInit, OnDestroy {
         this.http.delete(`${environment.apiBaseUrl}/post/delete/${this.post._id}`, {
             withCredentials: true,
         }).subscribe({
-            next: async (response) => {
-                console.log('Post erfolgreich gelöscht:', response);
-                await this.goBack(); //go to previous page after deleting
+            next: async () => {
+                this.goBack(); // go to previous page after deleting
             },
             error: (err) => {
-                console.error('Fehler beim Löschen des Posts:', err);
+                console.error('An error occurred while deleting post:', err);
                 this.error = 'Deleting did not work';
             },
         });
     }
 
-    goBack(): void {
+    async goBack() {
         if (this.navigationService.hasPreviousUrl()) {
             const previousUrl = this.navigationService.getPreviousUrl()!;
-            this.router.navigateByUrl(previousUrl);
-        } else {
-            this.router.navigateByUrl('/'); // Fallback
+            await this.router.navigateByUrl(previousUrl);
+            return;
         }
+        await this.router.navigateByUrl('/'); // Fallback
     }
 
     toggleUpVote() {
-        console.log('toggle');
         if (this.hasVoted) {
             this.removeUpVote();
             return;
@@ -158,12 +153,10 @@ export class PostComponent implements OnInit, OnDestroy {
     removeUpVote() {
         if (this.post) {
             this.postVoteChange('remove').then(() => {
-                console.log(`set hasVoted from ${this.hasVoted}`);
                 this.hasVoted = false;
-                console.log(`set hasVoted to ${this.hasVoted}`);
                 return false;
             }).catch((error) => {
-                console.log('An error occurred while posting vote change:', error);
+                console.error('An error occurred while posting vote change:', error);
             });
         }
     }
@@ -171,12 +164,10 @@ export class PostComponent implements OnInit, OnDestroy {
     addUpVote() {
         if (this.post) {
             this.postVoteChange('add').then(() => {
-                console.log(`set hasVoted from ${this.hasVoted}`);
                 this.hasVoted = true;
-                console.log(`set hasVoted to ${this.hasVoted}`);
                 return true;
             }).catch((error) => {
-                console.log('An error occurred while posting vote change:', error);
+                console.error('An error occurred while posting vote change:', error);
             });
         }
     }
@@ -192,7 +183,6 @@ export class PostComponent implements OnInit, OnDestroy {
 
         if (this.post) {
             this.post.upVotes = resp.post.upVotes;
-            console.log('vote resp user: ', resp.user);
             this.authService.setUser(!!resp.user, resp.user);
         }
     }

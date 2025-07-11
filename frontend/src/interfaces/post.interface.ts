@@ -7,5 +7,4 @@ export interface Post {
     userName: string;
     createdAt: string;
     upVotes: number;
-    //downvote?: number;
 }

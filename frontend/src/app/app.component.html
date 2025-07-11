@@ -1,7 +1,12 @@
 <div class="flex h-screen w-screen relative flex-col md:flex-row">
+    <button class="skip-link" (click)="skipToMain()" aria-label="Zum Inhalt springen">
+        Zum Inhalt springen
+    </button>
     <app-navigation></app-navigation>
-    <main class="relative flex-1 overflow-y-auto overflow-x-hidden p-[0.5rem] md:p-[2rem] flex flex-col items-center">
-        <!-- Mobile: Toggle links, ABout Us rechts oben -->
+    <main id="main-content" tabindex="-1"
+          class="relative flex-1 overflow-y-auto overflow-x-hidden
+           p-[0.5rem] md:p-[2rem] flex flex-col items-center">
+        <!-- Mobile version for theme toggler and about-us icon -->
         <div class="flex gap-4 items-center w-full justify-end md:hidden mr-4">
             <div class=" top-[2rem] left-[2rem] z-50">
                 <button (click)="toggleTheme()" class="button-blue">
@@ -14,7 +19,7 @@
             </div>
         </div>
 
-        <!-- Desktop: Toggle + About Us rechts oben nebeneinander -->
+        <!-- Desktop version for theme toggler and about-us icon -->
         <div class="hidden md:flex absolute top-[2rem] right-[2rem] z-50 items-center gap-4">
             <button (click)="toggleTheme()" class="button-blue">
                 <fa-icon [icon]="theme === 'dark' ? faMoon : faLightbulb"></fa-icon>

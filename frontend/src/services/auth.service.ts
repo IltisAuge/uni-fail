@@ -29,11 +29,7 @@ export class AuthService {
     }
 
     reloadUser(): Observable<UserState> {
-        return this.loadUser().pipe(
-            tap((state) => {
-                console.log('Reloaded user:', state);
-            }),
-        );
+        return this.loadUser();
     }
 
     setUser(success: boolean, user?: User | undefined) {

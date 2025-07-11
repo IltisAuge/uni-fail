@@ -7,7 +7,7 @@ import {AboutUserComponent} from './about-user/about-user.component';
 import {PostFormComponent} from './post-form/post-form.component';
 import {UserPostsComponent} from './user-posts/user-posts.component';
 
-export const accessGuard: CanActivateFn = (route, state) => {
+export const accessGuard: CanActivateFn = (route) => {
     const authService = inject(AuthService);
     const router = inject(Router);
     return authService.reloadUser().pipe(

@@ -55,19 +55,6 @@ export async function deleteUser(userId: string) {
 }
 
 export async function getUser(userId: string): Promise<User | undefined> {
-    if (userId === '000000000') {
-        return {
-            _id: '000000000',
-            provider: 'Mock Provider',
-            email: 'mock@mail.com',
-            name: 'Mock Name',
-            isAdmin: false,
-            displayName: 'Mock Displayname',
-            avatarKey: '2289_SkVNQSBGQU1PIDEwMjgtMTIy.jpg',
-            votedPosts: [],
-            isBlocked: false,
-        };
-    }
     const cachedUser = userCache.get(userId) as unknown as User;
     if (cachedUser) {
         return cachedUser;
@@ -98,27 +85,21 @@ async function updateUserField(userId: string, field: string, value: any) {
 }
 
 export async function addVotedPost(_id: string, postId: string) {
-    console.log(`addVotedPost: _id=${_id} postId=${postId}`);
     const user = await getUser(_id);
-    console.log(user);
     if (!user) {
         return;
     }
-    const s = [...user.votedPosts, postId];
-    console.log(s);
-    return await updateUserField(_id, 'votedPosts', s);
+    const newVotedPosts = [...user.votedPosts, postId];
+    return await updateUserField(_id, 'votedPosts', newVotedPosts);
 }
 
 export async function removeVotedPost(_id: string, postId: string) {
-    console.log(`removeVotedPost: _id=${_id} postId=${postId}`);
     const user = await getUser(_id);
-    console.log(user);
     if (!user) {
         return;
     }
-    const s = user.votedPosts.filter((id) => id !== postId);
-    console.log(s);
-    return await updateUserField(_id, 'votedPosts', s);
+    const newVotedPosts = user.votedPosts.filter((id) => id !== postId);
+    return await updateUserField(_id, 'votedPosts', newVotedPosts);
 }
 
 export async function setDisplayName( _id: string, displayName: string) {

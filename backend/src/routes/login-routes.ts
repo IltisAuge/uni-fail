@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import dotenv from 'dotenv';
-import {getRandomDisplayName, getUser, saveUser} from '@/controller/user-controller';
+import {getRandomDisplayName, getUser, saveUser} from '@/controllers/user-controller';
 import {GoogleLoginController} from '@/login-providers/google-login';
 import {MicrosoftLoginController} from '@/login-providers/microsoft-login';
 
@@ -52,15 +52,12 @@ loginRouter.get('/google-auth-return', (req, res) => {
             return userData;
         })
         .catch((error) => {
-            console.error('An error occurred while getting user data from google login controller:', error);
+            console.error('An error occurred while getting user data from google login controllers:', error);
         });
 });
 
 loginRouter.get('/microsoft-auth-return', (req, res) => {
     const authCode = req.query.code as string;
-    const sid = req.cookies['connect.sid'].split('.')[0].replace('s%3A', '');
-    console.log(`microsoft auth return sid=${sid}`);
-    console.log(`microsoft auth return: session=${JSON.stringify(req.session)}`);
     if (authCode == undefined) {
         res.send('No authCode');
         return;
@@ -71,7 +68,6 @@ loginRouter.get('/microsoft-auth-return', (req, res) => {
     }
 
     const state = req.query.state;
-    console.log(`state in query: ${state}`);
     if (state == undefined) {
         res.send('No state');
         return;
@@ -107,7 +103,7 @@ loginRouter.get('/microsoft-auth-return', (req, res) => {
 
 // Only enable this endpoint in development
 if (process.env.PRODUCTION === 'false') {
-    console.log('Enabled /login/mock endpoint');
+    console.info('Enabled /login/mock endpoint');
     loginRouter.get('/mock', async (req, res) => {
         const username = req.query.username as string;
         const isAdmin = req.query.isAdmin as string;
@@ -128,10 +124,10 @@ if (process.env.PRODUCTION === 'false') {
         res.status(200).json({user});
     });
 } else {
-    console.log('Not enabled /login/mock endpoint');
+    console.info('/login/mock endpoint not enabled');
 }
 
-async function completeAuthentication(userData: any, req: any, res: any) {
+async function completeAuthentication(userData: Record<string, any>, req: any, res: any) {
     let user = await getUser(userData._id);
     if (!user) {
         // User does not yet exist in the database

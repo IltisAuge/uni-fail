@@ -59,7 +59,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                 this.loading = false;
             },
             error: (error) => {
-                console.log('An error occurred while searching:', error);
+                console.error('An error occurred while searching for posts:', error);
             },
         });
     }
