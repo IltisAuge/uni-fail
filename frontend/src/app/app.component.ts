@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
 
+
 @Component({
     selector: 'app-root',
     imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
