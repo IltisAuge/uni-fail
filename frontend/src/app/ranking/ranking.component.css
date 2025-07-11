@@ -16,7 +16,6 @@
 
 .pedestal-head {
     font-weight: bold;
-    padding: 0 1rem;
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease-out;

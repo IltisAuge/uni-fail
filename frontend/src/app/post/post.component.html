@@ -84,7 +84,8 @@
                         </button>
                     </div>
 
-                    <div *ngIf="canDeletePost" class="ml-auto">
+                    <div *ngIf="canDeletePost" class="ml-auto" tabindex="0"
+                         (keydown.enter)="openDeleteModal(); $event.preventDefault()">
                         <button (click)="openDeleteModal()" class="delete-button font-bold">
                             Post löschen
                             <span class="delete-button__inner">
@@ -116,7 +117,9 @@
     <!-- Dialog header -->
     <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
         <h3 class="text-xl font-semibold">Post löschen</h3>
-        <button (click)="closeDeleteModal()" class="hover:text-gray-400 hover:cursor-pointer">✕</button>
+        <button (click)="closeDeleteModal()"
+                (keydown.enter)="closeDeleteModal(); $event.preventDefault()"
+                class="hover:text-gray-400 hover:cursor-pointer">✕</button>
     </div>
 
     <!-- Dialog body -->
@@ -126,13 +129,18 @@
 
     <!-- Dialog footer -->
     <div class="flex justify-end space-x-2 gap-10 items-center border-t border-[var(--border-color)] pt-4">
-        <a (click)="closeDeleteModal()">Abbrechen</a>
-        <button (click)="deletePost()" class="button-red">Ja, löschen</button>
+        <a (click)="closeDeleteModal()" class="cursor-pointer" tabindex="0"
+           (keydown.enter)="closeDeleteModal(); $event.preventDefault()">Abbrechen</a>
+        <button (click)="deletePost()"
+                (keydown.enter)="deletePost(); $event.preventDefault()"
+                class="button-red">Ja, löschen</button>
     </div>
 </dialog>
 
 <ng-template #loginToVote>
-    <a (click)="routeToLogin()" class="cursor-pointer" tabindex="0">Melde dich an, um abzustimmen</a>
+    <a (click)="routeToLogin()"
+       (keydown.enter)="routeToLogin(); $event.preventDefault()"
+       class="cursor-pointer" tabindex="0">Melde dich an, um abzustimmen</a>
 </ng-template>
 
 <app-not-found *ngIf="!loading && !post && !error"></app-not-found>

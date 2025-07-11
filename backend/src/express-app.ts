@@ -68,7 +68,7 @@ server.get('/csrf-token', (req, res) => {
 });
 server.get('/me', async (req, res) => {
     if (!req.session.userId) {
-        res.status(401).send('Unauthorized');
+        res.json({user: undefined});
         return;
     }
     const user = await getUser(req.session.userId);

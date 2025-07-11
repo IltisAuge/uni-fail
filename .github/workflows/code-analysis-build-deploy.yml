@@ -9,7 +9,7 @@ on:
 
 jobs:
     code-analysis:
-        name: Code Analysis (Frontend & Backend)
+        name: Code Analysis (Frontend & Backend) & Backend Integration Tests
         runs-on: ubuntu-latest
 
         steps:
@@ -45,6 +45,10 @@ jobs:
 
             - name: Run ESLint (backend - TypeScript)
               run: npm run eslint:ts
+              working-directory: backend
+
+            - name: Run backend integration tests
+              run: npm run test
               working-directory: backend
 
     build-and-deploy:
