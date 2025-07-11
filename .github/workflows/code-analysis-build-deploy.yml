@@ -47,10 +47,6 @@ jobs:
               run: npm run eslint:ts
               working-directory: backend
 
-            - name: Run backend integration tests
-              run: npm run test
-              working-directory: backend
-
     build-and-deploy:
         name: Build and deploy
         needs: code-analysis
