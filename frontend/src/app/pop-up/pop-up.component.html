@@ -1,1 +1,6 @@
-<p>pop-up works!</p>
+<app-popup
+    *ngIf="showWelcomePopup"
+    [title]="'Willkommen bei UniFail!'"
+    [message]="'Schön, dass du da bist. Du kannst dieses Fenster schließen, um es nicht mehr zu sehen.'"
+    (closed)="onPopupClosed()"
+></app-popup>

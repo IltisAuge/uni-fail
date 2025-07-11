@@ -15,6 +15,7 @@ import rankingRouter from './routes/ranking-routes';
 import tagRouter from './routes/tag-routes';
 import {getUser, loadAvailableDisplayNames} from '@/controllers/user-controller';
 import votingRouter from '@/routes/voting-routes';
+import welcomeRoutes from '@/routes/PopUp-routes';
 
 dotenv.config();
 
@@ -44,6 +45,9 @@ server.use(session({
         domain: process.env.PRODUCTION == 'true' ? `.${process.env.DOMAIN}` : undefined,
     },
 }));
+
+server.use('/api', welcomeRoutes);
+
 server.use(cors({
     origin: process.env.HOST,
     credentials: true,

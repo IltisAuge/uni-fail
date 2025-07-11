@@ -1,55 +1,38 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-popup',
-    standalone: true,
     template: `
-    @if (isOpen()) {
-    <div class="popup">
-      <div class="popup-content">
-        <h2>{{ title() }}</h2>
-        <p>{{ message() }}</p>
-        <button (click)="close()">x</button>
-      </div>
-    </div>
-    }
-  `,
-    styles: [
-        `
-      .popup {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .popup-content {
-        background-color: pink;
-        padding: 20px;
-        border-radius: 5px;
-      }
+        <div *ngIf="showPopup" class="popup">
+            <div class="popup-content">
+                <h2>Willkommen bei UniFail!</h2>
+                <p>Dies ist dein erstes Mal hier 🎉</p>
+                <button (click)="dismissPopup()">Nicht mehr anzeigen</button>
+            </div>
+        </div>
     `,
-    ],
+    standalone: true,
+    styleUrls: ['./popup.component.css'],
+    providers: [CookieService],
 })
-export class PopupComponent {
-    isOpen = signal(false);
-    title = signal('');
-    message = signal('');
+export class PopupComponent implements OnInit {
+    showPopup = false;
 
-    @Output() closed = new EventEmitter<void>();
+    constructor(
+        private cookieService: CookieService,
+        private http: HttpClient
+    ) {}
 
-    open(title: string, message: string) {
-        this.title.set(title);
-        this.message.set(message);
-        this.isOpen.set(true);
+    ngOnInit() {
+        this.showPopup = !this.cookieService.check('welcomePopupDismissed');
     }
 
-    close() {
-        this.isOpen.set(false);
-        this.closed.emit();
+    dismissPopup() {
+        this.http.post('/api/dismiss-welcome', {}, { withCredentials: true }).subscribe(() => {
+            this.cookieService.set('welcomePopupDismissed', 'true', 1000); //after 1000 days reevaluating
+            this.showPopup = false;
+        });
     }
 }

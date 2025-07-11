@@ -1,20 +1,31 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {Component, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+//import {RouterLink, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faCircleInfo, faLightbulb, faMoon} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
-import {NavigationComponent} from './navigation/navigation.component';
-
+//import {NavigationComponent} from './navigation/navigation.component';
+import { PopupComponent } from './pop-up/pop-up.component';
 
 @Component({
     selector: 'app-root',
-    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
-    templateUrl: './app.component.html',
     standalone: true,
-    styleUrl: './app.component.css',
+    imports: [
+        /*NavigationComponent,
+        RouterOutlet,
+        FaIconComponent,
+        RouterLink,
+        NgTemplateOutlet,*/
+        PopupComponent
+    ],
+    styleUrls: ['./app.component.css'],
+    template: `
+    <button (click)="openPopup()">Popup öffnen</button>
+    <app-popup (closed)="onPopupClosed()"></app-popup>
+  `
 })
+
 export class AppComponent implements OnInit {
 
     protected readonly faCircleInfo = faCircleInfo;
@@ -23,12 +34,17 @@ export class AppComponent implements OnInit {
 
     theme: string = 'light';
 
+    showWelcomePopup = false;
+
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         private http: HttpClient) {
     }
 
     ngOnInit() {
+        const dismissed = localStorage.getItem('welcomePopupDismissed');
+        this.showWelcomePopup = dismissed !== 'true';
+
         this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
             withCredentials: true,
         }).subscribe();
@@ -39,6 +55,34 @@ export class AppComponent implements OnInit {
             }
             document.documentElement.setAttribute('data-theme', this.theme);
         }
+        this.http.get<{ showWelcomePopup: boolean }>(`${environment.apiBaseUrl}/welcome`, {
+            withCredentials: true
+        }).subscribe({
+            next: (res)=>{
+                console.error("Welcome test went wrong");
+            }
+        })
+    }
+
+    @ViewChild(PopupComponent) popup!: PopupComponent;
+
+    onPopupClosed() {
+        this.http.post(
+            `${environment.apiBaseUrl}/dismiss-welcome`,
+            {},
+            { withCredentials: true }
+        ).subscribe({
+            next: () => {
+                this.showWelcomePopup = false;
+            },
+            error: (err) => {
+                console.error('Error with gettin Dismiss-Cookies', err);
+            }
+        });
+    }
+
+    openPopup() {
+        this.showWelcomePopup = true;
     }
 
     getThemeName() {
