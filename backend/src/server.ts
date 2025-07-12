@@ -1,6 +1,6 @@
+import * as process from 'node:process';
 import {connect} from 'mongoose';
 import server from './express-app';
-import * as process from 'node:process';
 
 console.info(`Connecting to MongoDB '${process.env.DB_HOST}:${process.env.DB_PORT}'...`);
 connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {

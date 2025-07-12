@@ -4,16 +4,29 @@ import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faCircleInfo, faLightbulb, faMoon} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
+import {CommonModule} from '@angular/common';
 import {environment} from '../environments/environment';
 import {NavigationComponent} from './navigation/navigation.component';
+import {PopupComponent} from './pop-up/pop-up.component';
+
 
 @Component({
     selector: 'app-root',
-    imports: [NavigationComponent, RouterOutlet, FaIconComponent, RouterLink, NgTemplateOutlet],
-    templateUrl: './app.component.html',
     standalone: true,
-    styleUrl: './app.component.css',
+    imports: [
+        CommonModule,
+        NavigationComponent,
+        RouterOutlet,
+        FaIconComponent,
+        RouterLink,
+        NgTemplateOutlet,
+        PopupComponent,
+    ],
+    styleUrls: ['./app.component.css'],
+    templateUrl: './app.component.html',
+
 })
+
 export class AppComponent implements OnInit {
 
     protected readonly faCircleInfo = faCircleInfo;
@@ -28,9 +41,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
-            withCredentials: true,
-        }).subscribe();
         if (isPlatformBrowser(this.platformId)) {
             const storedTheme = localStorage.getItem('theme');
             if (storedTheme) {
@@ -38,6 +48,10 @@ export class AppComponent implements OnInit {
             }
             document.documentElement.setAttribute('data-theme', this.theme);
         }
+
+        this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
+            withCredentials: true,
+        }).subscribe();
     }
 
     getThemeName() {
