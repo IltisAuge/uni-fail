@@ -1,6 +1,9 @@
-<app-popup
-    *ngIf="showWelcomePopup"
-    [title]="'Willkommen bei UniFail!'"
-    [message]="'Schön, dass du da bist. Du kannst dieses Fenster schließen, um es nicht mehr zu sehen.'"
-    (closed)="onPopupClosed()"
-></app-popup>
+<div *ngIf="showPopup" class="popup">
+    <div class="popup-header">
+        <h2>Willkommen 🎉</h2>
+        <button class="popup-close button-blue cursor-pointer" (click)="closePopup()">X</button>
+    </div>
+    <p>Hier kannst du deinen UniFails teilen, andere lesen und bewerten.</p>
+    <p>Möge die schlimmste Uni gewinnen :)</p>
+    <button class="dismiss-button button-blue cursor-pointer" (click)="dismissPopup()">Nicht mehr anzeigen</button>
+</div>

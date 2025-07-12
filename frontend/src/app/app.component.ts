@@ -1,29 +1,30 @@
-import {Component, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-//import {RouterLink, RouterOutlet} from '@angular/router';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faCircleInfo, faLightbulb, faMoon} from '@fortawesome/free-solid-svg-icons';
 import {HttpClient} from '@angular/common/http';
+import {CommonModule} from '@angular/common';
 import {environment} from '../environments/environment';
-//import {NavigationComponent} from './navigation/navigation.component';
-import { PopupComponent } from './pop-up/pop-up.component';
+import {NavigationComponent} from './navigation/navigation.component';
+import {PopupComponent} from './pop-up/pop-up.component';
+
 
 @Component({
     selector: 'app-root',
     standalone: true,
     imports: [
-        /*NavigationComponent,
+        CommonModule,
+        NavigationComponent,
         RouterOutlet,
         FaIconComponent,
         RouterLink,
-        NgTemplateOutlet,*/
-        PopupComponent
+        NgTemplateOutlet,
+        PopupComponent,
     ],
     styleUrls: ['./app.component.css'],
-    template: `
-    <button (click)="openPopup()">Popup öffnen</button>
-    <app-popup (closed)="onPopupClosed()"></app-popup>
-  `
+    templateUrl: './app.component.html',
+
 })
 
 export class AppComponent implements OnInit {
@@ -42,12 +43,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        const dismissed = localStorage.getItem('welcomePopupDismissed');
-        this.showWelcomePopup = dismissed !== 'true';
-
-        this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
-            withCredentials: true,
-        }).subscribe();
         if (isPlatformBrowser(this.platformId)) {
             const storedTheme = localStorage.getItem('theme');
             if (storedTheme) {
@@ -55,30 +50,47 @@ export class AppComponent implements OnInit {
             }
             document.documentElement.setAttribute('data-theme', this.theme);
         }
-        this.http.get<{ showWelcomePopup: boolean }>(`${environment.apiBaseUrl}/welcome`, {
-            withCredentials: true
+
+        this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
+            withCredentials: true,
+        }).subscribe();
+
+        this.http.get<{ showWelcome: boolean }>(`${environment.apiBaseUrl}/welcome`, {
+            withCredentials: true,
         }).subscribe({
-            next: (res)=>{
-                console.error("Welcome test went wrong");
-            }
-        })
-    }
-
-    @ViewChild(PopupComponent) popup!: PopupComponent;
-
-    onPopupClosed() {
-        this.http.post(
-            `${environment.apiBaseUrl}/dismiss-welcome`,
-            {},
-            { withCredentials: true }
-        ).subscribe({
-            next: () => {
-                this.showWelcomePopup = false;
+            next: (res) => {
+                console.log('Welcome popup status backend:', res.showWelcome);
+                this.showWelcomePopup = res.showWelcome;
             },
             error: (err) => {
-                console.error('Error with gettin Dismiss-Cookies', err);
-            }
+                console.error('Error getting Welcome status from backend', err);
+                //fallback
+                this.showWelcomePopup = true;
+            },
         });
+    }
+
+    //@ViewChild(PopupComponent) popup!: PopupComponent;
+
+    onPopupClosed(permanentlyDismissed: boolean) {
+        if (permanentlyDismissed) {
+            this.http.post(
+                `${environment.apiBaseUrl}/dismiss-welcome`,
+                {},
+                {withCredentials: true},
+            ).subscribe({
+                next: () => {
+                    this.showWelcomePopup = false;
+                    console.log('Popup permanently dismissed via backend.');
+                },
+                error: (err) => {
+                    console.error('Error with dismissing cookie via backend', err);
+                },
+            });
+        } else {
+            this.showWelcomePopup = false;
+            console.log('Popup temporarily closed.');
+        }
     }
 
     openPopup() {

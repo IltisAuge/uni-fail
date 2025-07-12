@@ -1,38 +1,58 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Inject, PLATFORM_ID } from '@angular/core'; // <-- Add Inject, PLATFORM_ID
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClient } from '@angular/common/http';
+import { CommonModule, isPlatformBrowser } from '@angular/common'; // <-- Add isPlatformBrowser
+import confetti from 'canvas-confetti';
 
 @Component({
     selector: 'app-popup',
-    template: `
-        <div *ngIf="showPopup" class="popup">
-            <div class="popup-content">
-                <h2>Willkommen bei UniFail!</h2>
-                <p>Dies ist dein erstes Mal hier 🎉</p>
-                <button (click)="dismissPopup()">Nicht mehr anzeigen</button>
-            </div>
-        </div>
-    `,
     standalone: true,
-    styleUrls: ['./popup.component.css'],
+    imports: [CommonModule],
+    templateUrl: './pop-up.component.html',
+    styleUrls: ['./pop-up.component.css'],
     providers: [CookieService],
 })
 export class PopupComponent implements OnInit {
-    showPopup = false;
+    showPopup = true;
+
+    @Output() closed = new EventEmitter<boolean>();
 
     constructor(
         private cookieService: CookieService,
-        private http: HttpClient
+        @Inject(PLATFORM_ID) private platformId: Object,
     ) {}
 
     ngOnInit() {
         this.showPopup = !this.cookieService.check('welcomePopupDismissed');
+        console.log('OnInit - showWelcomePopup:', this.showPopup);
+
+        // Guard the confetti call with the platform check
+        if (isPlatformBrowser(this.platformId) && this.showPopup) {
+            this.shootConfetti();
+        }
     }
 
     dismissPopup() {
-        this.http.post('/api/dismiss-welcome', {}, { withCredentials: true }).subscribe(() => {
-            this.cookieService.set('welcomePopupDismissed', 'true', 1000); //after 1000 days reevaluating
-            this.showPopup = false;
+        this.cookieService.set('welcomePopupDismissed', 'true', {
+            path: '/',
+            sameSite: 'Lax',
+            expires: 7,
+        });
+        this.showPopup = false;
+        this.closed.emit(true);
+    }
+
+    closePopup() {
+        this.showPopup = false; //local
+        this.closed.emit(false);
+    }
+    shootConfetti(): void {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { x: 0.8, y: 0.7 },
+            colors: ['#bb0000', '#ffffff', '#00ff00', '#0000bb'],
+            shapes: ['square', 'circle'],
+            scalar: 1.1,
         });
     }
 }

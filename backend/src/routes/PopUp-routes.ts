@@ -12,9 +12,8 @@ router.post('/dismiss-welcome', (req: Request, res: Response) => {
         httpOnly: false,
         secure: process.env.PRODUCTION === 'true',
         sameSite: 'lax',
-        maxAge: 1000 * 60 * 60 * 24 * 365
+        maxAge: 1000 * 60 * 60 * 24 * 365,
     });
-    res.sendStatus(200);
-});
+    res.json({ status: 'OK' });});
 
 export default router;

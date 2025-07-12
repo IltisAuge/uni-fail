@@ -46,7 +46,7 @@ server.use(session({
     },
 }));
 
-server.use('/api', welcomeRoutes);
+server.use('/', welcomeRoutes);
 
 server.use(cors({
     origin: process.env.HOST,
