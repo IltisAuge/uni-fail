@@ -35,8 +35,6 @@ export class AppComponent implements OnInit {
 
     theme: string = 'light';
 
-    showWelcomePopup = false;
-
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         private http: HttpClient) {
@@ -54,47 +52,6 @@ export class AppComponent implements OnInit {
         this.http.get(`${environment.apiBaseUrl}/csrf-token`, {
             withCredentials: true,
         }).subscribe();
-
-        this.http.get<{ showWelcome: boolean }>(`${environment.apiBaseUrl}/welcome`, {
-            withCredentials: true,
-        }).subscribe({
-            next: (res) => {
-                console.log('Welcome popup status backend:', res.showWelcome);
-                this.showWelcomePopup = res.showWelcome;
-            },
-            error: (err) => {
-                console.error('Error getting Welcome status from backend', err);
-                //fallback
-                this.showWelcomePopup = true;
-            },
-        });
-    }
-
-    //@ViewChild(PopupComponent) popup!: PopupComponent;
-
-    onPopupClosed(permanentlyDismissed: boolean) {
-        if (permanentlyDismissed) {
-            this.http.post(
-                `${environment.apiBaseUrl}/dismiss-welcome`,
-                {},
-                {withCredentials: true},
-            ).subscribe({
-                next: () => {
-                    this.showWelcomePopup = false;
-                    console.log('Popup permanently dismissed via backend.');
-                },
-                error: (err) => {
-                    console.error('Error with dismissing cookie via backend', err);
-                },
-            });
-        } else {
-            this.showWelcomePopup = false;
-            console.log('Popup temporarily closed.');
-        }
-    }
-
-    openPopup() {
-        this.showWelcomePopup = true;
     }
 
     getThemeName() {

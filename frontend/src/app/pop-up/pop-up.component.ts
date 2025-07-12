@@ -12,22 +12,24 @@ import confetti from 'canvas-confetti';
     providers: [CookieService],
 })
 export class PopupComponent implements OnInit {
-    showPopup = true;
+
+    showPopup = false;
 
     @Output() closed = new EventEmitter<boolean>();
 
     constructor(
         private cookieService: CookieService,
         @Inject(PLATFORM_ID) private platformId: Object,
-    ) {}
+    ) { }
 
     ngOnInit() {
-        this.showPopup = !this.cookieService.check('welcomePopupDismissed');
-        console.log('OnInit - showWelcomePopup:', this.showPopup);
-
         // Guard the confetti call with the platform check
-        if (isPlatformBrowser(this.platformId) && this.showPopup) {
-            this.shootConfetti();
+        if (isPlatformBrowser(this.platformId)) {
+            const dismissed = this.cookieService.get('welcomePopupDismissed') === 'true';
+            this.showPopup = !dismissed;
+            if (this.showPopup) {
+                this.shootConfetti();
+            }
         }
     }
 
@@ -42,9 +44,10 @@ export class PopupComponent implements OnInit {
     }
 
     closePopup() {
-        this.showPopup = false; //local
+        this.showPopup = false;
         this.closed.emit(false);
     }
+
     shootConfetti(): void {
         confetti({
             particleCount: 100,
