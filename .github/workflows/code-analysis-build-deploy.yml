@@ -53,6 +53,8 @@ jobs:
 
             - name: Run Integration Tests
               run: npm test
+              env:
+                PRODUCTION: false # To enable mock login endpoint during integration testing
               working-directory: backend
 
     build-and-deploy:
