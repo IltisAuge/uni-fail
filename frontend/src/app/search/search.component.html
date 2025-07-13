@@ -15,5 +15,7 @@
         <p *ngIf="posts.length > 0">{{posts.length}} Suchergebnisse:</p>
     </div>
 
-    <app-post-preview [posts]=posts [loading]=loading class="w-full md:w-[90%] lg:w-[70%]"></app-post-preview>
+    <app-post-preview *ngIf="posts.length > 0" [posts]=posts [loading]=loading
+                      class="w-full md:w-[90%] lg:w-[70%]">
+    </app-post-preview>
 </div>
