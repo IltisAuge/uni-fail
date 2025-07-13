@@ -18,7 +18,7 @@ Pull this repository by opening a new terminal. Navigate to the desired destinat
 After pulling the project from Github, install all required Node packages.
 To do this, open a terminal and navigate to `/frontend` in the project's directory. Then run `npm install --force`. --force is required because Angular 18 requires tailwindcss@"^2.0.0 || ^3.0.0" but this project uses TailwindCSS 4 as it is also compatible via Angular 18.
 
-The setup the backend, navigate to ``/backend`` and run `npm install`.
+To setup the backend, navigate to ``/backend`` and run `npm install`.
 In the ``/backend`` directory, create two new files: `.env` and `google_client.json`.
 The google_client.json file is needed later.
 The structure of the environment configuration file ```.env``` should be as followed:

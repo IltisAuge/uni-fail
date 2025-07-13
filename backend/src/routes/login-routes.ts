@@ -115,7 +115,7 @@ if (process.env.PRODUCTION === 'false') {
             name: username,
             isAdmin: isAdmin === 'true',
             displayName: `${username} Displayname`,
-            avatarKey: '2289_SkVNQSBGQU1PIDEwMjgtMTIy.jpg',
+            avatarKey: 'default.png',
             votedPosts: [],
             isBlocked: isBlocked === 'true',
         };
@@ -132,7 +132,7 @@ async function completeAuthentication(userData: Record<string, any>, req: any, r
     if (!user) {
         // User does not yet exist in the database
         // Set default avatar and random display name
-        const avatarId = '307ce493-b254-4b2d-8ba4-d12c080d6651.jpg';
+        const avatarId = 'default.png';
         const randomDisplayName = getRandomDisplayName();
         user = {
             _id: userData._id,
