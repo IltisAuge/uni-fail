@@ -106,17 +106,4 @@ server.get('/', (req, res) => {
     res.send('Welcome to the API of uni-fail!');
 });
 
-downloadAllAvatars().then(() => {
-    console.info('Downloaded all avatar files');
-    return;
-}).catch((error) => {
-    console.error('An error occurred while downloading avatars:', error);
-});
-loadAvailableDisplayNames().then((displayNames) => {
-    console.info('Loaded all available display names');
-    return displayNames;
-}).catch((error) => {
-    console.error('An error occurred while loading available display names:', error);
-});
-
 export default server;
