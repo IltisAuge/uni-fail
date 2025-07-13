@@ -10,10 +10,9 @@ import loginRouter from './routes/login-routes';
 import postRouter from './routes/post-routes';
 import userRouter from './routes/user-routes';
 import adminRouter from './routes/admin-routes';
-import {downloadAllAvatars} from './s3';
 import rankingRouter from './routes/ranking-routes';
 import tagRouter from './routes/tag-routes';
-import {getUser, loadAvailableDisplayNames} from '@/controllers/user-controller';
+import {getUser} from '@/controllers/user-controller';
 import votingRouter from '@/routes/voting-routes';
 
 dotenv.config();

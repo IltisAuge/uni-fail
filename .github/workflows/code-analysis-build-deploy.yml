@@ -55,6 +55,7 @@ jobs:
               run: npm test
               env:
                 PRODUCTION: false # To enable mock login endpoint during integration testing
+                SESSION_SECRET: abc123
               working-directory: backend
 
     build-and-deploy:
