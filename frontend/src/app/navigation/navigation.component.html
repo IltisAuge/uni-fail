@@ -1,0 +1,86 @@
+<header class="relative md:p-4 z-20 shadow-lg md:min-h-[100vh] border-r border-[var(--border-color)]">
+    <div class="flex flex-wrap justify-around items-center gap-1">
+        <button
+            *ngIf="isMobile"
+            (click)="toggleMenu()"
+            class="cursor-pointer">
+            <fa-icon [icon]="faBars" size="2x"></fa-icon>
+        </button>
+        <a [routerLink]="['/']" class="logo-link">
+            <img src="assets/logo-unifail.jpg"
+                alt="Uni-Fail Logo"
+                class="max-w-[15rem] p-[1rem] md:mx-auto" />
+        </a>
+    </div>
+
+    <!-- DROPDOWN NAVIGATION -->
+    <nav *ngIf="menuOpen" @dropdownAnimation class="overflow-hidden w-full" aria-label="Navigation">
+        <ul class="flex flex-col space-y-2 py-4 whitespace-nowrap">
+            <li>
+                <a class="nav-item"
+                   routerLink="/"
+                   routerLinkActive="active-link">
+                    <fa-icon [icon]="faHome"></fa-icon>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a class="nav-item"
+                   routerLink="/search"
+                   routerLinkActive="active-link">
+                    <fa-icon [icon]="faSearch"></fa-icon>
+                    <span>Suche</span>
+                </a>
+            </li>
+            <li>
+                <a class="nav-item"
+                   routerLink="/ranking"
+                   routerLinkActive="active-link">
+                    <fa-icon [icon]="faRankingStar"></fa-icon>
+                    <span>Rangliste</span>
+                </a>
+            </li>
+            <li>
+                <a class="nav-item"
+                   routerLink="/post"
+                   routerLinkActive="active-link">
+                    <fa-icon [icon]="faPlus"></fa-icon>
+                    <span>Post erstellen</span>
+                </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+                <a class="nav-item"
+                   routerLink="/my-posts"
+                   routerLinkActive="active-link">
+                    <fa-icon [icon]="faFolder"></fa-icon>
+                    <span>Deine Posts</span>
+                </a>
+            </li>
+            <li *ngIf="isLoggedIn; else login">
+                <a class="nav-item"
+                   routerLink="/my-account">
+                    <fa-icon [icon]="faUser"></fa-icon>
+                    <span>Dein Konto</span>
+                </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+                <a (click)="logout()" class="nav-item" tabindex="0"
+                   (keydown)="onLogoutKeydown($event)">
+                    <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                    <span>Abmelden</span>
+                </a>
+            </li>
+            <ng-template #login>
+                <li>
+                    <a class="nav-item"
+                       tabindex="0"
+                       routerLink="/login">
+                        <fa-icon [icon]="faUser"></fa-icon>
+                        Anmelden
+                    </a>
+                </li>
+            </ng-template>
+        </ul>
+    </nav>
+</header>
+

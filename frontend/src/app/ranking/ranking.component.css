@@ -1,0 +1,71 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.pedestal {
+    margin-top: auto;
+    text-align: center;
+    white-space: wrap;
+    overflow-wrap: anywhere;
+    flex: 1;
+}
+
+.pedestal-head {
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    position: relative;
+}
+
+.pedestal-head:hover {
+    color: var(--text-hover);
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.pedestal-head p {
+    width: 100%;
+    white-space: wrap;
+}
+
+.pedestal-body {
+    border: 1px solid var(--border-color);
+    font-weight: bold;
+    font-size: 4rem;
+    border-radius: 20px 20px 0 0;
+
+    /* centralize writing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* text shadow with 8 for sharpness    */
+    text-shadow:
+        0.2px 0.2px 0 #4B0082,
+        0.4px 0.4px 0 #4B0082,
+        0.6px 0.6px 0 #4B0082,
+        0.8px 0.8px 0 #4B0082,
+        1px 1px 0 #4B0082,
+        1.2px 1.2px 0 #4B0082,
+        1.5px 1.5px 1.5px rgb(30 30 47 / 0.7);
+}
+
+.pedestal:first-child {
+    border-right: none;
+}
+
+.pedestal:nth-child(3) {
+    border-left: none;
+}
+
+@media (width <= 500px) {
+    .pedestal {
+        white-space: wrap;
+        text-wrap: wrap;
+    }
+}

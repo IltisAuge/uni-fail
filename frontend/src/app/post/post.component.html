@@ -1,0 +1,146 @@
+<div class="w-full lg:w-[90%] xl:w-[80%]">
+    <!--"getting back" button-->
+    <div class="mb-4">
+        <button
+            (click)="goBack()"
+            class="button-blue">
+            <fa-icon [icon]="faArrowLeft"></fa-icon> Zurück zur Übersicht
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="text-center text-[var(--text-secondary)]">
+        Post-Details werden geladen...
+    </div>
+
+    <div *ngIf="error" class="text-center text-[var(--button-red)]">
+        {{ error }}
+    </div>
+
+    <div *ngIf="post && !loading"
+         class="bg-[var(--background-card)] text-[var(--text-primary)]
+                rounded-lg shadow-[var(--shadow-card)] p-6 mt-8
+                flex flex-col gap-5">
+
+        <div class="flex gap-10">
+            <ng-template #userImage>
+                <img [src]="getPostImage(post)" alt="User Avatar"
+                     class="rounded-full w-12 h-12 object-cover">
+            </ng-template>
+            <div class="hidden md:inline-block">
+                <ng-container *ngTemplateOutlet="userImage"></ng-container>
+            </div>
+
+            <div class="flex-1 flex flex-col gap-4">
+                <div class="flex gap-10 items-center">
+                    <div class="inline-block md:hidden">
+                        <ng-container *ngTemplateOutlet="userImage"></ng-container>
+                    </div>
+
+                    <span class="text-sm text-[var(--text-secondary)]">
+                        Verfasst von
+                        <span *ngIf="!isAdmin; else userNameLink">
+                            {{post.userName}}
+                        </span>
+                         am {{ post.createdAt | date:'dd.MM.yyyy' }}
+                    </span>
+                </div>
+
+                <ng-template #userNameLink>
+                    <a class="text-blue-500" routerLink="/user/{{post.userId}}" tabindex="0">{{ post.userName || 'Unbekannt' }}</a>
+                </ng-template>
+
+                <div class="mb-[1rem]">
+                    <h1 class="text-xl font-bold mb-2">{{ post.title }}</h1>
+                    <!--Tags-->
+                    <div *ngIf="post.tags.length > 0; else noTags">
+                        <div *ngIf="post.tags.length > 0" class="flex flex-wrap gap-2 items-end">
+                            <app-tag *ngFor="let tag of post.tags" tag="{{tag}}"></app-tag>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #noTags>
+                    <p class="text-sm text-[var(--text-secondary)]">Keine Tags vorhanden.</p>
+                </ng-template>
+
+                <!-- content scroll area-->
+                <div class="break-all max-h-64 border-1 border-[var(--border-color)] p-3 rounded overflow-y-auto whitespace-pre-wrap text-[var(--text-primary)] leading-relaxed mb-6">
+                    {{ post.content }}
+                </div>
+
+                <div class="flex items-center">
+                    <div *ngIf="post && isLoggedIn; else loginToVote">
+                        <button title="Up-Vote"
+                                class="cursor-pointer thumb-fa-icon"
+                                (click)="toggleUpVote()">
+                            <fa-icon [icon]="faThumbsUp"
+                                     class="text-[1.5rem] mr-2
+                                            hover:text-[var(--button-yellow-hover)]
+                                            transition-all duration-200" [ngClass]="{
+                                                'text-[var(--button-yellow-hover)]': hasVoted
+                                            }">
+                            </fa-icon>
+                            <span>{{post.upVotes}}</span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="canDeletePost" class="ml-auto" tabindex="0"
+                         (keydown.enter)="openDeleteModal(); $event.preventDefault()">
+                        <button (click)="openDeleteModal()" class="delete-button font-bold">
+                            Post löschen
+                            <span class="delete-button__inner">
+                            <span class="delete-button__blobs">
+                                <span class="delete-button__blob"></span>
+                                <span class="delete-button__blob"></span>
+                                <span class="delete-button__blob"></span>
+                                <span class="delete-button__blob"></span>
+                            </span>
+                        </span>
+                        </button>
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="absolute">
+                            <defs>
+                                <filter id="goo">
+                                    <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10"></feGaussianBlur>
+                                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7" result="goo"></feColorMatrix>
+                                    <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dialog #deleteDialog class="w-full text-[var(--text-primary)] fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 max-w-2xl rounded-lg p-4 bg-[var(--background-card)] backdrop:bg-black/50">
+    <!-- Dialog header -->
+    <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
+        <h3 class="text-xl font-semibold">Post löschen</h3>
+        <button (click)="closeDeleteModal()"
+                (keydown.enter)="closeDeleteModal(); $event.preventDefault()"
+                class="hover:text-gray-400 hover:cursor-pointer">✕</button>
+    </div>
+
+    <!-- Dialog body -->
+    <div class="py-4 space-y-4 flex flex-wrap justify-center">
+        <h3 class="font-bold text-xl">Bist du dir sicher, dass du diesen Post endgültig löschen willst?</h3>
+    </div>
+
+    <!-- Dialog footer -->
+    <div class="flex justify-end space-x-2 gap-10 items-center border-t border-[var(--border-color)] pt-4">
+        <a (click)="closeDeleteModal()" class="cursor-pointer" tabindex="0"
+           (keydown.enter)="closeDeleteModal(); $event.preventDefault()">Abbrechen</a>
+        <button (click)="deletePost()"
+                (keydown.enter)="deletePost(); $event.preventDefault()"
+                class="button-red">Ja, löschen</button>
+    </div>
+</dialog>
+
+<ng-template #loginToVote>
+    <a (click)="routeToLogin()"
+       (keydown.enter)="routeToLogin(); $event.preventDefault()"
+       class="cursor-pointer" tabindex="0">Melde dich an, um abzustimmen</a>
+</ng-template>
+
+<app-not-found *ngIf="!loading && !post && !error"></app-not-found>

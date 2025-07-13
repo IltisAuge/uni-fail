@@ -1,0 +1,40 @@
+<div class="flex flex-col justify-center items-center w-full md:w-[80%] 3xl:w-[60%]">
+    <h1 class="page-headline">🎉 Rangliste 🎉</h1>
+    <h3 class="text-xl mb-10 text-center text-wrap">Universitäten und Hochschulen mit den meisten Up-Votes</h3>
+    <div class="flex w-full gap-2">
+        <div class="pedestal" #pedestalRef>
+            <a *ngIf="rankedUnis.length >= 2; else placeholder" class="pedestal-head"
+                 routerLink="/search" [queryParams]="{ q: rankedUnis[1]._id }">
+                <p>{{ rankedUnis[1]._id }}</p>
+                <p>{{ rankedUnis[1].totalUpvotes }} Votes</p>
+            </a>
+            <div class="pedestal-body h-[6rem] lg:h-[10rem] bg-[#95E3CF]">
+                <p [style.color]="'#4B0082'">2</p>
+            </div>
+        </div>
+        <div class="pedestal" #pedestalRef>
+            <a *ngIf="rankedUnis.length >= 1; else placeholder" class="pedestal-head"
+                 routerLink="/search" [queryParams]="{ q: rankedUnis[0]._id }">
+                <p>{{ rankedUnis[0]._id }}</p>
+                <p>{{ rankedUnis[0].totalUpvotes }} Votes</p>
+            </a>
+            <div class="pedestal-body h-[8rem] lg:h-[16rem] bg-[#9CE5B4]">
+                <p [style.color]="'#4B0082'">1</p>
+            </div>
+        </div>
+        <div class="pedestal" #pedestalRef>
+            <a *ngIf="rankedUnis.length >= 3; else placeholder" class="pedestal-head"
+                 routerLink="/search" [queryParams]="{ q: rankedUnis[2]._id }">
+                <p>{{ rankedUnis[2]._id }}</p>
+                <p>{{ rankedUnis[2].totalUpvotes }} Votes</p>
+            </a>
+            <div class="pedestal-body h-[4rem] lg:h-[6rem] bg-[#8FE0E7]">
+                <p [style.color]="'#4B0082'">3</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #placeholder>
+    <p> </p>
+</ng-template>

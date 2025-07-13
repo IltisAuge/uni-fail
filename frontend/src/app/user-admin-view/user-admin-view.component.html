@@ -1,0 +1,16 @@
+<div class="flex flex-col justify-center">
+    <h1 class="page-headline">Benutzer {{displayName}}</h1>
+    <p>Angemeldet über {{provider}}</p>
+    <p>E-Mail: {{email}}</p>
+    <button class="button-red mt-5 w-fit" (click)="resetDisplayName()">Anzeigename zurücksetzen</button>
+    <button *ngIf="!isBlocked; else unblockUserBtn" class="button-red mt-5 w-fit" (click)="setBlocked(true)">Benutzer sperren</button>
+    <button *ngIf="!isAdmin; else removeAdminBtn" class="button-red mt-5 w-fit" (click)="setAdmin(true)">Adminrechte hinzufügen</button>
+</div>
+
+<ng-template #unblockUserBtn>
+    <button class="button-green mt-5 w-fit" (click)="setBlocked(false)">Benutzer entsperren</button>
+</ng-template>
+
+<ng-template #removeAdminBtn>
+    <button class="button-green mt-5 w-fit" (click)="setAdmin(false)">Adminrechte entfernen</button>
+</ng-template>

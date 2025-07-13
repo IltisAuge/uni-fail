@@ -1,0 +1,9 @@
+<div *ngIf="showPopup" class="popup">
+    <div class="popup-header">
+        <h2>Willkommen 🎉</h2>
+        <button class="popup-close cursor-pointer" (click)="closePopup()">x</button>
+    </div>
+    <p>Hier kannst du deine Uni-Fails teilen, andere lesen und bewerten.</p>
+    <p>Möge die schlimmste Uni gewinnen :)</p>
+    <button class="mt-5 button-blue cursor-pointer" (click)="dismissPopup()">Nicht mehr anzeigen</button>
+</div>

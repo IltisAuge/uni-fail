@@ -1,0 +1,19 @@
+name: uni-fail
+
+services:
+    mongodb:
+        image: mongo
+        container_name: uni-fail_mongodb
+        ports:
+            - 27017:27017
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: 'root'
+            MONGO_INITDB_ROOT_PASSWORD: 'root'
+        volumes:
+            - uni-fail_mongodb:/data/db
+        networks:
+            - uni-fail
+volumes:
+    uni-fail_mongodb:
+networks:
+    uni-fail:

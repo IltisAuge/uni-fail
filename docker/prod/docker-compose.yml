@@ -1,0 +1,52 @@
+name: uni-fail
+
+services:
+    angular:
+        build: ./frontend
+        container_name: uni-fail_angular
+        ports:
+            - 4000:4000
+        volumes:
+            - ./frontend/dist/:/uni-fail/app/dist/
+        networks:
+            - uni-fail
+            - nginx_shared
+        deploy:
+            resources:
+                limits:
+                    memory: 100M
+    api-server:
+        build: ./backend
+        container_name: uni-fail_api-server
+        ports:
+            - 5010:5010
+        volumes:
+            - ./backend/dist/:/uni-fail/app/dist/
+            - ./backend/.env:/uni-fail/app/.env
+            - ./backend/google_client.json:/uni-fail/google_client.json
+            - ./backend/uploads/:/uni-fail/app/uploads/
+        networks:
+            - uni-fail
+            - nginx_shared
+        deploy:
+            resources:
+                limits:
+                    memory: 100M
+    mongodb:
+        image: mongo
+        container_name: uni-fail_mongodb
+        ports:
+            - 27018:27017
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: 'root'
+            MONGO_INITDB_ROOT_PASSWORD: 'CHANGE_ME'
+        volumes:
+            - uni-fail_mongodb:/data/db
+        networks:
+            - uni-fail
+volumes:
+    uni-fail_mongodb:
+networks:
+    uni-fail:
+    nginx_shared:
+        external: true

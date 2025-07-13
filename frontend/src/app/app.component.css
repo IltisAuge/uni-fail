@@ -1,0 +1,42 @@
+:host {
+    display: flex;
+}
+
+@media (width <= 768px) {
+    :host {
+        flex-direction: column;
+    }
+}
+
+.about-us-fa-icon {
+    transition: transform 0.3s ease-out;
+    font-size: 1.5rem;
+    display: inline-block;
+}
+
+.about-us-icon:hover .about-us-fa-icon {
+    transform: scale(1.1);
+}
+
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 1000;
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: none;
+}
+
+.skip-link:focus {
+    left: 0;
+    top: 0;
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
