@@ -119,4 +119,11 @@ export class PostFormComponent {
         }
         this.selectedTags.push(tag);
     }
+
+    handleTagKeydown(event: KeyboardEvent, tag: Tag) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.toggleTagSelection(tag);
+        }
+    }
 }

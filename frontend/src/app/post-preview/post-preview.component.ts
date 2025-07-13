@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, RouterModule} from '@angular/router';
 import {environment} from '../../environments/environment';
@@ -12,12 +12,20 @@ import {Post} from '../../interfaces/post.interface';
     templateUrl: './post-preview.component.html',
     styleUrl: './post-preview.component.css',
 })
-export class PostPreviewComponent {
+export class PostPreviewComponent implements OnChanges {
 
     @Input() loading = true;
     @Input() posts: Post[] = [];
 
     constructor(private router: Router) {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['posts'] && this.posts?.length > 0) {
+            this.posts.sort((a, b) => {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            });
+        }
     }
 
     /**

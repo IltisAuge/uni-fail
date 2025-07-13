@@ -64,9 +64,8 @@
             <button (click)="closeTagsModal()" class="hover:text-gray-400 hover:cursor-pointer">✕</button>
         </div>
         <div class="w-full m-4 flex flex-wrap gap-2 md:gap-5">
-            <form class="flex-1">
-                <input #tagFilter type="text" placeholder="Suche nach Tags" class="w-full min-w-fit" (input)="filterTags(tagFilter.value)">
-            </form>
+            <input #tagFilter type="text" placeholder="Suche nach Tags"
+                   class="flex-1 w-full min-w-fit" (input)="filterTags(tagFilter.value)">
             <button class="button-blue" (click)="closeTagsModal()">Auswahl bestätigen</button>
         </div>
     </div>
@@ -75,9 +74,13 @@
     <div class="py-4 space-y-4 text-[var(--text-primary)]">
         <p *ngIf="tagFilter.value.length > 0" class="font-bold">{{displayedTags.length}} gefilterte Tags:</p>
         <div class="flex flex-wrap justify-center">
-            <p *ngFor="let tag of displayedTags" class="cursor-pointer p-4" [ngClass]="{
+            <p *ngFor="let tag of displayedTags" class="cursor-pointer p-4"
+               tabindex="0"
+               [ngClass]="{
                   'text-blue-500': selectedTags.includes(tag)
-                }" (click)="toggleTagSelection(tag)">
+                }"
+               (click)="toggleTagSelection(tag)"
+               (keydown)="handleTagKeydown($event, tag)">
                 {{tag.displayName}}
             </p>
         </div>
