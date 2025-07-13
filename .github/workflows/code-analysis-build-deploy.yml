@@ -47,6 +47,14 @@ jobs:
               run: npm run eslint:ts
               working-directory: backend
 
+            - name: Create dummy google_client.json
+              run: echo '{}' > google_client.json
+              working-directory: backend
+
+            - name: Run Integration Tests
+              run: npm test
+              working-directory: backend
+
     build-and-deploy:
         name: Build and deploy
         needs: code-analysis
