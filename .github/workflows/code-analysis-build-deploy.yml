@@ -61,7 +61,7 @@ jobs:
     build-and-deploy:
         name: Build and deploy
         needs: code-analysis
-        if: github.ref == 'refs/heads/dev'
+        if: github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout code
