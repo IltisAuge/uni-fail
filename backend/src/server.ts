@@ -1,8 +1,7 @@
-import * as process from 'node:process';
 import {connect} from 'mongoose';
 import server from './express-app';
 import {downloadAllAvatars} from '@/s3';
-import {loadAvailableDisplayNames} from '@/controllers/user-controller';
+import {loadDisplayNames} from '@/controllers/user-controller';
 
 console.info(`Connecting to MongoDB '${process.env.DB_HOST}:${process.env.DB_PORT}'...`);
 connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
@@ -32,7 +31,7 @@ downloadAllAvatars().then(() => {
 }).catch((error) => {
     console.error('An error occurred while downloading avatars:', error);
 });
-loadAvailableDisplayNames().then((displayNames) => {
+loadDisplayNames().then((displayNames) => {
     console.info('Loaded all available display names');
     return displayNames;
 }).catch((error) => {

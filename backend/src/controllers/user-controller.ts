@@ -4,33 +4,28 @@ import {DisplayNamesModel} from '@/schemata/display-names-schema';
 import {UserModel} from '@/schemata/user-schema';
 
 const userCache = new NodeCache();
-let availableDisplayNames: string[] = [];
+let displayNames: string[] = [];
 
-export async function loadAvailableDisplayNames(): Promise<string[]> {
+export async function loadDisplayNames(): Promise<string[]> {
     const doc = await DisplayNamesModel.findOne({_id: 0});
     if (!doc) {
         await DisplayNamesModel.create({ _id: 0, names: [] });
         return [];
     }
-    availableDisplayNames = doc.names;
-    return availableDisplayNames;
+    displayNames = doc.names;
+    return displayNames;
 }
 
 export function getRandomDisplayName(): string {
-    if (availableDisplayNames.length === 0) {
+    if (displayNames.length === 0) {
         throw new Error('No display names are available!');
     }
-    let randomIndex;
-    let displayName;
-    do {
-        randomIndex = Math.floor(Math.random() * availableDisplayNames.length);
-        displayName = availableDisplayNames[randomIndex];
-    } while (!isDisplayNameAvailable(displayName));
-    return displayName;
+    const randomIndex = Math.floor(Math.random() * displayNames.length);
+    return displayNames[randomIndex];
 }
 
 export async function isDisplayNameAvailable(displayName: string): Promise<boolean> {
-    const includes = availableDisplayNames.includes(displayName);
+    const includes = displayNames.includes(displayName);
     const existsUser = !!await UserModel.findOne({displayName});
     return !includes && !existsUser;
 }
