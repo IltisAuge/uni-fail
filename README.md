@@ -158,8 +158,12 @@ Run ``docker ps`` in your production server's terminal and your should see 4 con
 
 You can find a workflow for Github Actions in ``.github/workflows/code-analysis-build-deploy.yml``:
 
-This Action script is triggered by any push or pull request to any branch.<br>
-The first job is to run code analysis for TypeScript, HTML and CSS files. If the target branch is "master" and if code analysis completes successfully, the build and deploy job is triggered.<br>
+This action script is triggered by any push or pull-request to any branch.<br>
+The first job is to run code analysis for TypeScript, HTML and CSS files and run ``npm test`` on the backend to perform the implemented integration tests.<br>
+If the target branch is "master" and if code analysis and other tests complete successfully, the build and deploy job is triggered.<br>
 It automatically builds the frontend and backend services for production, deploys all required files to the production server and restarts the Docker containers.<br>
 To access the production server via SSH (Secure Shell) via Github you have to add a Secret in ``Repository settings`` > ``Secrets and variables`` > ``Actions``.<br>
 This secret contains a private SSH key in .pem format. The corresponding public key is stored on your production server.
+
+## Credits:
+Avatars used in this software: https://github.com/alohe/avatars

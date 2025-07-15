@@ -17,14 +17,14 @@
         <div class="image-wrapper h-[128px] w-[128px]" (click) = "openAvatarModal()">
             <img ngSrc="{{avatarURL}}" height="128px" width="128px" alt="Dein Avatar"/>
         </div>
-        <button (click)="openAvatarModal()" class="button-blue mt-auto hover:cursor-pointer">Dein Avatar ändern</button>
+        <button (click)="openAvatarModal()" class="button-blue mt-auto hover:cursor-pointer">Deinen Avatar ändern</button>
     </div>
 </div>
 
 <dialog #avatarDialog class="w-full fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 max-w-2xl rounded-lg p-4 bg-[var(--background-card)] backdrop:bg-black/50">
     <!-- Dialog header -->
     <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
-        <h3 class="text-xl font-semibold">Wähle ein Avatar aus</h3>
+        <h3 class="text-xl font-semibold">Wähle einen Avatar aus</h3>
         <button (click)="closeAvatarModal()"
                 aria-label="Avatar-Auswahl schließen"
                 class="hover:text-gray-400 hover:cursor-pointer">✕</button>

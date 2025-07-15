@@ -124,7 +124,7 @@ export class PostComponent implements OnInit, OnDestroy {
             withCredentials: true,
         }).subscribe({
             next: async () => {
-                this.goBack(); // go to previous page after deleting
+                await this.goBack(); // go to previous page after deleting
             },
             error: (err) => {
                 console.error('An error occurred while deleting post:', err);
