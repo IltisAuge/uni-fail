@@ -24,7 +24,6 @@ services:
             - ./backend/dist/:/uni-fail/app/dist/
             - ./backend/.env:/uni-fail/app/.env
             - ./backend/google_client.json:/uni-fail/google_client.json
-            - ./backend/uploads/:/uni-fail/app/uploads/
         networks:
             - uni-fail
             - nginx_shared
