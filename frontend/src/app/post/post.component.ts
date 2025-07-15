@@ -136,8 +136,12 @@ export class PostComponent implements OnInit, OnDestroy {
     async goBack() {
         if (this.navigationService.hasPreviousUrl()) {
             const previousUrl = this.navigationService.getPreviousUrl()!;
-            await this.router.navigateByUrl(previousUrl);
-            return;
+            if (previousUrl === '/'
+                || previousUrl.startsWith('/search')
+                || previousUrl === '/my-posts') {
+                await this.router.navigateByUrl(previousUrl);
+                return;
+            }
         }
         await this.router.navigateByUrl('/'); // Fallback
     }

@@ -6,6 +6,7 @@ import {UserAdminViewComponent} from './user-admin-view/user-admin-view.componen
 import {AboutUserComponent} from './about-user/about-user.component';
 import {PostFormComponent} from './post-form/post-form.component';
 import {UserPostsComponent} from './user-posts/user-posts.component';
+import {AccessDeniedComponent} from './access-denied/access-denied.component';
 
 export const accessGuard: CanActivateFn = (route) => {
     const authService = inject(AuthService);
@@ -27,6 +28,10 @@ export const accessGuard: CanActivateFn = (route) => {
             // Block all components for blocked users
             if (state.user && state.user.isBlocked) {
                 return router.createUrlTree(['/access-denied']);
+            }
+            // Redirect unblocked user to home when accessing AccessDeniedComponent
+            if (route.component === AccessDeniedComponent && state.user && !state.user.isBlocked) {
+                return router.createUrlTree(['/']);
             }
             // Allow all other components
             return true;
