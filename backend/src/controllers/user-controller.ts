@@ -20,7 +20,7 @@ export function getRandomDisplayName(): string {
     if (displayNames.length === 0) {
         throw new Error('No display names are available!');
     }
-    let randomIndex = Math.floor(Math.random() * displayNames.length);
+    const randomIndex = Math.floor(Math.random() * displayNames.length);
     return displayNames[randomIndex];
 }
 
