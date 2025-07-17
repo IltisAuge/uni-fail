@@ -6,7 +6,6 @@ import {UserAdminViewComponent} from './user-admin-view/user-admin-view.componen
 import {AboutUserComponent} from './about-user/about-user.component';
 import {PostFormComponent} from './post-form/post-form.component';
 import {UserPostsComponent} from './user-posts/user-posts.component';
-import {AccessDeniedComponent} from './access-denied/access-denied.component';
 
 export const accessGuard: CanActivateFn = (route) => {
     const authService = inject(AuthService);
