@@ -62,7 +62,7 @@ export async function getUser(userId: string): Promise<User | undefined> {
     return undefined;
 }
 
-async function updateUserField(userId: string, field: string, value: any) {
+async function updateUserField(userId: string, field: string, value: string | string[] | boolean) {
     const cachedUser = userCache.get(userId) as User | undefined;
     if (cachedUser) {
         cachedUser[field] = value;
@@ -80,20 +80,20 @@ async function updateUserField(userId: string, field: string, value: any) {
 }
 
 export async function addVotedPost(_id: string, postId: string) {
-    const user = await getUser(_id);
+    const user: User | undefined = await getUser(_id);
     if (!user) {
         return;
     }
-    const newVotedPosts = [...user.votedPosts, postId];
+    const newVotedPosts: string[] = [...user.votedPosts, postId];
     return await updateUserField(_id, 'votedPosts', newVotedPosts);
 }
 
 export async function removeVotedPost(_id: string, postId: string) {
-    const user = await getUser(_id);
+    const user: User | undefined = await getUser(_id);
     if (!user) {
         return;
     }
-    const newVotedPosts = user.votedPosts.filter((id) => id !== postId);
+    const newVotedPosts = user.votedPosts.filter((id: string) => id !== postId);
     return await updateUserField(_id, 'votedPosts', newVotedPosts);
 }
 

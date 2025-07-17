@@ -68,7 +68,7 @@ export class UserAdminViewComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
-    setUserData(userData: any) {
+    setUserData(userData: User) {
         this.displayName = userData.displayName;
         this.provider = userData.provider;
         this.email = userData.email;

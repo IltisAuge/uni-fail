@@ -3,6 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {OAuth2Client} from 'google-auth-library';
 import {LoginController} from '@/controllers/login-controller';
+import {UserData} from '@/interfaces/userdata.interface';
 
 export class GoogleLoginController extends LoginController {
 
@@ -21,7 +22,7 @@ export class GoogleLoginController extends LoginController {
         });
     }
 
-    async getUserData(code: string) {
+    async getUserData(code: string): Promise<UserData> {
         const response = await this.getClient().getToken(code);
         const idToken = response.tokens.id_token;
         if (idToken == undefined) {

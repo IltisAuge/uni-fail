@@ -1,5 +1,6 @@
 import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {LoginController} from '@/controllers/login-controller';
+import {UserData} from '@/interfaces/userdata.interface';
 
 export interface MicrosoftIdToken extends JwtPayload {
 	oid: string;
@@ -46,7 +47,7 @@ export class MicrosoftLoginController extends LoginController {
         return jwtDecode<MicrosoftIdToken>(id_token);
     }
 
-    async getUserData(decoded_token: MicrosoftIdToken) {
+    async getUserData(decoded_token: MicrosoftIdToken): Promise<UserData> {
         return {
             provider: 'Microsoft',
             _id: decoded_token.oid,

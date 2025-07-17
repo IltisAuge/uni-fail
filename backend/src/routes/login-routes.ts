@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import {getRandomDisplayName, getUser, saveUser} from '@/controllers/user-controller';
 import {GoogleLoginController} from '@/login-providers/google-login';
 import {MicrosoftLoginController} from '@/login-providers/microsoft-login';
+import {UserData} from '@/interfaces/userdata.interface';
 
 dotenv.config();
 
@@ -127,7 +128,7 @@ if (process.env.PRODUCTION === 'false') {
     console.info('/login/mock endpoint not enabled');
 }
 
-async function completeAuthentication(userData: Record<string, any>, req: any, res: any) {
+async function completeAuthentication(userData: UserData, req: any, res: any) {
     let user = await getUser(userData._id);
     if (!user) {
         // User does not yet exist in the database

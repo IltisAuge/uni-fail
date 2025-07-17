@@ -100,7 +100,6 @@ postRouter.get('/:id', async (req, res) => {
     }
 });
 
-
 postRouter.post('/create', createPostLimiter, async (req, res) => {
     const title = req.body.title as string || '';
     const content = req.body.content as string || '';
@@ -141,7 +140,6 @@ postRouter.delete('/delete/:id', async (req, res) => {
         res.status(404).json({error:`Post with id '${postId}' not found`});
         return;
     }
-    console.error(`post.userId=${post.userId}, userId=${userId} username=${user.name} isAdmin=${user.isAdmin}`);
     if (post.userId !== userId && !user.isAdmin) {
         res.status(403).json({error:'No permission to delete this post'});
         return;
