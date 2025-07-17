@@ -24,7 +24,7 @@ export const routes: Routes = [
     { path: 'my-posts', component: UserPostsComponent, canActivate: [accessGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'user/:id', component: UserAdminViewComponent, canActivate: [accessGuard] },
-    { path: 'access-denied', component:  AccessDeniedComponent, canActivate: [accessGuard] },
+    { path: 'access-denied', component:  AccessDeniedComponent },
     { path: 'post/:id', component: PostComponent, canActivate: [accessGuard] },
     { path: '**', component: NotFoundComponent },
 ];
