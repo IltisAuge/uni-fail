@@ -3,6 +3,20 @@ import {getRandomDisplayName, getUser, setAdmin, setBlocked, setDisplayName} fro
 
 const adminRouter = Router();
 
+adminRouter.use(async (req, res, next) => {
+    let user;
+    // Send HTTP 401 if user is not logged in or if the user does not exist
+    if (!req.session.userId || !(user = await getUser(req.session.userId))) {
+        res.sendStatus(401);
+        return;
+    }
+    if (!user.isAdmin) {
+        res.sendStatus(403);
+        return;
+    }
+    next();
+});
+
 adminRouter.get('/user/:id', async (req, res) => {
     const userId = req.params.id;
     if (!userId) {

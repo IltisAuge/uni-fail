@@ -11,13 +11,13 @@ postRouter.use((req, res, next) => {
         (req.path === '/get' || req.path === '/search' || /^\/[^/]+$/.test(req.path));
 
     if (!isPublic && !req.session.userId) {
-        res.status(401).json('Unauthorized: Authentification required.');
+        res.sendStatus(401);
     }
 
     next();
 });
 
-const requestLimiter = rateLimit({
+const createPostLimiter = rateLimit({
     windowMs: process.env.PRODUCTION === 'true' ? 60 * 1000 : 0,
     limit: 3,
     standardHeaders: true,
@@ -101,7 +101,7 @@ postRouter.get('/:id', async (req, res) => {
 });
 
 
-postRouter.post('/create', requestLimiter, async (req, res) => {
+postRouter.post('/create', createPostLimiter, async (req, res) => {
     const title = req.body.title as string || '';
     const content = req.body.content as string || '';
     const tags = req.body.tags as [string];
