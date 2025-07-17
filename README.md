@@ -1,9 +1,22 @@
 ## This project was created by Daniel Ziegler, Lisa Natterer and Leonie Reusch from DHBW Stuttgart.
 
 # Techstack
-This software uses ``Angular 18``, ``TypeScript``, ``TailwindCSS``, ``FontAwesome`` for the frontend.
-The backend is built using ``NodeJS``. The ``express`` library is being used for the API-Server.
-To test backend features, ``supertest`` and ``vitest`` are used. Data is stored in ``MongoDB`` via ``mongoose``, image (avatar) files are uploaded to an `AWS S3 Bucket`.
+
+Frontend:
+- Angular 18
+- TypeScript 5
+- TailwindCSS 4
+- FontAwesome
+
+Backend:
+- NodeJS
+- TypeScript 5
+- Express-Library (for API-Server)
+- supertest, vitest (for Integration Tests)
+
+Data Storage:
+- MongoDB via mongoose
+- AWS S3 Bucket
 
 # Documentation for Developers
 
@@ -32,7 +45,7 @@ DB_PASSWORD=
 DB_NAME=
 DB_AUTH_SOURCE=
 AUTH_RETURN_URL=http://localhost:4200
-HOST=http://localhost:5010
+HOST=http://localhost:4200
 DOMAIN=localhost
 API_BASE=http://localhost:5010
 MICROSOFT_TENANT_ID=
@@ -79,7 +92,19 @@ This will download a file containing sensitive information to connect to your ap
 
 ## 2. Setup Frontend & Backend services in a production environment
 
-First, you need to build both the frontend and backend services.
+### Setup API URIs for production
+In development mode the Angular Proxy routes requests to /api/** to the local API server.<br>
+For production usage you have to define your custom API server domain in ``.env``.<br>
+The productive version hosted on <a href="uni-fail.iltisauge.de">uni-fail.iltisauge.de</a> uses <a href="api.uni-fail.iltisauge.de">api.uni-fail.iltisauge.de</a> as its API domain. The API server behind this domain always runs the newest version pushed to the master branch on Github.<br>
+You have to update the API domain in ``/backend/.env``, ``/frontend/environments/environments.prod.ts`` and ``/frontend/environments/environments.server.prod.ts``
+For example: The .env file used in production has the following field set:
+````dotenv
+AUTH_RETURN_URL=https://uni-fail.iltisauge.de
+HOST=https://uni-fail.iltisauge.de
+DOMAIN=uni-fail.iltisauge.de
+API_BASE=https://api.uni-fail.iltisauge.de
+MICROSOFT_RETURN_URL=https://api.uni-fail.iltisauge.de/login/microsoft-auth-return
+````
 
 ### Building the Frontend
 
@@ -96,7 +121,7 @@ You have to upload a copy of the ``.env`` file to your production environment an
 1. PRODUCTION=true
 2. Adjust your MongoDB connection credentials
 3. Change AUTH_RETURN_URL to point to your frontend Angular application (Important: No tailing "/"!)
-4. Change HOST, DOMAIN to reflect your domain name 
+4. Change HOST, DOMAIN to reflect your frontend domain name 
 5. Change API_BASE to point to your backend API service (Important: No tailing "/"!)
 
 ### Setup Microsoft and Google authentication for production
@@ -154,7 +179,7 @@ Run ``docker ps`` in your production server's terminal and your should see 4 con
 3. uni-fail_mongodb on port 27017:27017
 4. nginx on port 80:80, 443:443
 
-### Github Action for building and deployment
+### Github Action for automated building and deployment (CI/CD Pipeline)
 
 You can find a workflow for Github Actions in ``.github/workflows/code-analysis-build-deploy.yml``:
 
