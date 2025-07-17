@@ -29,10 +29,6 @@ export const accessGuard: CanActivateFn = (route) => {
             if (state.user && state.user.isBlocked) {
                 return router.createUrlTree(['/access-denied']);
             }
-            // Redirect unblocked user to home when accessing AccessDeniedComponent
-            if (route.component === AccessDeniedComponent && state.user && !state.user.isBlocked) {
-                return router.createUrlTree(['/']);
-            }
             // Allow all other components
             return true;
         }),
