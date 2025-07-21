@@ -20,9 +20,16 @@ connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.D
 });
 
 // Start express app
-server.listen(5010, () => {
+const serverProcess = server.listen(5010, () => {
     console.info(`Starting in ${process.env.PRODUCTION === 'true' ? 'PRODUCTION':'DEVELOPMENT'} mode`);
     console.info('Server listening on port 5010');
+});
+
+process.on("SIGINT", () => {
+    console.info(`Shutting down express server...`);
+    serverProcess.close(() => {
+        process.exit(0);
+    });
 });
 
 downloadAllAvatars().then(() => {

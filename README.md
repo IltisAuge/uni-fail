@@ -14,9 +14,17 @@ Backend:
 - Express-Library (for API-Server)
 - supertest, vitest (for Integration Tests)
 
-Data Storage:
+Data storage:
 - MongoDB via mongoose
 - AWS S3 Bucket
+
+# Additional information
+This software has implemented CSRF-protection.<br>
+For SEO (Search Engine Optimization) ``robots.txt`` and ``sitemap.xml`` files are provided in ``/frontend/public``.<br>
+This software is hosted on a VPS (Virtual private server). It runs in a Docker-Compose project behind an NGINX reverse proxy.<br>
+The frontend and API services use SSL certificates from LetsEncrypt to provide a secure connection.
+Those SSL certificates are bound to my private domains <a href="uni-fail.iltisauge.de">uni-fail.iltisauge.de</a> and <a href="api.uni-fail.iltisauge.de">api.uni-fail.iltisauge.de</a>.<br>
+You can find the presentation and design concept in the root directory of this repository.
 
 # Documentation for Developers
 
@@ -28,12 +36,12 @@ You need to add a few files and configurations to start the development services
 
 Pull this repository by opening a new terminal. Navigate to the desired destination directory and run ``git pull https://github.com/IltisAuge/uni-fail.git``.
 
-After pulling the project from Github, install all required Node packages.
+After pulling the project from GitHub, install all required Node packages.
 To do this, open a terminal and navigate to `/frontend` in the project's directory. Then run `npm install --force`. --force is required because Angular 18 requires tailwindcss@"^2.0.0 || ^3.0.0" but this project uses TailwindCSS 4 as it is also compatible via Angular 18.
 
-To setup the backend, navigate to ``/backend`` and run `npm install`.
+To set up the backend, navigate to ``/backend`` and run `npm install`.
 In the ``/backend`` directory, create two new files: `.env` and `google_client.json`.
-The google_client.json file is needed later.
+The ``google_client.json`` file is needed later.
 The structure of the environment configuration file ```.env``` should be as followed:
 ```dotenv
 PRODUCTION=false
@@ -68,10 +76,10 @@ A S3 Bucket is used to store the available avatar image files. Create your own S
 It's recommended to create a new IAM user and add security credentials. Copy the AccessKey and SecretKey to ``.env``. WARNING: The SecretKey will only be shown ONCE when creating new credentials!
 
 ### Setup Microsoft & Google authentication
-This project allows users to login with their Microsoft or Google account.
+This project allows users to log in with their Microsoft or Google account.
 
 #### Microsoft Entra
-To get your Microsoft TenantId and ClientId you need to create an application in Microsoft Entra.
+To get your Microsoft TenantId and ClientId, you need to create an application in Microsoft Entra.
 Visit https://entra.microsoft.com and navigate to `Applications` > `App registrations` and click `New registration`.
 Enter a name for your application (you may use "unifail").<br>
 ``Supported account types`` is your choice.<br>
@@ -109,7 +117,7 @@ You have to upload a copy of the ``.env`` file to your production environment an
 1. PRODUCTION=true
 2. Adjust your MongoDB connection credentials
 3. Change AUTH_RETURN_URL to point to your frontend Angular application (Important: No tailing "/"!)
-4. Change HOST, DOMAIN to reflect your domain name 
+4. Change HOST and DOMAIN to reflect your domain name 
 5. Change API_BASE to point to your backend API service (Important: No tailing "/"!)
 
 ### Setup Microsoft and Google authentication for production
@@ -161,21 +169,21 @@ Docker will build the frontend and backend Docker Images on the first compose-ex
 
 If you are using NGINX, start this service as well.
 
-Run ``docker ps`` in your production server's terminal and your should see 4 containers running:
+Run ``docker ps`` in your production server's terminal and you should see four containers running:
 1. uni-fail_angular on port 4200:4200
 2. uni-fail_api-server on port 5010:5010
 3. uni-fail_mongodb on port 27017:27017
 4. nginx on port 80:80, 443:443
 
-### Github Action for building and deployment
+### GitHub Action for building and deployment
 
-You can find a workflow for Github Actions in ``.github/workflows/code-analysis-build-deploy.yml``:
+You can find a workflow for GitHub Actions in ``.github/workflows/code-analysis-build-deploy.yml``:
 
 This action script is triggered by any push or pull-request to any branch.<br>
 The first job is to run code analysis for TypeScript, HTML and CSS files and run ``npm test`` on the backend to perform the implemented integration tests.<br>
 If the target branch is "master" and if code analysis and other tests complete successfully, the build and deploy job is triggered.<br>
 It automatically builds the frontend and backend services for production, deploys all required files to the production server and restarts the Docker containers.<br>
-To access the production server via SSH (Secure Shell) via Github you have to add a Secret in ``Repository settings`` > ``Secrets and variables`` > ``Actions``.<br>
+To access the production server via SSH (Secure Shell) via GitHub you have to add a Secret in ``Repository settings`` > ``Secrets and variables`` > ``Actions``.<br>
 This secret contains a private SSH key in .pem format. The corresponding public key is stored on your production server.
 
 ## Credits:
