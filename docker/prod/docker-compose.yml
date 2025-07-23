@@ -15,6 +15,7 @@ services:
             resources:
                 limits:
                     memory: 100M
+        restart: always
     api-server:
         build: ./backend
         container_name: uni-fail_api-server
@@ -31,8 +32,9 @@ services:
             resources:
                 limits:
                     memory: 100M
+        restart: always
     mongodb:
-        image: mongo
+        image: mongo:8.0.9
         container_name: uni-fail_mongodb
         ports:
             - 27018:27017
@@ -43,6 +45,7 @@ services:
             - uni-fail_mongodb:/data/db
         networks:
             - uni-fail
+        restart: always
 volumes:
     uni-fail_mongodb:
 networks:
