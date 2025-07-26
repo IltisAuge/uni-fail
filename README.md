@@ -20,7 +20,7 @@ Data storage:
 
 # Additional information
 This software has implemented CSRF-protection.<br>
-For SEO (Search Engine Optimization) ``robots.txt`` and ``sitemap.xml`` files are provided in ``/frontend/public``.<br>
+For SEO (Search Engine Optimization) ``robots.txt`` and ``sitemap.xml`` files are provided in ``/frontend/public`` and server-side rendering (SSR) is used in this software.<br>
 This software is hosted on a VPS (Virtual private server). It runs in a Docker-Compose project behind an NGINX reverse proxy.<br>
 The frontend and API services use SSL certificates from LetsEncrypt to provide a secure connection.
 Those SSL certificates are bound to my private domains <a href="https://uni-fail.iltisauge.de">uni-fail.iltisauge.de</a> and <a href="https://api.uni-fail.iltisauge.de">api.uni-fail.iltisauge.de</a>.<br>
