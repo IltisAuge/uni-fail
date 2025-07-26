@@ -25,8 +25,8 @@ const serverProcess = server.listen(5010, () => {
     console.info('Server listening on port 5010');
 });
 
-process.on("SIGINT", () => {
-    console.info(`Shutting down express server...`);
+process.on('SIGINT', () => {
+    console.info('Shutting down express server...');
     serverProcess.close(() => {
         process.exit(0);
     });
